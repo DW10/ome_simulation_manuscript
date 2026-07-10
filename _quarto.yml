@@ -1,0 +1,30 @@
+project:
+  type: book
+
+book:
+  title: "The problem with the OME metric"
+  author: "Dylan Whitaker"
+  date: "8/18/2021"
+  chapters:
+    - index.qmd
+    - manuscript.qmd
+    - references.qmd
+  appendices: 
+    - appendix.qmd
+    - simulation.qmd
+    
+bibliography: /Users/dylanwhitaker/Library/CloudStorage/OneDrive-UniversityCollegeLondon/refs.bib
+csl: elsevier-vancouver.csl
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+  docx:
+    toc: true
+    
+execute:
+  echo: false
+  warning: true
+  error: true

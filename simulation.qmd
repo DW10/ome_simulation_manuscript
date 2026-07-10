@@ -1,0 +1,107 @@
+---
+title: "Code for simulation study"
+---
+
+# Functions
+
+The `sim_patient` function produces a study dataset by seeding procedure dates given the annual case load and the study period. Then for each procedure sampling whether the procedure is robotic or standard, and finally sampling which opioid is used.
+
+The function then estimates the mean analgesia requirement based on treatment and opioid and samples the dose from a normal distribution.
+
+```{r sim_patient }
+#| echo: true
+#| collape: true
+
+sim_patient <- function(
+  mu_tot = 50,
+  potency_oxycodone_truth = 1.85,
+  potency_oxycodone_ome = 2,
+  proportion_morphine = 0.7,
+  oxycodone_shortage = c(as.Date("2024-01-01"), as.Date("2024-12-31")),
+  t_0 = as.Date("2020-01-01"),
+  t_end = as.Date("2025-12-31"),
+  t_robot = as.Date("2023-01-01"),
+  annual_n = 30,
+  robot_effect_size = 0.8
+){
+  # Calculate total number of patients over the study period
+  total_days <- as.numeric(t_end - t_0)
+  total_years <- total_days / 365.25
+  total_n <- round(total_years * annual_n)
+
+  # Sample random dates
+  dates <- as.Date(runif(total_n, min = as.numeric(t_0), max = as.numeric(t_end)), origin = "1970-01-01")
+
+  # Sample if procedure is robotic (after 2023, 80% chance)
+  robotic <- ifelse(dates >= t_robot, rbinom(total_n, 1, 0.8) == 1, FALSE)
+
+  # Sample which opioid is used
+  # During 2024, 100% morphine. Otherwise, 40% oxycodone, 60% morphine.
+  is_shortage <- dates >= oxycodone_shortage[1] & dates <= oxycodone_shortage[2]
+  opioid <- ifelse(is_shortage, "M",
+    ifelse(rbinom(total_n, 1, proportion_morphine) == 1, "M", "O")
+  )
+
+  # Estimate mean analgesia requirement based on treatment
+  mu <- ifelse(robotic, mu_tot * robot_effect_size, mu_tot)
+
+  # Set mean dose depending on opioid type (using true potency)
+  mu_op <- ifelse(opioid == "M", mu, mu / potency_oxycodone_truth)
+
+  # Sample dose from normal distribution
+  dose <- rnorm(total_n, mean = mu_op, sd = 10)
+
+  # Round the doses to an integer of milligrams and prevent negative doses
+  dose <- pmax(0, round(dose))
+
+  # Create final dataframe
+  df <- data.frame(
+    date = dates,
+    robotic = robotic,
+    opioid = opioid,
+    dose = dose
+  )
+
+  # Sort by date for chronological sense
+  df <- df[order(df$date), ]
+  rownames(df) <- NULL
+  
+  df <- df %>%
+      mutate(ome = case_when(
+        opioid == "M" ~ dose,
+        opioid == "O" ~ dose * 1*potency_oxycodone_ome
+      ))
+ 
+  df <- df %>% mutate(
+    robotic = factor(robotic, labels = c("Non-Robotic", "Robotic")),
+    opioid = factor(opioid, levels = c("M", "O"), labels = c("Morphine", "Oxycodone"))
+  )
+
+  return(df)
+}
+```
+
+The `analyse_dataset` function acts to hypothesis test the difference in mean OME between robotic and non-robotic procedures.
+
+```{r analyse_dataset}
+#| echo: true
+#| collape: true
+
+analyse_dataset <- function(df){
+  # Perform t-test for difference in mean OME between robotic and non-robotic procedures
+  t_test_result <- t.test(ome ~ robotic, data = df)
+
+  
+  # analyse the difference between the opioid proportions
+  fishers_result <- fisher.test(table(df$robotic, df$opioid)) 
+  
+  # Return results as a list
+  return(list(
+    mean_diff_ome = diff(t_test_result$estimate),
+    p_value_ome = t_test_result$p.value,
+    conf_int_ome = t_test_result$conf.int,
+    chisq_result_medication = fishers_result$p.value
+  ))
+}
+
+```

@@ -1,0 +1,107 @@
+# Supplamentary materials
+
+## Mathmatical proofs
+
+### Proof for @eq-mu-ome-final {#sec-equation-proof}
+ @eq-mu-ome-1 can then be substituted into the the arithmetic mean to yield @eq-mu-ome-2.
+$$
+\mu = \frac{1}{N} \sum^N_{j=1}  \left( \sum_{i\in\mathbf{M}} d_{j,i} c_{i,r} \right)
+$${#eq-mu-ome-2}
+As finite summation is linear, we sun cam across the medications $i$ and then across the patients $p$. As the conversion vector $c_{i,r}$ is constant with respect to $j$ it can be factored out to yeild @eq-mu-ome-3
+$$
+\mu = \sum_{i\in\mathbf{M}} \left( \frac{1}{N} \sum^N_{j=1}  d_{j,i}  \right) c_{i,r}
+$${#eq-mu-ome-3}
+
+
+### Proof to demonstrate the sensitivity of the arthimetic mean to proportions {#sec-ome-difference-proof}
+
+To describe how the variance between group means ($\mu_{\text{OME}}^{(A)} - \mu_{\text{OME}}^{(B)}$) is driven by both the statistical association between treatment groups (Associational difference)^[This is not a causal quantitiy but rather the combination of the causal effect of the treatement on the OME metric combined with the statical association of the treatment on the outcome] and composition of the medications within each group (medication proportion), we employed a structural decomposition.
+
+#### Conditional Component Definition
+
+For any medication $i \in \mathbf{M}$ within a study cohort $G \in \{A, B\}$, the unconditional mean dose $\mu_{d_i}^{(G)}$ is defined as the product of the prescription probability and the expected dose:
+
+$$
+\mu_{d_i}^{(G)} = p_i^{(G)} \cdot \bar{d}_i^{(G)}
+$$ {#eq-conditional-mean}
+
+where:
+
+* $p_i^{(G)} = P(d_i > 0 \mid G)$ represents the proportion of patients in group $G$ receiving medication $i$.
+
+* $\bar{d}_i^{(G)} = E[d_i \mid d_i > 0, G]$ represents the conditional mean dose among actively treated patients.
+
+#### Group Difference Expansion
+
+Substituting @eq-conditional-mean into the aggregate group difference formula yields:
+
+$$
+\mu_{\text{OME}}^{(A)} - \mu_{\text{OME}}^{(B)} = \sum_{i\in\mathbf{M}} \left( p_i^{(A)}\bar{d}_i^{(A)} - p_i^{(B)}\bar{d}_i^{(B)} \right) c_{i,r}
+$$ {#eq-expanded-difference}
+
+#### Counterfactual Counter-Balancing
+
+By adding and subtracting the counterfactual cross-term $p_i^{(A)}\bar{d}_i^{(B)}c_{i,r}$ within the summation, we map the trajectory between the two distinct states:
+
+$$
+\mu_{\text{OME}}^{(A)} - \mu_{\text{OME}}^{(B)} = \sum_{i\in\mathbf{M}} \left( p_i^{(A)}\bar{d}_i^{(A)} - p_i^{(A)}\bar{d}_i^{(B)} + p_i^{(A)}\bar{d}_i^{(B)} - p_i^{(B)}\bar{d}_i^{(B)} \right) c_{i,r}
+$$ {#eq-algebraic-bridge}
+
+#### Final Structural Decomposition
+
+Factoring out the shared terms isolates the two independent drivers of macroscopic OME divergence:
+
+$$
+\mu_{\text{OME}}^{(A)} - \mu_{\text{OME}}^{(B)} = \sum_{i\in\mathbf{M}} \underbrace{p_i^{(A)}\left(\bar{d}_i^{(A)} - \bar{d}_i^{(B)}\right)c_{i,r}}_{\text{Associational difference}} + \sum_{i\in\mathbf{M}} \underbrace{\bar{d}_i^{(B)}\left(p_i^{(A)} - p_i^{(B)}\right)c_{i,r}}_{\text{Medication proportion}}
+$$ {#eq-final-decomposition}
+
+### Clinical Significance
+
+* **Associational difference:** Quantifies the true statistical association by isolating shifts in the active treatment magnitude while holding the selection rate constant ($p_i^{(A)}$).
+* **Medication proportion Effect:** Quantifies the structural selection bias. A shift in the prevalence of medication usage ($p_i^{(A)} \neq p_i^{(B)}$) alters $\mu_{\text{OME}}$ linearly via $c_{i,r}$, even if the active proportions of medications are perfectly homogeneous ($\bar{d}_i^{(A)} = \bar{d}_i^{(B)}$).
+
+## Literature search
+
+### PUBMED search terms {#sec-appendix-pubmed}
+
+The search term was executed on the PUBMED online search tool on 7th July 2026. 
+
+::: {.callout-note appearance="simple" title = "PUBMED search term"}
+(((((("opioid equivalent" OR "oral morphine equivalence" OR "oral morphine equivalent" OR "oral morphine equivalents" OR "OME" OR "morphine milligram equivalents" OR "morphine milligram equivalence" OR "MME" OR "morphine equivalent daily dose" OR "MEDD") AND ("perioperative" OR "peri-operative" OR "postoperative" OR "post-operative" OR "surgical" OR "surgery" OR "post-surgical" OR "postsurgical"))) AND ("2025/01/01"[Date - Publication] : "2025/12/31"[Date - Publication]))) AND ("clinical trial"[Filter] OR "clinical trial" OR "controlled clinical trial" OR "randomized controlled trial" OR "interventional" OR "intervention study" OR "clinical trials as topic"[MeSH Terms] OR "cohort studies"[MeSH Terms] OR "cohort" OR "prospective" OR "retrospective" OR "case-control" OR "comparative study" OR "evaluation study"))
+:::
+
+### Covidence extraction form {#sec-appendix-cov-extraction}
+
+Data was extracted from selected papers using the following proforma by a single author. Authors could leave notes to highlight specific features for later analysis required.
+
+```{r}
+#| label: tbl-extraction-form
+#| tbl-cap: "Litrature extraction proforma"
+#| output: TRUE
+
+tbl_extraction_form <- data.frame("Variable" = c("Study type",
+                          "Opioid conversion set",
+                          "Intervention",
+                          "Opioid proportions reported between intervetnion groups",
+                          "Outcome",
+                          "Data avalibility"),
+           "Options" = c("Randomised controlled trial, Cohort study, Case controlled study, Other",
+                         "Cited, Included in paper, Not described",
+                         "Surgical intervention, Anaesthetic intervnetion, Other",
+                         "Described or Not described",
+                         "Difference in opioid requirement/treatment, No difference",
+                         "Publically avalible, Not publically avaliable, Database study"),
+           "Explanatory text" = c("What is the format of the study?",
+                                  "In the methods section, is how is the OME metric generated described and how are the conversion values referenced?",
+                                  "What type of intervention is given. For pre/post-operative interventions that include changes to medication select anaesthesia. For descriptive studies analysing differences select other.",
+                                  "Assess the results section, Is it possible to establish the proprotion, mean or total doses of each opioid between intervention groups. If authros explicilty state only one type of opioid used in the OME/MME metric select 'Described'.",
+                                  "In the primary outcome of OME/MME, is there a significant difference reported between intervention groups.",
+                                  "Is data avalible for readers to ascertain the proportions of opioids between groups? If OME/MME metric only avaliable then select 'Not avalible'."))
+
+knitr::kable(tbl_extraction_form,
+    col.names = c("Variable", "Options", "Explanatory text")
+)
+
+```
+
+

@@ -1,0 +1,466 @@
+---
+title: "Manuscript"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| warning: false
+#| message: false
+
+
+library(kableExtra)
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+
+theme_academic <- function() {
+  theme_minimal(base_size = 12) +
+    theme(
+      panel.grid.minor = element_blank(),
+      panel.grid.major.x = element_blank(),
+      axis.line = element_line(color = "black"),
+      axis.ticks = element_line(color = "black"),
+      text = element_text(family = "sans"),
+      plot.title = element_text(face = "bold", size = 14),
+      strip.background = element_rect(fill = "white", color = "black")
+    )
+}
+# Add scale_y_continuous(expand = expansion(mult = c(0, 0.05))) to plots 
+# to ensure the Y axis starts at 0 and bars touch the X axis.
+
+scale_fill_academic <- function() {
+  scale_fill_viridis_d(option = "magma", begin = 0.3, end = 0.8)
+}
+
+```
+
+# Background
+
+## Section on Oral moprhine equivelence, how they first came about
+
+## Section on the published issues with this, mostly that people use different conversions sets
+
+## Section that when consisitant with the conversion set, it is assumed that any differences in drug or route are accounted for.
+
+An important aspect of the OME metric that has not been highlighted in the literature is the dependence on the proportion of each medication within each group.
+
+Often in clinical practice the term potency is used to describe the relative strength of one opioid compared to another. The potency of a medication is commonly understood to be the dose required to achieve equal effect, and in the case of opioids, the equianalgesic effect. Thus @eq-potency describes the relationship between the conversion value $c$ and the potency $\rho$ of a given medication $i$ via a given route $r$.
+
+$$c_{i,r} = \frac{1}{\rho_{i,r}}
+$$ {#eq-potency} 
+
+The value of $c$ then allows for the calculation of the equivalent effective dose $d_{\text{target}}$ given a dose of a reference medication $d_{\text{referance}}$, as summarised in @eq-equivelent-dose. A simple worked example of is provided in @nte-conversion-example.$$
+
+d_{\text{referance}} \times c_{i,r} = d_{\text{target}}
+$$ {#eq-equivelent-dose}
+
+::: {#nte-conversion-example .callout-note collapse=true title="Worked example of opioid equivelence" }
+
+**Question**: What dose of intravenous fentanyl will provide equal analgesic benefit to 5mg of intravenous morphine, assuming IV fentanyl is 100 times more potent.
+
+$$\begin{aligned}
+\rho_{\text{fentanyl,IV}} = 100 \\
+c_{\text{fentanyl,IV}} = \frac{1}{\rho_{\text{fentanyl,IV}}} \\
+c_{\text{fentanyl,IV}} = \frac{1}{100} = 0.01 \\
+\end{aligned}$$
+
+First we use the potency value to find the conversion value to be 0.01.
+
+$$\begin{aligned}
+d_{\text{morphine}} \times c_{\text{fentanyl,IV}} = d_{\text{fentanyl}} \\
+5 \times 0.01 = 0.05\text{mg} = 50\text{mcg}
+\end{aligned}$$
+
+Then we multiple our reference dose of 5mg of morphine by the conversion value to find the equivalent dose of fentanyl to be 0.05mg or 50mcg.
+
+This approach can also be used to convert from two non-reference medications by firstly converting to the reference (often oral morphine) and then to the target medication. This approach is used clinically for opioid conversion or rotation and is the origin of the opioid equivelence system.
+
+:::
+
+## Opioid equivalence metric
+
+We can express the OME value for patient $j$ as $\text{OME}_j$ in @eq-ome as the sum of the dose $d$^[Medications administered in different dose units are generally converted to a single dose unit (often **mg**) and the conversion values updated to reflect this but in some cases they may be kept in their administered unit (**e.g. mcg**) and the conversion shifted by an appropriate factor.] for medication $i$ in the set of medications $\mathbf{M}$ multiplied by the conversion value $c$ for a given route $r$.
+
+$$\text{OME}_j = \sum_{i\in\mathbf{M}} d_i c_{i,r}
+$${#eq-ome}
+
+Given a parametric distribution, the arithmetic mean of a groups OME value $\mu_{\text{OME}}$ can calculated as @eq-mu-ome-1 as the sum of OME values across $N$ values of the group divided by the group size for $j \in N$.
+$$
+\mu_{\text{OME}} = \frac{1}{N} \sum^N_{j=1} \text{OME}_j
+$${#eq-mu-ome-1}
+
+The group mean can be expressed as the sum of mean dose $\mu_{d_{i}}$ within the group multiplied by the relevant conversion value as shown in @eq-mu-ome-final, the decomposition is demonstrated in @sec-equation-proof.
+
+$$\mu_{\text{OME}} = \sum_{i\in\mathbf{M}} \mu_{d_{i}} c_{i,r} 
+$${#eq-mu-ome-final}
+
+This demonstrates that the group mean $\mu_{\text{OME}}$ is sensitive to the relative proportions of the medications within each group. 
+
+For two  groups $A$ and $B$ where the $\mu_{d_{i}}^{(A)} \neq \mu_{d_{i}}^{(B)}$ then $\mu_{\text{OME}}^{(A)} \not\equiv \mu_{\text{OME}}^{(B)}$. Thus the difference between the observed $mu_{\text{OME}}^{(A)}$ and $mu_{\text{OME}}^{(B)}$ is a product of not only the statistical association by also the difference in proportions of medications within each group. This is shown in @sec-ome-difference-proof. 
+
+
+## Aims
+
+In this paper we will aim to demonstrate:
+
+1. Describe how the methods of calculating OME values in the peri-operative and surgical literature.
+
+2. Simulate and describe the influence of differing medication proportions on the results of an experiment. 
+
+3. Demonstrate this using prior examples from the literature. 
+
+
+# Methods
+
+## Rapid Literature Review
+
+A rapid literature review of the use of opioid equivalence metrics in peri-operative and surgical studies over 2025 was performed. A structured search of the PUBMED database as detailed in @sec-appendix-pubmed on 7th July 2026. Papers were screened and data extracted using the Covidence platform @zotero-item-670 with a custom proforma (@sec-appendix-cov-extraction). 
+
+```{r}
+# TO get screening data:
+# Covidence -> Export -> References subsection -> Title and absract screening -> Export as .csv -> Drag to data foler -> Rename to lit_screen.csn
+lit_screen <- read.csv("data/lit_screen.csv")
+lit_select <- read.csv("data/lit_select.csv")
+lit_included <- read.csv("data/lit_included.csv")
+lit_excluded <- read.csv("data/lit_excluded.csv")
+lit_data <- read.csv("data/lit_data.csv") %>% filter(Reviewer.Name == "Dylan Whitaker")
+
+n_lit_data <- nrow(lit_data)
+
+```
+
+## Simulated study
+
+A simulation of a study was performed to demonstrated the sensitivity of the opioid equivalence metric to the conversion values used and the proportions of opioids used between intervention groups. The simulation is reported with ADEMP structure @morrisUsingSimulationStudies2019. The summary of the simulation is provided in @nte-sim-design. 
+
+```{r}
+case_volume <- 100
+proportion_robotic <- 0.8
+t_0 = as.Date("2020-01-01")
+t_end = as.Date("2025-12-31")
+t_robot = as.Date("2023-01-01")
+proportion_morphine = 0.7
+oxycodone_shortage = c(as.Date("2024-01-01"), as.Date("2024-12-31"))
+
+mu_tot = 50
+sd_tot = 10
+potency_oxycodone_truth = 1.85
+potency_oxycodone_ome = 2
+  
+annual_n = 30
+robot_effect_size = 0.8
+  
+```
+
+::: {#nte-sim-design .callout-note title="Simulated trial design"}
+A research team at St Somewhere Hospital want to establish if the use of a robot for the procedure, a somethingectomy, reduces the post-operative opioid requirement.
+
+They design a cohort controlled trial with two intervention groups:
+  1) robot-assisted surgery
+  2) standard surgery. 
+  
+The primary outcome is the total opioid requirement, as measured as OME, in the first 24 hours post-operatively as a surrogate for the total pain caused by the surgical procedure.
+
+The usual case volume is `r case_volume` procedures per year, these were all performed using standard surgery until `r t_robot` when a robot was acquired, and since `r scales::percent(proportion_robotic)` of cases are performed with the robot. Data was collected between `r t_0` and `r t_end`.
+
+All patients are treated with a Patient Controlled Analgesia (PCA) after their operation and on average the anaesthetist will prescribe a morphine PCA to `r scales::percent(proportion_morphine)` of patients and an oxycodone PCA to the remainder based on clinical judgement. No other opioid medication was administered. 
+
+During the study there was a national shortage of oxycodone from `r oxycodone_shortage[1]` to `r oxycodone_shortage[2]` and at which time all patients were prescribed a morphine PCA. Whilst the authors described this in their methods section, they did feel it would impact their results as the differing opioids were already accounted for in their OME metric. 
+
+Patients in the standard surgery group have an expected opioid requirement ($\mu_{\text{OME}}$) of `r mu_tot`mg (sd `r sd_tot`) of morphine equivalents in the first 24 hours post-operatively. The authors expect that the robot-assisted surgery will reduce the opioid requirement by `r scales::percent(1-robot_effect_size)` and thus the expected opioid requirement for this group is `r mu_tot * (robot_effect_size)`mg of morphine equivalents in the first 24 hours post-operatively. The ground truth oxycodone potency is `r scales::percent(potency_oxycodone)` relative to morphine morphine and thus the conversion value for oxycodone ($c_{\text{oxycodone}}$) is `r 1/potency_oxycodone`. 
+:::
+
+The simulation was performed in `r version$version.string` and the code is available . 
+
+
+
+# Results
+
+## Rapid Literature Review 
+
+Of the 480 studies identified in the rapid literature search, *`r nrow(lit_included)` proceeded to data extraction and `r nrow(lit_excluded)` were ...* . 
+
+The distributions of the study designs and intervention types are shown in @fig-study-types. 
+```{r}
+#| label: fig-study-types
+#| fig-title: Study types
+
+# Plot for Study.type proportions
+plot_lit_study_type <- ggplot(lit_data, aes(x = Study.type)) +
+  geom_bar(aes(fill = Study.type)) +
+  labs(title = "Proportion of Study Types",
+       x = "Study Type",
+       y = "Count") +
+  theme_minimal() +
+  theme_academic()+
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  scale_fill_academic()+
+  theme(legend.position = "none")
+
+# Plot for Intervention proportions
+plot_lit_intervnetion_type <- ggplot(lit_data, aes(x = Intervention)) +
+  geom_bar(aes(fill = Intervention)) +
+  labs(title = "Proportion of Interventions",
+       x = "Intervention",
+       y = "Count") +
+  theme_minimal() +
+  theme_academic()+
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  scale_fill_academic()+
+  theme(legend.position = "none")
+
+plot_lit_study_type / plot_lit_intervnetion_type
+
+```
+
+With regards to the opioid conversion sets used `r lit_data %>% filter(Opioid.conversion.set == "Cited") %>% nrow()` cited another paper, whilst `r lit_data %>% filter(Opioid.conversion.set == "Included in text") %>% nrow()` included the conversion values in the methods. However for `r lit_data %>% filter(Opioid.conversion.set == "Not described") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.conversion.set == "Not described") %>% nrow()/n_lit_data)`) papers did not include any reference or citation to the opioid conversion sets used. Only `r lit_data %>% filter(Opioid.proportions.within.group == "Described") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.proportions.within.group == "Described") %>% nrow()/n_lit_data)`) *paper* described the proportions of opioids used between intervention groups as shown in @fig-study-results. 
+
+```{r}
+#| label: fig-study-results
+#| fig-title: Proportion of studies reporting conversion set and opiooid proportions
+
+# Prepare data for heatmap: sum of occurrences per combination
+heatmap_data <- lit_data |>
+  group_by(Opioid.conversion.set, Opioid.proportions.within.group) |>
+  summarise(count = n(), .groups = "drop")
+
+# Prepare data with a conditional color column for labels
+ggplot(heatmap_data, aes(x = Opioid.proportions.within.group, y = Opioid.conversion.set, fill = count)) +
+  geom_tile() +
+  geom_label(aes(label = paste0("n=",count), color = after_scale(ifelse(fill > 0.5, "black", "white"))),
+             fill = alpha("white", 0.7), size = 3.5) +
+  scale_fill_viridis_c(option = "A", direction = -1) +
+  labs(title = "Heatmap of Opioid Conversion Set vs Proportions",
+       x = "Proportion within group",
+       y = "Opioid conversion set",
+       fill = "Count") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid = element_blank()
+  )
+```
+
+## Simulation study 
+
+### Study set up and interpretation
+
+```{r, echo=FALSE, message=FALSE}
+# Source the founctions in simulaton.qmd with a temporary R script containing only code blocks
+temp_r_file <- tempfile(fileext = ".R")
+knitr::purl("simulation.qmd", output = temp_r_file, quiet = TRUE)
+source(temp_r_file)
+unlink(temp_r_file)
+rm(temp_r_file)
+```
+
+```{r }
+df <- sim_patient(
+  mu_tot = mu_tot,
+  potency_oxycodone_truth = potency_oxycodone_truth,
+  potency_oxycodone_ome = potency_oxycodone_ome,
+  proportion_morphine = proportion_morphine,
+  oxycodone_shortage = oxycodone_shortage,
+  t_0 = t_0,
+  t_end = t_end,
+  t_robot = t_robot,
+  annual_n = annual_n,
+  robot_effect_size = robot_effect_size
+)
+
+```
+
+`r nrow(df)` procedures were simulated using the parameters described in @nte-sim-design. The OME value for each patient was calculated use $c_{\text{morphine}}$ as 1 (as the reference medication) and $c_{\text{oxycodone}}$ as `r c_oxycodone_value`, in contract to the ground truth value of `r 1/potency_oxycodone`. The mean dose (mg), opioid and OME value for each group is shown in @tbl-sim-demo.
+
+```{r}
+#| label: tbl-sim-demo
+#| tbl-title: Demographic table of simulated study population
+library(tableone)
+
+table_1 <- CreateTableOne(data=df,
+               vars = c("dose", "opioid", "ome"),
+               strata = "robotic",
+               addOverall = TRUE,
+               test=FALSE)
+
+kableone(table_1)
+```
+
+::: {#fig-sim-density layout-ncol=2}
+```{r}
+#| label: fig-sim-dose-density
+#| fig-title: "Density plot of dose by medication"
+
+ggplot(df, aes(x=dose, fill=opioid))+
+  geom_density(alpha=0.5)+
+  theme_academic()+
+  labs(,
+        x="OME (mg)",
+        y="Density",
+        fill="Opioid")+
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) 
+```
+
+```{r}
+#| label: fig-sim-ome-density
+#| fig-title: "Density plot of ome by surgery type"
+
+ggplot(df, aes(x=ome, fill=robotic))+
+  geom_density(alpha=0.5)+
+  theme_academic()+
+  labs(title="Density plot of OME by robotic surgery",
+        x="OME (mg)",
+        y="Density",
+        fill="Robotic Surgery")+
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) 
+
+```
+:::
+
+@fig-sim-density Demonstrated the distribution of the dose of each medication (@fig-sim-dose-density) and the distribution of OME values by surgery type (@fig-sim-ome-density). The mean OME value for the robotic surgery group was `r df %>% filter(robotic == "Robotic") %>% summarise(mean(ome)) %>% round(1)` OME mg and for the standard surgery group was `r  df %>% filter(robotic != "Robotic") %>% summarise(mean(ome)) %>% round(1)`mg.
+
+```{r}
+result <- analyse_dataset(df)
+```
+
+Using a two sided t-test to measure the difference in mean OME between the robotic and standard surgery groups, the mean difference was `r round(result$mean_diff_ome)` OME mg (95% CI `r paste(round(result$conf_int_ome, 1), collapse = " to ")`) with a p-value of `r signif(result$p_value_ome, 3)`. To assess if the difference in proportion of morphine and oxodone was significant a Fishers Exact test was performed and found a p-value of `r signif(result$chisq_result_medication, 3)`.
+
+Thus the researched from St Somewhere Hospital were able to conclude that the robotic surgery was associated with a significant different post-operative OME dose. 
+
+### Impact of conversion set and proportions
+
+The study was then recreated using a grid search of different conversion values and differences proportion of post-operative oxycodone prescribing. 
+
+```{r}
+
+numb_trials <- 5
+conversion_values <- seq(from=1, to=2, by = 0.05)
+morphine_proportion <- seq(from =0.1, to= 0.9, by = 0.05)
+
+for(t in 1:numb_trials){
+  for(i in conversion_values){
+    for(j in morphine_proportion){
+    
+    df <- sim_patient(
+      mu_tot = mu_tot,
+      potency_oxycodone_truth = potency_oxycodone_truth,
+      potency_oxycodone_ome = i,
+      proportion_morphine = j,
+      oxycodone_shortage = oxycodone_shortage,
+      t_0 = t_0,
+      t_end = t_end,
+      t_robot = t_robot,
+      annual_n = annual_n,
+      robot_effect_size = robot_effect_size
+    )
+    
+    result <- analyse_dataset(df)
+    
+    if(t == 1 & i == conversion_values[1] & j == morphine_proportion[1]){
+      rm(results_grid)
+      results_grid <- data.frame(
+        trial = t,
+        conversion_value = i,
+        morphine_proportion = j,
+        mean_diff_ome = result$mean_diff_ome,
+        p_value_ome = result$p_value_ome,
+        p_value_fishers = result$chisq_result_medication
+      )
+    }else{
+    # Store results
+    results_grid <- rbind(results_grid, data.frame(
+      trial=t,
+      conversion_value = i,
+      morphine_proportion = j,
+      mean_diff_ome = result$mean_diff_ome,
+      p_value_ome = result$p_value_ome,
+      p_value_fishers = result$chisq_result_medication
+    ))
+    }
+    
+  }
+  }
+}
+
+results_grid <- results_grid %>% group_by(conversion_value, morphine_proportion) %>%
+  summarise(mean_diff_ome = mean(mean_diff_ome),
+            p_value_ome = mean(p_value_ome),
+            p_value_fishers = mean(p_value_fishers),
+            .groups = "drop") 
+
+ ggplot(results_grid, aes(x=conversion_value, y=morphine_proportion, fill=mean_diff_ome)) +
+  geom_tile() +
+  geom_text(aes(label = signif(mean_diff_ome, 2)), color = "white", size = 3) +
+  scale_fill_viridis_c(option = "A", direction = -1) +
+  labs(title = "Grid Search of Conversion Values and Morphine Proportions",
+       x = "Conversion Value for Oxycodone",
+       y = "Proportion of Morphine",
+       fill = "Mean Difference in OME") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid = element_blank()
+  )
+
+```
+
+Given a `r mu_tot` mg expected opioid requirement and a treatment effect of `r scales::percent(robot_effect_size-1)` mg we would expect the mean difference in OME of the robotic group to be `r (mu_tot * robot_effect_size)-mu_tot` mg OME.
+
+The results are shown in @fig-sim-grid-search. 
+
+
+```{r}
+
+library(dplyr)
+library(tidyr)
+library(plotly)
+
+# 1. Extract the sorted unique axes for x and y
+x <- sort(unique(results_grid$conversion_value))
+y <- sort(unique(results_grid$morphine_proportion))
+
+# 2. Pivot the long dataframe into a wide matrix for z
+z <- results_grid %>%
+  # Ensure data is ordered correctly before pivoting
+  arrange(morphine_proportion, conversion_value) %>%
+  # Pivot: columns become x, rows become y, values are z
+  pivot_wider(
+    names_from = conversion_value, 
+    values_from = mean_diff_ome
+  ) %>%
+  # Drop the y-axis column so only the z-values remain in the matrix
+  select(-morphine_proportion) %>%
+  as.matrix()
+
+# 3. Pass the formatted x, y, and z directly into your plotly template
+fig <- plot_ly(
+  type = 'surface',
+  contours = list(
+    #x = list(show = TRUE, start = 1.5, end = 2, size = 0.04, color = 'white'),
+    #z = list(show = TRUE, start = 0.5, end = 0.8, size = 0.05)
+  ),
+  x = ~x,
+  y = ~y,
+  z = ~z
+)
+
+fig <- fig %>% layout(
+    scene = list(
+      xaxis = list(nticks = 20),
+      zaxis = list(nticks = 4),
+      camera = list(eye = list(x = 0, y = -1, z = 0.5)),
+      aspectratio = list(x = .9, y = .8, z = 0.2)
+    )
+)
+
+fig
+
+```
+
+
+
+# Conclusion
+
+

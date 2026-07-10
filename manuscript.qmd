@@ -151,6 +151,7 @@ potency_oxycodone_ome = 2
   
 annual_n = 30
 robot_effect_size = 0.8
+robot_effect_mg = mu_tot * (robot_effect_size-1)
   
 ```
 
@@ -169,7 +170,7 @@ All patients are treated with a Patient Controlled Analgesia (PCA) after their o
 
 During the study there was a national shortage of oxycodone from `r oxycodone_shortage[1]` to `r oxycodone_shortage[2]` and at which time all patients were prescribed a morphine PCA. Whilst the authors described this in their methods section, they did feel it would impact their results as the differing opioids were already accounted for in their OME metric. 
 
-Patients in the standard surgery group have an expected opioid requirement ($\mu_{\text{OME}}$) of `r mu_tot`mg (sd `r sd_tot`) of morphine equivalents in the first 24 hours post-operatively. The authors expect that the robot-assisted surgery will reduce the opioid requirement by `r scales::percent(1-robot_effect_size)` and thus the expected opioid requirement for this group is `r mu_tot * (robot_effect_size)`mg of morphine equivalents in the first 24 hours post-operatively. The ground truth oxycodone potency is `r scales::percent(potency_oxycodone)` relative to morphine morphine and thus the conversion value for oxycodone ($c_{\text{oxycodone}}$) is `r 1/potency_oxycodone`. 
+Patients in the standard surgery group have an expected opioid requirement ($\mu_{\text{OME}}$) of `r mu_tot`mg (sd `r sd_tot`) of morphine equivalents in the first 24 hours post-operatively. The authors expect that the robot-assisted surgery will reduce the opioid requirement by `r scales::percent(1-robot_effect_size)` and thus the expected opioid requirement for this group is `r mu_tot * (robot_effect_size)`mg of morphine equivalents in the first 24 hours post-operatively. The ground truth oxycodone potency is `r scales::percent(potency_oxycodone_truth)` relative to morphine morphine and thus the conversion value for oxycodone ($c_{\text{oxycodone}}$) is `r 1/potency_oxycodone_truth`. 
 :::
 
 The simulation was performed in `r version$version.string` and the code is available . 
@@ -272,7 +273,7 @@ df <- sim_patient(
 
 ```
 
-`r nrow(df)` procedures were simulated using the parameters described in @nte-sim-design. The OME value for each patient was calculated use $c_{\text{morphine}}$ as 1 (as the reference medication) and $c_{\text{oxycodone}}$ as `r c_oxycodone_value`, in contract to the ground truth value of `r 1/potency_oxycodone`. The mean dose (mg), opioid and OME value for each group is shown in @tbl-sim-demo.
+`r nrow(df)` procedures were simulated using the parameters described in @nte-sim-design. The OME value for each patient was calculated use $c_{\text{morphine}}$ as 1 (as the reference medication) and $c_{\text{oxycodone}}$ as `r 1/potency_oxycodone_ome`, in contract to the ground truth value of `r 1/potency_oxycodone_truth`. The mean dose (mg), opioid and OME value for each group is shown in @tbl-sim-demo.
 
 ```{r}
 #| label: tbl-sim-demo
@@ -334,132 +335,80 @@ Thus the researched from St Somewhere Hospital were able to conclude that the ro
 The study was then recreated using a grid search of different conversion values and differences proportion of post-operative oxycodone prescribing. 
 
 ```{r}
+#| label: fig-sim-grid-search-1
 
-numb_trials <- 5
-conversion_values <- seq(from=1, to=2, by = 0.05)
-morphine_proportion <- seq(from =0.1, to= 0.9, by = 0.05)
-
-for(t in 1:numb_trials){
-  for(i in conversion_values){
-    for(j in morphine_proportion){
-    
-    df <- sim_patient(
-      mu_tot = mu_tot,
-      potency_oxycodone_truth = potency_oxycodone_truth,
-      potency_oxycodone_ome = i,
-      proportion_morphine = j,
-      oxycodone_shortage = oxycodone_shortage,
-      t_0 = t_0,
-      t_end = t_end,
-      t_robot = t_robot,
-      annual_n = annual_n,
-      robot_effect_size = robot_effect_size
-    )
-    
-    result <- analyse_dataset(df)
-    
-    if(t == 1 & i == conversion_values[1] & j == morphine_proportion[1]){
-      rm(results_grid)
-      results_grid <- data.frame(
-        trial = t,
-        conversion_value = i,
-        morphine_proportion = j,
-        mean_diff_ome = result$mean_diff_ome,
-        p_value_ome = result$p_value_ome,
-        p_value_fishers = result$chisq_result_medication
-      )
-    }else{
-    # Store results
-    results_grid <- rbind(results_grid, data.frame(
-      trial=t,
-      conversion_value = i,
-      morphine_proportion = j,
-      mean_diff_ome = result$mean_diff_ome,
-      p_value_ome = result$p_value_ome,
-      p_value_fishers = result$chisq_result_medication
-    ))
-    }
-    
-  }
-  }
-}
-
-results_grid <- results_grid %>% group_by(conversion_value, morphine_proportion) %>%
-  summarise(mean_diff_ome = mean(mean_diff_ome),
-            p_value_ome = mean(p_value_ome),
-            p_value_fishers = mean(p_value_fishers),
-            .groups = "drop") 
-
- ggplot(results_grid, aes(x=conversion_value, y=morphine_proportion, fill=mean_diff_ome)) +
-  geom_tile() +
-  geom_text(aes(label = signif(mean_diff_ome, 2)), color = "white", size = 3) +
-  scale_fill_viridis_c(option = "A", direction = -1) +
-  labs(title = "Grid Search of Conversion Values and Morphine Proportions",
-       x = "Conversion Value for Oxycodone",
-       y = "Proportion of Morphine",
-       fill = "Mean Difference in OME") +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    panel.grid = element_blank()
-  )
+simulation1 <- run_simulation(trials=5,
+               conversion_values = seq(from=1, to=4, by = 0.2),
+               morphine_proportion = seq(from =0.1, to= 0.9, by = 0.05)
+               )
+plot_grid(simulation1,
+          potency_oxycodone_truth = potency_oxycodone_truth,
+          robot_effect_mg = robot_effect_mg)
 
 ```
 
 Given a `r mu_tot` mg expected opioid requirement and a treatment effect of `r scales::percent(robot_effect_size-1)` mg we would expect the mean difference in OME of the robotic group to be `r (mu_tot * robot_effect_size)-mu_tot` mg OME.
 
-The results are shown in @fig-sim-grid-search. 
+The results shown in @fig-sim-grid-search show that where the proportions of morphine morphine prescribed post-op, (thus meaning a shortage of oxycodone has little influence on prescribing patterns and hence the effect of the exogenous shock is little) then across the values of $c_{\text{Oxycodone}}$, the true difference in treatment groups is well observed. With all situations being statistically significant. However as the proportion of post-operative prescribing shifts towards oxycodone, the observed difference in OME between the two groups becomes highly sensitive to the conversion value used. This is due to the exogenous effect of the oxycodone shortage impacting the robotic group more than the the standard surgery group. 
 
+In this study set up, the true effect of the robot is powerful with an true effect of -10mg which is equal to 1 SD. Power calculations in @sec-appendix-simulation-power demonstrate that this is a very highly powered study. 
 
 ```{r}
-
-library(dplyr)
-library(tidyr)
-library(plotly)
-
-# 1. Extract the sorted unique axes for x and y
-x <- sort(unique(results_grid$conversion_value))
-y <- sort(unique(results_grid$morphine_proportion))
-
-# 2. Pivot the long dataframe into a wide matrix for z
-z <- results_grid %>%
-  # Ensure data is ordered correctly before pivoting
-  arrange(morphine_proportion, conversion_value) %>%
-  # Pivot: columns become x, rows become y, values are z
-  pivot_wider(
-    names_from = conversion_value, 
-    values_from = mean_diff_ome
-  ) %>%
-  # Drop the y-axis column so only the z-values remain in the matrix
-  select(-morphine_proportion) %>%
-  as.matrix()
-
-# 3. Pass the formatted x, y, and z directly into your plotly template
-fig <- plot_ly(
-  type = 'surface',
-  contours = list(
-    #x = list(show = TRUE, start = 1.5, end = 2, size = 0.04, color = 'white'),
-    #z = list(show = TRUE, start = 0.5, end = 0.8, size = 0.05)
-  ),
-  x = ~x,
-  y = ~y,
-  z = ~z
-)
-
-fig <- fig %>% layout(
-    scene = list(
-      xaxis = list(nticks = 20),
-      zaxis = list(nticks = 4),
-      camera = list(eye = list(x = 0, y = -1, z = 0.5)),
-      aspectratio = list(x = .9, y = .8, z = 0.2)
-    )
-)
-
-fig
+robot_effect_mg = -4
+robot_effect_size = (mu_tot + robot_effect_mg)/mu_tot
 
 ```
 
+The experiment was run again but with a more modest effect of `r robot_effect_mg`mg or a post-operative OME `r scales::percent(robot_effect_size)` percent of the non-robotic group.
 
+```{r}
+#| label: fig-sim-grid-search-2
+
+#Note that the robot_effect_size vairable is hard coded to the global_env above 
+simulation2 <- run_simulation(trials=5,
+               conversion_values = seq(from=1, to=4, by = 0.2),
+               morphine_proportion = seq(from =0.1, to= 0.9, by = 0.05)
+               )
+plot_grid(simulation2,
+          potency_oxycodone_truth = potency_oxycodone_truth,
+          robot_effect_mg = robot_effect_mg)
+
+```
+
+## Demonstrating the sensitivity of medication proportion separate from conversion values. 
+
+In @eq-final-decomposition demonstrates that the difference in group means is dependant on the associational difference induced by the treatment in addition to the medication proportions, both of which are independent of the conversion values used. To demonstrate this, a simplified version of of the simulated study described in @#nte-sim-design was performed. 
+
+We will set the following parameters:
+
+- $\delta \mu_{\text{OME}}$: The standardised effect size 
+
+- $\sigma$: The standard deviation of the OME values in the population.
+
+- $\Delta p_i$: The difference in the proportion of medication $i$ between group $A$ and $B$.
+
+These will allow us to define the following using the equations in @eq-simple-exp: 
+
+- $\Delta \mu_{\text{OME}}$: The absolute difference in mean OME between group $A$ and $B$.
+
+
+$$\begin{aligned}
+\frac{\delta \mu_{\text{OME}}}{\sigma}  = \Delta \mu_{\text{OME}} \\
+\Delta \mu_{\text{OME}} = \mu_{\text{OME}}^{(A)} - \mu_{\text{OME}}^{(B)}\\
+\Delta p_i = p_i^{(A)} - p_i^{(B)} 
+\end{aligned}
+$$ {#eq-simple-exp}
+
+```{r}
+
+delta_mu = 1
+sigma = 1
+Delta_mu = delta_mu/sigma
+
+i <- c("morphine", "oxycodone")
+
+
+```
 
 # Conclusion
 

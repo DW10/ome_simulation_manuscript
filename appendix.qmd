@@ -104,4 +104,99 @@ knitr::kable(tbl_extraction_form,
 
 ```
 
+## Simulation study
 
+### Power calculation {#sec-appendix-simulation-power}
+
+In the first part of the experiment a large effect size is used.
+
+```{r}
+
+t_0 = as.Date("2020-01-01")
+t_end = as.Date("2025-12-31")
+t_robot = as.Date("2023-01-01")
+study_length_years <- as.numeric(difftime(t_end, t_0,  unit="weeks"))/52.25
+robot_length_years <- as.numeric(difftime(t_end, t_robot,  unit="weeks"))/52.25
+
+case_volume <- 100
+total_study_population <- case_volume * study_length_years
+proportion_robotic <- 0.8
+total_robotic <- robot_length_years * case_volume * proportion_robotic
+total_non_robotic = total_study_population - total_robotic
+
+proportion_morphine = 0.7
+oxycodone_shortage = c(as.Date("2024-01-01"), as.Date("2024-12-31"))
+
+mu_tot = 50
+sd_tot = 10
+potency_oxycodone_truth = 1.85
+potency_oxycodone_ome = 2
+
+robot_effect_size = 0.8
+
+mu_robotic = mu_tot * robot_effect_size
+mean_diff = mu_robotic - mu_tot
+mean_diff_sd = mean_diff/sd_tot
+
+```
+
+For a study period of `r study_length_years` years and a annual case volume of `r case_volume` the total number of expected study participants is `r total_study_population`, of which we would expect `r total_robotic` to be robotic cases and `r total_non_robotic`  given a `r robot_length_years`year period where `r scales::percent(proportion_robotic)` of cases are performed robotically.
+
+Assuming a `r mu_tot` mg (SD: `r sd_tot` mg) mean opioid requirement for the non-robotic population, we can calculate the expected mean OME requirement for robotic and non-robotic cases given a `r robot_effect_size` effect size. The expected mean OME requirement for robotic cases is `r mu_robotic` mg giving a mean difference of `r  mean_diff` mg or `r mean_diff_sd` standard deviations.
+
+```{r}
+library(pwr)
+power_exp_1 <- pwr.t2n.test(n1 = total_non_robotic, 
+             n2 = total_robotic, 
+             d = mean_diff_sd, 
+             sig.level = 0.05, 
+             alternative = "two.sided")
+
+```
+Given the inital experimental set up it is clear that the study is very highly powered with the power value to be calculated at `r scales::percent(power_exp_1$power)`.
+
+@fig-power-curve demonstrated the power curve for the comparison of OME between robotic and non-robotic surgical groups. The dashed lines indicate the minimum detectable effect size at 80% power.
+
+```{r}
+#| label: fig-power-curve
+#| fig-cap: "Power curve for the comparison of OME between robotic and non-robotic surgical groups. The dashed lines indicate the minimum detectable effect size at 80% power."
+
+library(pwr)
+library(ggplot2)
+
+d_seq <- seq(0.05, 1.0, by = 0.005)
+
+power_seq <- sapply(d_seq, function(d) {
+  pwr.t2n.test(n1 = total_non_robotic, n2 = total_robotic,
+               d = d, sig.level = 0.05,
+               alternative = "two.sided")$power
+})
+
+mdd <- pwr.t2n.test(n1 = total_non_robotic, n2 = total_robotic,
+                    sig.level = 0.05, power = 0.8,
+                    alternative = "two.sided")$d
+mdd_mg = sd_tot * mdd
+
+power_df <- data.frame(d = d_seq, power = power_seq)
+
+ggplot(power_df, aes(x = d, y = power)) +
+  geom_line() +
+  geom_hline(yintercept = 0.8, linetype = "dashed", colour = "grey40") +
+  geom_vline(xintercept = mdd, linetype = "dashed", colour = "grey40") +
+  annotate("text", x = mdd + 0.03, y = 0.05,
+           label = paste0("MDD = ", round(mdd_mg, 2),"mg \n(SD =" , round(mdd, 3), ")"),
+           hjust = 0, size = 3.5) +
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2),
+                     labels = scales::percent_format()) +
+  labs(x = "Cohen's *d* (standardised effect size)",
+       y = "Power (1 − β)") +
+  theme_classic() +
+  theme(axis.title.x = ggtext::element_markdown())
+```
+
+With the observed sample sizes, the minimum detectable effect size at 80% power is 
+*d* = `r round(mdd, 3)`, which equates to a mean difference of `r round(mdd_mg, 2)` mg OME.
+
+The effect size is use to inform the weakly powered study in 
+
+```

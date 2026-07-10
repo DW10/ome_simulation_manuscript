@@ -91,7 +91,6 @@ analyse_dataset <- function(df){
   # Perform t-test for difference in mean OME between robotic and non-robotic procedures
   t_test_result <- t.test(ome ~ robotic, data = df)
 
-  
   # analyse the difference between the opioid proportions
   fishers_result <- fisher.test(table(df$robotic, df$opioid)) 
   
@@ -102,6 +101,114 @@ analyse_dataset <- function(df){
     conf_int_ome = t_test_result$conf.int,
     chisq_result_medication = fishers_result$p.value
   ))
+}
+
+```
+
+The `run simulation` function will run $t$ trials for each of the values of the conversion values $c_{\text{Oxycodone}}$ and the proportion of morphine perceribed post-operativly. The results will be stored in a data frame and then summarized using the mean of the results of the `analyse_dataset` function.  
+
+```{r run_simulation}
+
+run_simulation <- function(trials = 5,
+                          conversion_values = seq(from=1, to=4, by = 0.2),
+                          morphine_proportion = seq(from =0.1, to= 0.9, by = 0.05))
+                          {
+
+  for(t in 1:trials){
+    for(i in conversion_values){
+      for(j in morphine_proportion){
+    
+    df <- sim_patient(
+      mu_tot = mu_tot,
+      potency_oxycodone_truth = potency_oxycodone_truth,
+      potency_oxycodone_ome = i,
+      proportion_morphine = j,
+      oxycodone_shortage = oxycodone_shortage,
+      t_0 = t_0,
+      t_end = t_end,
+      t_robot = t_robot,
+      annual_n = annual_n,
+      robot_effect_size = robot_effect_size
+    )
+    
+    result <- analyse_dataset(df)
+    
+    if(t == 1 & i == conversion_values[1] & j == morphine_proportion[1]){
+      
+      results_grid <- data.frame(
+        trial = t,
+        conversion_value = i,
+        morphine_proportion = j,
+        mean_diff_ome = result$mean_diff_ome,
+        p_value_ome = result$p_value_ome,
+        p_value_fishers = result$chisq_result_medication
+      )
+    }else{
+    # Store results
+    results_grid <- rbind(results_grid, data.frame(
+      trial=t,
+      conversion_value = i,
+      morphine_proportion = j,
+      mean_diff_ome = result$mean_diff_ome,
+      p_value_ome = result$p_value_ome,
+      p_value_fishers = result$chisq_result_medication
+    ))
+    }
+    
+  }
+  }
+}
+
+  results_grid <- results_grid %>% group_by(conversion_value, morphine_proportion) %>%
+    summarise(mean_diff_ome = mean(mean_diff_ome),
+            p_value_ome = mean(p_value_ome),
+            p_value_fishers = mean(p_value_fishers),
+            .groups = "drop") %>%
+    mutate(significant = ifelse(p_value_ome < 0.05, "*", ""))
+
+  return(results_grid)
+
+} 
+
+```
+
+
+```{r plot_grid}
+
+plot_grid <- function(results_grid,
+                      potency_oxycodone_truth,
+                      robot_effect_mg){
+
+midpoint <- robot_effect_mg
+min_val <- min(results_grid$mean_diff_ome, na.rm = TRUE)  # adjust column name as needed
+max_val <- max(results_grid$mean_diff_ome, na.rm = TRUE)
+
+ ggplot(results_grid, aes(x=conversion_value, y=morphine_proportion, fill=mean_diff_ome)) +
+  geom_tile() +
+  geom_text(aes(label = significant), color = "darkgreen") +
+  scale_fill_gradientn(
+  colours = c("blue", "dodgerblue", "white", "orange", "red"),
+  values = scales::rescale(c(
+    min_val,
+    (min_val + midpoint) / 2,
+    midpoint,
+    (midpoint + max_val) / 2,
+    max_val
+  )),
+  limits = c(min_val, max_val)
+)+
+  labs(title = ,
+       x = "$c_{\text{Oxycodone}}$",
+       y = "Proportion of Morphine",
+       fill = "Mean Difference in OME",
+       caption = "Blue * denotes significant testing with p value < 0.05") +
+   geom_vline(xintercept = potency_oxycodone_truth, linetype = "dashed", color = "red")+
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid = element_blank()
+  )
+ 
 }
 
 ```

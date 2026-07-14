@@ -2,7 +2,56 @@
 title: "Code for simulation study"
 ---
 
-# Functions
+# Functions {#sec-sim}
+
+## Simple simulation {#sec-sim-simple}
+
+The `sim_simple` function simulates a simple experiment with two equally groups, control and treatment, for total `n` samples. `delta_p_i` controls the difference in proportion of medications `i` between the two groups. For each patient a expected opioid requirement is sampled from a normal distribution with mean `mu_opioid_requirment_control` and standard deviation `sigma`. The treatment group has a mean opioid requirement that is increased by the factor of `treatment_effect`.
+For samples where `i` is `"oxycodone"`, the expected opioid requirement is converted to a oxycodone dose using `potency_oxycodone` and then converted back into expected dose of morphine (the OME) using the conversion factor `potency_oxycodone` +/- an error term `error_in_c_oxycodone`.
+
+The function then returns the difference between the OME dose between the control and treatment group. 
+
+```{r sim_simple}
+
+sim_simple <- function(n, # total number of patients
+                       delta_p_i, # Difference in proportion of i between groups,
+                       i = c("morphine", "oxycodone"), # The two medications
+                       mu_opioid_requirment_control = 1, 
+                       sigma = 0.1,
+                       treatment_effect = 0,
+                       potency_oxycodone,
+                       error_in_c_oxycodone = 0){
+  
+   group_control = data.frame(
+     group = "control",
+     drug = sample(i, size = n/2, replace = TRUE, prob = c(0.5+delta_p_i/2, 0.5-delta_p_i/2)),
+     opioid_req = rnorm(n/2, mean = mu_opioid_requirment_control, sd = sigma)
+   )
+  
+  group_treatment = data.frame(
+     group = "treatment",
+     drug = sample(i, size = n/2, replace = TRUE, prob = c(0.5-delta_p_i/2, 0.5+delta_p_i/2)),
+     opioid_req = rnorm(n/2, mean = mu_opioid_requirment_control+(mu_opioid_requirment_control*treatment_effect), sd = sigma)
+   )
+  
+  result <- rbind(group_control,group_treatment) %>%
+    mutate(dose_recived = ifelse(drug == "morphine", opioid_req, opioid_req/potency_oxycodone),
+           ome = ifelse(drug == "morphine", dose_recived, dose_recived*(potency_oxycodone+(potency_oxycodone*error_in_c_oxycodone))
+                        ))
+  
+  analysis <- result %>%
+    group_by(group) %>%
+    summarise(proportion_morphine = sum(drug == "morphine")/n(),
+              mean_ome = mean(ome),
+              n = n(),
+              .groups = "drop") 
+    
+  return(analysis$mean_ome[2] - analysis$mean_ome[1])
+  
+}
+
+```
+
 
 The `sim_patient` function produces a study dataset by seeding procedure dates given the annual case load and the study period. Then for each procedure sampling whether the procedure is robotic or standard, and finally sampling which opioid is used.
 

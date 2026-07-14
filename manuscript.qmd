@@ -4,12 +4,20 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
+```{r, echo=FALSE, message=FALSE}
+# Source the founctions in simulaton.qmd with a temporary R script containing only code blocks
+temp_r_file <- tempfile(fileext = ".R")
+knitr::purl("simulation.qmd", output = temp_r_file, quiet = TRUE)
+source(temp_r_file)
+unlink(temp_r_file)
+rm(temp_r_file)
+```
 
 ```{r}
 #| warning: false
 #| message: false
 
-
+library(scales)
 library(kableExtra)
 library(dplyr)
 library(ggplot2)
@@ -133,7 +141,54 @@ n_lit_data <- nrow(lit_data)
 
 ## Simulated study
 
-A simulation of a study was performed to demonstrated the sensitivity of the opioid equivalence metric to the conversion values used and the proportions of opioids used between intervention groups. The simulation is reported with ADEMP structure @morrisUsingSimulationStudies2019. The summary of the simulation is provided in @nte-sim-design. 
+Two simulated studies were performed to demonstrate the sensitivity of the OME metric to differences in the proportions of medications between groups and the conversion values used. 
+
+### Simple simulation study
+
+The first simulation aimed to quantify the relationship between the difference in proportion of a binary choice of medication between two groups, $\Delta p_i$ and the error in the conversion value used for the non-reference medication $\delta c_{i}$ on the observed difference in mean OME between the two groups ($\Delta \mu_{\text{OME}}$).
+
+$$
+\begin{aligned}
+\text{for } i \in \{\text{morphine, oxycodone} \} \\
+\Delta p_i = \Delta p_{\text{oxycodone}} = p_{\text{oxycodone}}^{\text{(control)}} - p_{\text{oxycodone}}^{\text{(intervention)}} \\
+\delta c_i = c_{\text{oxycodone}} + (c_{\text{oxycodone}} * \epsilon) \\
+\Delta \mu_{\text{OME}} = \mu_{\text{OME}}^{\text{(control)}} - \mu_{\text{OME}}^{\text{(intervention)}}
+\end{aligned}
+$$
+
+```{r sim simple}
+
+p_min <- -1
+p_max <- 1
+e_min <- -1
+e_max <- 1
+n = 10000
+mu_opioid_requirment_control = 10
+sigma = 0.1
+treatment_effect = 0.5
+
+simple_results <- data.frame(p = numeric(), e = numeric(), diff = numeric())
+for(p in seq(p_min, p_max, by = 0.05)){
+  for(e in seq(e_min, e_max, by = 0.05)){
+    
+    diff <- sim_simple(
+      n = n,
+      delta_p_i = p,
+      sigma = sigma,
+      mu_opioid_requirment_control = mu_opioid_requirment_control,
+      potency_oxycodone = 2,
+      error_in_c_oxycodone = e,
+      treatment_effect = treatment_effect
+    )
+    
+    simple_results <- rbind(simple_results, data.frame(p = p, e = e, diff = diff))
+  }
+}
+```
+
+Across the grid of values for $\Delta p_i$ and $\delta c_{i}$, `r comma(n)` total samples of two groups (control and intervention) with the observed difference in mean OME between the two groups was calculated. The expected mean dose was $\mathbb{E}$(`r mu_opioid_requirment_control`) with $\sigma$(`r sigma`)  For this simulation, the effect size between the control and treatment groups was set to `r treatment_effect`,thus $\mathbb{E}(\text{OME})_{\text{control}} = \mathbb{E}(\text{OME})_{\text{intervention}}$ and hence the expected value of $\Delta_{\text{control},\text{intervention}}\mu_{\text{OME}}$ is 0. 
+
+### Exemplar simulation study
 
 ```{r}
 case_volume <- 100
@@ -148,34 +203,33 @@ mu_tot = 50
 sd_tot = 10
 potency_oxycodone_truth = 1.85
 potency_oxycodone_ome = 2
-  
+
 annual_n = 30
 robot_effect_size = 0.8
 robot_effect_mg = mu_tot * (robot_effect_size-1)
-  
 ```
 
-::: {#nte-sim-design .callout-note title="Simulated trial design"}
-A research team at St Somewhere Hospital want to establish if the use of a robot for the procedure, a somethingectomy, reduces the post-operative opioid requirement.
+Following this, a realistic exemplar study was performed to demonstrate the applicability of the this relationship on a peri-opererative study. The summary of the simulation is provided in @nte-sim-design. The difference in proportion between groups is simulated using a medication shortage that shifts baseline practice, this shortage effects one group to a greater extent thus scaling the change in proportion in a divergent manner. In this simulation the effect size of the robot is set to `r robot_effect_mg` OME mg. 
+
+::: {#nte-sim-design .callout-note title="Simulated trial design" collapse=true}
+A research team at St Somewhere Hospital want to establish if the use of a robot for a surgical procedure, reduces the post-operative opioid requirement.
 
 They design a cohort controlled trial with two intervention groups:
-  1) robot-assisted surgery
-  2) standard surgery. 
+  1) robot-assisted surgery - known as "robotic"
+  2) standard open surgery - known as "non-robotic"
   
-The primary outcome is the total opioid requirement, as measured as OME, in the first 24 hours post-operatively as a surrogate for the total pain caused by the surgical procedure.
+The primary outcome is the total opioid requirement, as measured in OME mg, in the first 24 hours post-operatively as a surrogate for the total pain caused by the surgical procedure.
 
 The usual case volume is `r case_volume` procedures per year, these were all performed using standard surgery until `r t_robot` when a robot was acquired, and since `r scales::percent(proportion_robotic)` of cases are performed with the robot. Data was collected between `r t_0` and `r t_end`.
 
-All patients are treated with a Patient Controlled Analgesia (PCA) after their operation and on average the anaesthetist will prescribe a morphine PCA to `r scales::percent(proportion_morphine)` of patients and an oxycodone PCA to the remainder based on clinical judgement. No other opioid medication was administered. 
+All patients are treated with a Patient Controlled Analgesia (PCA) after their operation and on average the anaesthetist will prescribe a morphine PCA to `r scales::percent(proportion_morphine)` of patients and an oxycodone PCA to the remainder. No other opioid medication was administered. 
 
 During the study there was a national shortage of oxycodone from `r oxycodone_shortage[1]` to `r oxycodone_shortage[2]` and at which time all patients were prescribed a morphine PCA. Whilst the authors described this in their methods section, they did feel it would impact their results as the differing opioids were already accounted for in their OME metric. 
 
 Patients in the standard surgery group have an expected opioid requirement ($\mu_{\text{OME}}$) of `r mu_tot`mg (sd `r sd_tot`) of morphine equivalents in the first 24 hours post-operatively. The authors expect that the robot-assisted surgery will reduce the opioid requirement by `r scales::percent(1-robot_effect_size)` and thus the expected opioid requirement for this group is `r mu_tot * (robot_effect_size)`mg of morphine equivalents in the first 24 hours post-operatively. The ground truth oxycodone potency is `r scales::percent(potency_oxycodone_truth)` relative to morphine morphine and thus the conversion value for oxycodone ($c_{\text{oxycodone}}$) is `r 1/potency_oxycodone_truth`. 
 :::
 
-The simulation was performed in `r version$version.string` and the code is available . 
-
-
+All simulations were performed in `r version$version.string` and all code is available in @sec-sim. 
 
 # Results
 
@@ -246,16 +300,59 @@ ggplot(heatmap_data, aes(x = Opioid.proportions.within.group, y = Opioid.convers
 
 ## Simulation study 
 
-### Study set up and interpretation
+### Simple simulation
 
-```{r, echo=FALSE, message=FALSE}
-# Source the founctions in simulaton.qmd with a temporary R script containing only code blocks
-temp_r_file <- tempfile(fileext = ".R")
-knitr::purl("simulation.qmd", output = temp_r_file, quiet = TRUE)
-source(temp_r_file)
-unlink(temp_r_file)
-rm(temp_r_file)
+`r comma(nrow(simple_results))` different trials where performed across the grid values of $\Delta p_{\text{oxycodone}}$ (between `r p_max`, where all of the control group were treated with morphine and all of the control group were treated with oxycodone, and `r p_min`, the inverse) and $\delta c_{\text{oxycodone}}$. 
+
+```{r plot simple grid}
+#| label: fig-simple-grid
+#| title: "Heatmap of the difference in proportion between group and the error in conversion value" 
+
+library(latex2exp)
+
+plot_simple_grid <- ggplot(simple_results, aes(y = p, x = e, fill = diff)) +
+  geom_tile() +
+  labs(,
+       y = TeX(r'($\Delta  p_i$ (Difference in proportion))'),
+       x = TeX(r'($\delta c_{i}$ (Error in Conversion Value for Oxycodone) )'),
+       fill = TeX(r'(Observed difference ($\Delta \mu_{{OME}})$)')
+       ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid = element_blank(),
+    legend.position = "bottom")+
+  scale_fill_gradientn(
+  colours = c("blue", "dodgerblue", "white", "orange", "red"))+
+  geom_vline(xintercept = 0, linetype = "dashed", color = "black")+
+  geom_hline(yintercept = 0, linetype = "dashed", color = "black")+
+  annotate("text",x=-0.7, y=0.05, label = "Proportion of medication equal")+
+  annotate("text",x=-0.7, y=0.95, label = "Control group: 100% morphine\nIntervention group: 0% morphine")+
+  annotate("text",x=-0.7, y=-0.95, label = "Control group: 100% oxycodone\nIntervention group: 0% oxycodone")+
+  annotate("text",x=-0.05, y=-0.7, label = "No error in conversion value", angle=90)+
+  annotate("text",x=0.7, y=-0.05, label = "Overestimate potency ->" )+
+  annotate("text",x=-0.7, y=-0.05, label = "<- Underestimate potency")
+
+plot_simple_grid
+
 ```
+
+@fig-simple-grid demonstrates the interaction effect on the observed difference between the control group and treatment group. Where the proportion of medication in the control and intervention groups are the same ($\Delta p_i = 0$) then we note that the true effect size of 0 is recovered, regardless of any error in the conversion value ($\delta c_i$) used. However, as the proportions between the control and treatment group deviate, resulting difference observed is biased by any error in the conversion values. Where the groups are completely unmatched ($\Delta p_i \in 1,-1$) the resulting observed difference is the due entirely to the error in potency as shown in @eq-results-simple-1.
+
+$$
+\Delta \mu_{\text{OME}} = -1 \cdot \Delta p_i \cdot \delta c_i
+$$ {#eq-results-simple-1}
+
+This scaling constant is the expected dose for the control group as demonstrated in @sec-appendix-sim-1. 
+
+This relationship can be expressed shown in @eq-results-simple-2 (as expanded in in @eq-results-simple-2-proof).
+
+$$
+\mu^\text{intervention} = \mu^\text{control}[ 1 + \Delta p_i \cdot \delta c_i]
+$$ {#eq-results-simple-2}
+
+
+### Study set up and interpretation
 
 ```{r }
 df <- sim_patient(
@@ -399,16 +496,9 @@ $$\begin{aligned}
 \end{aligned}
 $$ {#eq-simple-exp}
 
-```{r}
-
-delta_mu = 1
-sigma = 1
-Delta_mu = delta_mu/sigma
-
-i <- c("morphine", "oxycodone")
 
 
-```
+
 
 # Conclusion
 

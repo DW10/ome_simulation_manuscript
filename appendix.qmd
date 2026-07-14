@@ -1,3 +1,8 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
 # Supplamentary materials
 
 ## Mathmatical proofs
@@ -55,6 +60,21 @@ $$
 \mu_{\text{OME}}^{(A)} - \mu_{\text{OME}}^{(B)} = \sum_{i\in\mathbf{M}} \underbrace{p_i^{(A)}\left(\bar{d}_i^{(A)} - \bar{d}_i^{(B)}\right)c_{i,r}}_{\text{Associational difference}} + \sum_{i\in\mathbf{M}} \underbrace{\bar{d}_i^{(B)}\left(p_i^{(A)} - p_i^{(B)}\right)c_{i,r}}_{\text{Medication proportion}}
 $$ {#eq-final-decomposition}
 
+### Simulation study
+
+$$
+\begin{aligned}
+\Delta \mu_{\text{OME}} = -1 \cdot \Delta p_i \cdot \delta c_i \\
+\Delta \mu_{\text{OME}} = -\mu_{\text{OME}}^\text{(control)} \cdot \Delta p_i \cdot \delta c_i \\
+\\
+p_i^{\text{(control)}} - p_i^{\text{(intervention)}} 
+\\
+
+\mu_{\text{OME}}^{\text{(control)}} - \mu_{\text{OME}}^{\text{(intervention)}} = -\mu_{\text{OME}}^\text{(control)} \cdot \Delta p_i \cdot \delta c_i \\
+\mu^\text{intervention} = \mu^\text{control}[ 1 + \Delta p_i \cdot \delta c_i]
+\end{aligned}
+$$ {#eq-results-simple-2-proof}
+
 ### Clinical Significance
 
 * **Associational difference:** Quantifies the true statistical association by isolating shifts in the active treatment magnitude while holding the selection rate constant ($p_i^{(A)}$).
@@ -105,6 +125,115 @@ knitr::kable(tbl_extraction_form,
 ```
 
 ## Simulation study
+
+### Effect of $\mu_{\text{OME}}^{\text{(control)}}$ on simple simulation {#sec-appendix-sim-1}
+
+```{r}
+
+p_min <- -1
+p_max <- 1
+e_min <- -1
+e_max <- 1
+n = 10000
+sigma = 0.1
+
+simple_results_mu <- data.frame(p = numeric(), e = numeric(), diff = numeric(), mu=numeric())
+for(mu in seq(0, 10, length.out = 6)){
+for(p in seq(p_min, p_max, by = 0.2)){
+  for(e in seq(e_min, e_max, by = 0.2)){
+    
+    diff <- sim_simple(
+      n = n,
+      delta_p_i = p,
+      sigma = sigma,
+      mu_opioid_requirment_control = mu,
+      potency_oxycodone = 2,
+      error_in_c_oxycodone = e,
+      treatment_effect = 0
+    )
+    
+    simple_results_mu <- rbind(simple_results_mu, data.frame(p = p, e = e, diff = diff, mu=mu))
+  }
+}
+}
+
+simple_results_t <- data.frame(p = numeric(), e = numeric(), diff = numeric(), t=numeric())
+for(t in seq(-1, 1, length.out = 9)){
+for(p in seq(p_min, p_max, by = 0.05)){
+  for(e in seq(e_min, e_max, by = 0.05)){
+    
+    diff <- sim_simple(
+      n = n,
+      delta_p_i = p,
+      sigma = sigma,
+      mu_opioid_requirment_control = 1,
+      potency_oxycodone = 2,
+      error_in_c_oxycodone = e,
+      treatment_effect = t
+    )
+    
+    simple_results_t <- rbind(simple_results_t, data.frame(p = p, e = e, diff = diff, t=t))
+  }
+}
+}
+
+
+```
+
+```{r}
+
+label_function <- function(val) {
+  paste0('mu["OME"]^"(control)" == ', val )
+}
+
+plot_simple_grid_mu <- ggplot(simple_results_mu, aes(y = p, x = e, fill = diff)) +
+  geom_tile() +
+  labs(,
+       y = TeX(r'($\Delta  p_i$ (Difference in proportion))'),
+       x = TeX(r'($\delta c_{i}$ (Error in Conversion Value for Oxycodone) )'),
+       fill = TeX(r'(Observed difference ($\Delta \mu_{{OME}})$)'),
+       subtitle = TeX(r'(True $\delta \mu_{{OME}} = 0$ )')
+       ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid = element_blank(),
+    legend.position = "bottom")+
+  scale_fill_gradientn(
+  colours = c("blue", "dodgerblue", "white", "orange", "red"))+
+  facet_wrap(~mu, labeller = as_labeller(label_function, default = label_parsed)
+             )
+  
+plot_simple_grid_mu
+
+```
+
+```{r}
+
+label_function <- function(val) {
+  paste0('delta["OME"] == ', val)
+}
+
+plot_simple_grid_t <- ggplot(simple_results_t, aes(y = p, x = e, fill = diff)) +
+  geom_tile() +
+  labs(,
+       y = TeX(r'($\Delta  p_i$ (Difference in proportion))'),
+       x = TeX(r'($\delta c_{i}$ (Error in Conversion Value for Oxycodone) )'),
+       fill = TeX(r'(Observed difference ($\Delta \mu_{{OME}})$)'),
+       caption  = TeX(r'($\mu_{{OME}}^{(control)}$ (Mean dose of control group) $= 1$ )')
+       ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid = element_blank(),
+    legend.position = "bottom")+
+  scale_fill_gradientn(
+  colours = c("blue", "dodgerblue", "white", "orange", "red"))+
+  facet_wrap(~t, labeller = as_labeller(label_function, default = label_parsed)
+             )
+  
+plot_simple_grid_t
+```
 
 ### Power calculation {#sec-appendix-simulation-power}
 

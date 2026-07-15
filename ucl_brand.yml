@@ -1,0 +1,59 @@
+meta:
+  name: "University College London (UCL)"
+  description: "UCL brand guidelines encoded for Quarto."
+
+color:
+  palette:
+    # Lead colours
+    dark-purple: "#361a54"
+    white: "#fafafa"
+    bright-purple: "#993bff"
+    mid-purple: "#ba82ff"
+    
+    # Supporting colours
+    light-purple: "#ddbdff"
+    pale-purple: "#eedeff"
+    heritage-blue: "#30d6ff"
+    
+    # Chart colours (from template)
+    chart-dark-blue: "#12239E"
+    chart-dark-red: "#751441"
+    chart-dark-green: "#10433F"
+    chart-light-blue: "#118DFF"
+    chart-light-orange: "#E66C37"
+    chart-light-pink: "#E645AB"
+    chart-light-green: "#1AAB40"
+
+  background: white
+  foreground: black
+  primary: dark-purple
+  secondary: bright-purple
+  info: heritage-blue
+  success: chart-light-green
+  warning: chart-light-orange
+  danger: chart-dark-red
+
+typography:
+  fonts:
+    - family: "UCL Sans"
+    - family: "DM Sans"
+      source: google
+    - family: "Aptos"
+  base: "UCL Sans"
+  headings: 
+    family: "UCL Sans"
+    color: primary
+  link:
+    decoration: underline
+    color: bright-purple
+
+#defaults:
+#  bootstrap:
+#    defaults:
+#      navbar-bg: "$brand-bright-purple"  # Resolved as a Sass variable
+#      navbar-fg: "$brand-white"
+#      sidebar-bg: "$brand-bright-purple"  # Resolved as a Sass variable
+#      sidebar-fg: "$brand-white"
+#      sidebar-hl: "$brand-heritage-blue"
+#      callout-color-note: "$brand-heritage-blue"
+#      toc-color: "$primary"

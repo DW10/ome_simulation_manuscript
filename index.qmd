@@ -1,3 +1,24 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r set quality}
+PRODUCTION_QUALITY <- FALSE
+```
+
 # Abstract {.unnumbered}
 
+::: {.callout-note}
+```{r print quality statement}
+if (PRODUCTION_QUALITY) {
+  print("High quality document - For review")
+} else {
+  print("Low quality document, \n edit the index.qmd to ` PRODUCTION_QUALITY <- TRUE ` before review")
+}
+```
+:::
+
 Abstract to be written
+

@@ -1,8 +1,13 @@
 ---
-title: "Code for simulation study"
+editor_options: 
+  chunk_output_type: console
 ---
 
-# Functions {#sec-sim}
+# Code for simulation study {#sec-sim}
+
+## Code repository
+
+The code will be hosted on a public github. 
 
 ## Simple simulation {#sec-sim-simple}
 
@@ -12,6 +17,8 @@ For samples where `i` is `"oxycodone"`, the expected opioid requirement is conve
 The function then returns the difference between the OME dose between the control and treatment group. 
 
 ```{r sim_simple}
+#| echo: true
+#| collape: true
 
 sim_simple <- function(n, # total number of patients
                        delta_p_i, # Difference in proportion of i between groups,
@@ -52,12 +59,13 @@ sim_simple <- function(n, # total number of patients
 
 ```
 
+## Exemplar simulation {#sec-sim-exemplar}
 
 The `sim_patient` function produces a study dataset by seeding procedure dates given the annual case load and the study period. Then for each procedure sampling whether the procedure is robotic or standard, and finally sampling which opioid is used.
 
 The function then estimates the mean analgesia requirement based on treatment and opioid and samples the dose from a normal distribution.
 
-```{r sim_patient }
+```{r sim_patient}
 #| echo: true
 #| collape: true
 
@@ -157,6 +165,9 @@ analyse_dataset <- function(df){
 The `run simulation` function will run $t$ trials for each of the values of the conversion values $c_{\text{Oxycodone}}$ and the proportion of morphine perceribed post-operativly. The results will be stored in a data frame and then summarized using the mean of the results of the `analyse_dataset` function.  
 
 ```{r run_simulation}
+#| echo: true
+#| collape: true
+
 
 run_simulation <- function(trials = 5,
                           conversion_values = seq(from=1, to=4, by = 0.2),
@@ -180,6 +191,15 @@ run_simulation <- function(trials = 5,
       robot_effect_size = robot_effect_size
     )
     
+    delta_p_oxycodone <- df |>
+      group_by(robotic) |>
+      summarise(p = mean(opioid == "Oxycodone")) |>
+      pull(p) |>
+      diff()
+    
+    epsilon <- (i - potency_oxycodone_truth)/potency_oxycodone_truth
+    
+    
     result <- analyse_dataset(df)
     
     if(t == 1 & i == conversion_values[1] & j == morphine_proportion[1]){
@@ -190,7 +210,9 @@ run_simulation <- function(trials = 5,
         morphine_proportion = j,
         mean_diff_ome = result$mean_diff_ome,
         p_value_ome = result$p_value_ome,
-        p_value_fishers = result$chisq_result_medication
+        p_value_fishers = result$chisq_result_medication,
+        delta_p_oxycodone = delta_p_oxycodone,
+        epsilon = epsilon
       )
     }else{
     # Store results
@@ -200,7 +222,9 @@ run_simulation <- function(trials = 5,
       morphine_proportion = j,
       mean_diff_ome = result$mean_diff_ome,
       p_value_ome = result$p_value_ome,
-      p_value_fishers = result$chisq_result_medication
+      p_value_fishers = result$chisq_result_medication,
+      delta_p_oxycodone = delta_p_oxycodone,
+      epsilon = epsilon
     ))
     }
     
@@ -212,6 +236,8 @@ run_simulation <- function(trials = 5,
     summarise(mean_diff_ome = mean(mean_diff_ome),
             p_value_ome = mean(p_value_ome),
             p_value_fishers = mean(p_value_fishers),
+            delta_p_oxycodone = mean(delta_p_oxycodone),
+            epsilon = mean(epsilon),
             .groups = "drop") %>%
     mutate(significant = ifelse(p_value_ome < 0.05, "*", ""))
 
@@ -221,8 +247,12 @@ run_simulation <- function(trials = 5,
 
 ```
 
+`plot_grid()` function plots the heatmap of the results of the exemplar simulation. 
 
 ```{r plot_grid}
+#| echo: true
+#| collape: true
+
 
 plot_grid <- function(results_grid,
                       potency_oxycodone_truth,

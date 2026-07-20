@@ -85,40 +85,51 @@ $$
 d_{\text{referance}} \times c_{i,r} = d_{\text{target}}
 $$ {#eq-equivelent-dose}
 
-A worked example of this is process of opioid conversion calculation is provided in @nte-conversion-example. This approach is used clinically for opioid conversion or rotation and is the origin of the opioid equivalence system. As discusses above, with a small set of opioid equivalence values, it's possible to convert doses between a wide range of different opioids. 
+A worked example of this is process of opioid conversion calculation is provided in @sec-conversion-example. This approach is used clinically for opioid conversion or rotation and is the origin of the opioid equivalence system. As discusses above, with a small set of opioid equivalence values, it's possible to convert doses between a wide range of different opioids. 
 
 ## Opioid equivalence in research
 
-This technique of comparing opioid equivalent doses has lead to the development of a new metric, the sum opioid burden, by summing across the equivalent dose of morphine for each opioid administered). This is usually expressed in units of equivalent dose of oral morphine with the units of OME mg^[The use of oral morphine as the reference medication is likely due to the background in palliative care and the availability/use of oral morphine across healthcare systems]. Assuming that pain is well controlled, this the sum of the doses of oral morphine equivalence is a measure of the opioid burden allows for the estimation of the total pain a patient is experiencing as shown in @eq-pain-burden. 
+This technique of comparing opioid equivalent doses has lead to the development of a new metric, the sum opioid burden.  Assuming that pain is well controlled, this the sum of the doses of oral morphine equivalence is a measure of the opioid burden allows for the estimation of the total pain a patient is experiencing as shown in @eq-pain-burden. 
 $$
 \begin{alignat}{2}
 & & \mathit{Pain}_{\text{total}} &= \mathit{Pain}_{\text{experienced}} + \text{Analgesia} \\
-& & \text{OME mg} &\approx \text{Analgesia}  \\[1em]
+& & \text{Opioid burden} &\approx \text{Analgesia}  \\[1em]
 &\text{Where: } \qquad & \mathit{Pain}_{\text{experienced}} &\approx 0 \\
 &\text{then: } & \mathit{Pain}_{\text{total}} &\approx \text{Analgesia}
 \end{alignat}
 $$ {#eq-pain-burden}
 
-The ability to now approximate the total amount of pain a patient is experiencing is a powerful metric for research as there is now a easy to collect, specific and quantified value to estimate the amount of pain a patient is in. This offers an attractive primary outcome for any study looking to reduce the pain experianced though a surgical procedure. 
+The ability to now approximate the total amount of pain a patient is experiencing is a powerful metric for research as there is now a easy to collect, specific and quantified value to estimate the amount of pain a patient is in. This offers an attractive primary outcome for any study looking to reduce the pain experienced though a surgical procedure. 
 
-We can express the OME value for patient $j$ as $\text{OME}_j$ in @eq-ome as the sum of the dose $d$^[Medications administered in different dose units are generally converted to a single dose unit (often **mg**) and the conversion values updated to reflect this but in some cases they may be kept in their administered unit (**e.g. mcg**) and the conversion shifted by an appropriate factor.] for medication $i$ in the set of medications $\mathbf{M}$ multiplied by the conversion value $c$ for a given route $r$.
+## Defining OME
+
+To provide a value with a unit a reference medication is selected to ground the conversions. This is usually expressed in units of equivalent dose of oral morphine with the units of OME mg^[The use of oral morphine as the reference medication is likely due to the background in palliative care and the availability/use of oral morphine across healthcare systems]. 
+
+The opioid burden metric is often presented as the weighted sum of opioids administered. We can define $\text{OME}_j$ as the sum of the dose $d$ for medication $i$ in the set of medications $\mathbf{M}$ multiplied by the conversion value $c$ for a given route $r$ for patient $j$ as shown in @eq-ome.^[Medications administered in different dose units are generally converted to a single dose unit (often **mg**) and the conversion values updated to reflect this but in some cases they may be kept in their administered unit (**e.g. mcg**) and the conversion shifted by an appropriate factor.] $\text{OME}_j$ can often be expressed as a total of all opioids administered or within a specific time frame (*e.g.* 24 hours post-operative).
 
 $$\text{OME}_j = \sum_{i\in\mathbf{M}} d_i c_{i,r}
 $${#eq-ome}
 
-Given a parametric distribution, the arithmetic mean of a groups OME value $\mu_{\text{OME}}$ can calculated as @eq-mu-ome-1 as the sum of OME values across $N$ values of the group divided by the group size for $j \in N$.
+Whilst $\text{OME}_j$ provides an estimate of a specific patients opioid burden, for use within research, further statistical tools are often applied for hypothesis testing. Given a likley parametric distribution, the arithmetic mean of a groups OME value $\mu_{\text{OME}}$ is often calculated as the sum of OME values in the group $G$ divided by the group size as shown in as @eq-mu-ome-1.
 $$
-\mu_{\text{OME}} = \frac{1}{N} \sum^N_{j=1} \text{OME}_j
+\mu_{\text{OME}}^{(G)} = \frac{1}{|G|} \sum_{j=G} \text{OME}_j
 $${#eq-mu-ome-1}
 
-The group mean can be expressed as the sum of mean dose $\mu_{d_{i}}$ within the group multiplied by the relevant conversion value as shown in @eq-mu-ome-final, the decomposition is demonstrated in @sec-equation-proof.
+As the mean OME is a **mean of weighted sums** it can instead be expressed as a **weighted sum of mean doses** whereby the mean dose of a given medication within the group $\bar{d_i}$ is weighted by the conversion values $c_{i,r}$ as shown in @eq-mu-ome-final. The rearrangement is demonstrated in @sec-equation-proof.
 
-$$\mu_{\text{OME}} = \sum_{i\in\mathbf{M}} \mu_{d_{i}} c_{i,r} 
+$$\mu_{\text{OME}}^{(G)}  = \sum_{i\in\mathbf{M}} \bar{d_{i}} c_{i,r} 
 $${#eq-mu-ome-final}
 
-This demonstrates that the group mean $\mu_{\text{OME}}$ is sensitive to the relative proportions of the medications within each group. 
+@eq-mu-ome-final shows that the group mean $\mu_{\text{OME}}$ calculated for group $G$ is sensitive to the relative proportions of the medications within each group. For two groups $A$ and $B$ where the mean dose of a given opioid $i$ is not then same ($\bar{d_{i}}^{(A)} \neq \bar{d_{i}}^{(B)}$) then the resulting means OME values are not equivalent ($\mu_{\text{OME}}^{(A)} \not\equiv \mu_{\text{OME}}^{(B)}$). 
 
-For two  groups $A$ and $B$ where the $\mu_{d_{i}}^{(A)} \neq \mu_{d_{i}}^{(B)}$ then $\mu_{\text{OME}}^{(A)} \not\equiv \mu_{\text{OME}}^{(B)}$. Thus the difference between the observed $mu_{\text{OME}}^{(A)}$ and $mu_{\text{OME}}^{(B)}$ is a product of not only the statistical association by also the difference in proportions of medications within each group. This is shown in @sec-ome-difference-proof. 
+
+## Influence of conversion values 
+
+From @eq-mu-ome-final we see that the conversion value $c_{i,r}$ is a scaler applied to the mean dose ${\bar{d_i}}$. We have described the lineage of the conversion values from a estimate used in clinical practice to their integration in metrics used in research. 
+
+The accuracy of the conversion values (how close the value used for $c_{i,r}$ is to the true value) is not well described. For example inter-personal variation may have a significant impact on the potency of a medication for a given patient however on a population level they may offer a "average conversion value set". However given that the 
+
+We have demonstrated that the difference measured between the observed $\mu_{\text{OME}}^{(A)}$ and $\mu_{\text{OME}}^{(B)}$ is a product of not only the association of the two groups (be it statistical or causal), but also the difference in proportions of medications within each group. This is explicitly demonstrated in @sec-ome-difference-proof. 
 
 
 ## Aims
@@ -129,8 +140,7 @@ In this paper we will aim to demonstrate:
 
 2. Simulate and describe the influence of differing medication proportions on the results of an experiment. 
 
-3. Demonstrate this using prior examples from the literature. 
-
+3. Demonstrate how this influence can effect results using examples from the literature. 
 
 # Methods
 
@@ -155,7 +165,7 @@ n_lit_data <- nrow(lit_data)
 
 Two simulated studies were performed to demonstrate the sensitivity of the OME metric to differences in the proportions of medications between groups and the conversion values used. 
 
-### Simple simulation  {#sec-manuscript-simple-sim}
+### Simple simulation {#sec-manuscript-simple-sim}
 
 The first simulation aimed to quantify the relationship between the difference in proportion of a binary choice of medication between two groups, $\Delta p_i$ and the error in the conversion value used for the non-reference medication $\delta c_{i}$ on the observed difference in mean OME between the two groups ($\Delta \mu_{\text{OME}}$).
 

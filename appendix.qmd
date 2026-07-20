@@ -7,16 +7,19 @@ params:
 ---
 # Supplementary materials
 ```{r echo=FALSE, message=FALSE}
+#| output: false
+
 # Source the founctions in simulaton.qmd with a temporary R script containing only code blocks
 temp_r_file <- tempfile(fileext = ".R")
 knitr::purl("simulation.qmd", output = temp_r_file, quiet = TRUE)
+source(temp_r_file, echo = FALSE)
 knitr::purl("index.qmd", output = temp_r_file, quiet = TRUE)
 source(temp_r_file, echo = FALSE)
 unlink(temp_r_file)
 rm(temp_r_file)
 ```
 
-## Opioid equivelence calculations in practice
+## Example opioid equivalence calculation {#sec-conversion-example}
 
 **Question**: What dose of intravenous fentanyl will provide equal analgesic benefit to 5 mg of intravenous morphine, assuming IV fentanyl is 100 times more potent.
 
@@ -38,54 +41,87 @@ Then we multiple our reference dose of 5mg of morphine by the conversion value t
 This approach can also be used to convert from two non-reference medications by firstly converting to the reference (often oral morphine) and then to the target medication.
 
 
-
-
-
 ## Mathematical proofs
 
-### Proof for @eq-mu-ome-final {#sec-equation-proof}
- @eq-mu-ome-1 can then be substituted into the the arithmetic mean to yield @eq-mu-ome-2.
+### Rearrangement of @eq-mu-ome-1 to @eq-mu-ome-final {#sec-equation-proof}
+
+The equation for the group mean OME provided @eq-mu-ome-1 is is a weighted sum of the OME values for patients $j$ in group $G$.
+
 $$
-\mu = \frac{1}{N} \sum^N_{j=1}  \left( \sum_{i\in\mathbf{M}} d_{j,i} c_{i,r} \right)
-$${#eq-mu-ome-2}
-As finite summation is linear, we sun cam across the medications $i$ and then across the patients $p$. As the conversion vector $c_{i,r}$ is constant with respect to $j$ it can be factored out to yeild @eq-mu-ome-3
+\begin{align}
+\text{OME}_j &= \sum_{i\in\mathbf{M}} d_i c_{i,r} \\
+\mu_{\text{OME}}^{(G)} &= \frac{1}{|G|} \sum_{j=G} \text{OME}_j
+\end{align}
 $$
-\mu = \sum_{i\in\mathbf{M}} \left( \frac{1}{N} \sum^N_{j=1}  d_{j,i}  \right) c_{i,r}
-$${#eq-mu-ome-3}
+First the the expression for $\text{OME}_j$ is substituted into the group mean. Then the order of summation is rearranged as both the sets $G$ and $\mathbf{M}$ are finite. Following this, the constant $c_{i,r}$ is factored out of the inner sum whilst the scaling term $\frac{1}{|G|}$ of group size is distributed to the inner term. 
+
+$$
+\begin{align}
+\mu_{\text{OME}}^{(G)} &= \frac{1}{|G|} \sum_{j \in G}  \left( \sum_{i\in\mathbf{M}} d_{j,i} c_{i,r} \right) \\
+\mu_{\text{OME}}^{(G)} &= \frac{1}{|G|} \sum_{j \in G}  \sum_{i\in\mathbf{M}} d_{j,i} c_{i,r} \\
+\mu_{\text{OME}}^{(G)} &= \sum_{i\in\mathbf{M}} \left( \frac{1}{|G|} \sum_{j=1}  d_{j,i}  \right) c_{i,r}
+\end{align}
+$$
+
+We can then define the mean dose $\bar{d}$ of medication $i$ as the arithmetic mean of doses for patients $j \in G$. 
+
+$$
+\bar{d_i} = \frac{1}{|G|} \sum_{j \in G} d_{j,i}
+$$
+This mean dose is then substituted back into the equation to yield the final rearrangement as seen in @eq-mu-ome-final. 
+
+$$
+\mu_{\text{OME}}^{(G)}  = \sum_{i\in\mathbf{M}} \bar{d_{i}} c_{i,r} 
+$$
 
 
-### Proof to demonstrate the sensitivity of the arthimetic mean to proportions {#sec-ome-difference-proof}
+### Sensitivity of the arithmetic mean to differing proportions of $\bar{d_i}$ {#sec-ome-difference-proof}
 
-To describe how the variance between group means ($\mu_{\text{OME}}^{(A)} - \mu_{\text{OME}}^{(B)}$) is driven by both the statistical association between treatment groups (Associational difference)^[This is not a causal quantitiy but rather the combination of the causal effect of the treatement on the OME metric combined with the statical association of the treatment on the outcome] and composition of the medications within each group (medication proportion), we employed a structural decomposition.
+#### True treatment effect
+
+Equation @eq-mu-ome-final outlines the calculation of a sample mean OME within a finite group. At the population level, using a simplified linear, confounder-free treatment effect, the expected OME of the treated population $\mathbb{E}[\text{OME} \mid T = 1]$ is modelled as a function of the baseline expectation $\mathbb{E}[\text{OME} \mid T = 0]$ and a standardized treatment effect ($t$) scaled by the baseline population standard deviation $\sigma_p$ (assuming homoscedasticity)
+
+$$
+\mathbb{E}[\text{OME} \mid T = 1] = \mathbb{E}[\text{OME} \mid T = 0] + t \cdot \sigma_{p}
+$$
+
+To estimate $t$ we will often measure the difference in the the observed mean of each group ($\mu_{\text{OME}}^{(T = 1)} - \mu_{\text{OME}}^{(T = 0)}$) divided by the variance $\sigma$.
+
+$$
+\begin{align}
+\mu_{\text{OME}}^{(T = 1)} &= \mu_{\text{OME}}^{(T = 0)} + t \cdot \sigma_{p} \\[1em]
+ t &= \frac{\mu_{\text{OME}}^{(T = 1)} - \mu_{\text{OME}}^{(T = 0)} }{\sigma_p} = \frac{\Delta \mu_{\text{OME}}}{\sigma_p} \\
+\end{align}
+$$
 
 #### Conditional Component Definition
 
-For any medication $i \in \mathbf{M}$ within a study cohort $G \in \{A, B\}$, the unconditional mean dose $\mu_{d_i}^{(G)}$ is defined as the product of the prescription probability and the expected dose:
+For any medication $i \in \mathbf{M}$ within a study cohort $G \in \{T=1, T=0\}$, the unconditional mean dose $\mu_{d_i}^{(G)}$  (as used in @eq-mu-ome-final ) can be decomposed as the product of the prescribing proportion $p_i$ and the conditional mean dose $\hat{d}_i$ amoung treated patients. 
 
 $$
-\mu_{d_i}^{(G)} = p_i^{(G)} \cdot \bar{d}_i^{(G)}
+\bar{d}_i^{(G)} = p_i^{(G)} \cdot \hat{d}_i^{(G)}
 $$ {#eq-conditional-mean}
 
 where:
 
 * $p_i^{(G)} = P(d_i > 0 \mid G)$ represents the proportion of patients in group $G$ receiving medication $i$.
 
-* $\bar{d}_i^{(G)} = E[d_i \mid d_i > 0, G]$ represents the conditional mean dose among actively treated patients.
+* $\hat{d}_i^{(G)} = E[d_i \mid d_i > 0, G]$ represents the conditional mean dose among actively treated patients.
 
 #### Group Difference Expansion
 
-Substituting @eq-conditional-mean into the aggregate group difference formula yields:
+Substituting @eq-conditional-mean into @eq-mu-ome-final for groups $T=1$ and $T=0$:
 
 $$
-\mu_{\text{OME}}^{(A)} - \mu_{\text{OME}}^{(B)} = \sum_{i\in\mathbf{M}} \left( p_i^{(A)}\bar{d}_i^{(A)} - p_i^{(B)}\bar{d}_i^{(B)} \right) c_{i,r}
+\Delta\mu_{\text{OME}} = \mu_{\text{OME}}^{(T=1)} - \mu_{\text{OME}}^{(T=0)} = \sum_{i\in\mathbf{M}} \left( p_i^{(T=1)}\hat{d}_i^{(T=1)} - p_i^{(T=0)}\hat{d}_i^{(T=0)} \right) c_{i,r}
 $$ {#eq-expanded-difference}
 
 #### Counterfactual Counter-Balancing
 
-By adding and subtracting the counterfactual cross-term $p_i^{(A)}\bar{d}_i^{(B)}c_{i,r}$ within the summation, we map the trajectory between the two distinct states:
+By adding and subtracting the cross-term $p_i^{(T=0)}\hat{d}_i^{(T=0)$
 
 $$
-\mu_{\text{OME}}^{(A)} - \mu_{\text{OME}}^{(B)} = \sum_{i\in\mathbf{M}} \left( p_i^{(A)}\bar{d}_i^{(A)} - p_i^{(A)}\bar{d}_i^{(B)} + p_i^{(A)}\bar{d}_i^{(B)} - p_i^{(B)}\bar{d}_i^{(B)} \right) c_{i,r}
+\Delta\mu_{\text{OME}} = \sum_{i\in\mathbf{M}} \left( p_i^{(T=1)}\hat{d}_i^{(T=1)} - p_i^{(T=1)}\hat{d}_i^{(T=0)} + p_i^{(T=1)}\hat{d}_i^{(T=0)} - p_i^{(T=0)}\hat{d}_i^{(T=0)} \right) c_{i,r}
 $$ {#eq-algebraic-bridge}
 
 #### Final Structural Decomposition
@@ -93,8 +129,10 @@ $$ {#eq-algebraic-bridge}
 Factoring out the shared terms isolates the two independent drivers of macroscopic OME divergence:
 
 $$
-\mu_{\text{OME}}^{(A)} - \mu_{\text{OME}}^{(B)} = \sum_{i\in\mathbf{M}} \underbrace{p_i^{(A)}\left(\bar{d}_i^{(A)} - \bar{d}_i^{(B)}\right)c_{i,r}}_{\text{Associational difference}} + \sum_{i\in\mathbf{M}} \underbrace{\bar{d}_i^{(B)}\left(p_i^{(A)} - p_i^{(B)}\right)c_{i,r}}_{\text{Medication proportion}}
+\Delta\mu_{\text{OME}} = \sum_{i\in\mathbf{M}} \underbrace{p_i^{(T=1)}\left(\hat{d}_i^{(T=1)} - \hat{d}_i^{(T=0)}\right)c_{i,r}}_{\text{treatment effect}} + \sum_{i\in\mathbf{M}} \underbrace{\hat{d}_i^{(T=0)}\left(p_i^{(T=1)} - p_i^{(T=0)}\right)c_{i,r}}_{\text{proportion effect}}
 $$ {#eq-final-decomposition}
+The first term reflects genuine dose-intensity change among treated patients: this is the component the estimator in @eq-t-estimator intends to recover as $t \cdot \sigma_p$. The second term arises purely from differing prescribing proportions $p_i^{(G)}$ between groups and is not attributable to treatment. This means that the the difference in group means $\Delta\mu_{\text{OME}}$ will only be equal to $t \cdot \sigma_p$ in the special case where the prescribing portions between groups are equal $p_i^{(T=1)} = p_i^{(T=0)}$, otherwise it only approximates the treatment effect. 
+
 
 ### Simulation study
 

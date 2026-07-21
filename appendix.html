@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.42">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Appendix A — Supplementary materials – The problem with the OME metric</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<link href="./simulation.html" rel="next">
+<link href="./references.html" rel="prev">
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-df2b56b101595322a8a9d4f1a916036a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./appendix.html">Appendices</a></li><li class="breadcrumb-item"><a href="./appendix.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Supplementary materials</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">The problem with the OME metric</a> 
+    </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Abstract</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./manuscript.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Manuscript</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./appendix.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Supplementary materials</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./simulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Code for simulation study</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-conversion-example" id="toc-sec-conversion-example" class="nav-link active" data-scroll-target="#sec-conversion-example"><span class="header-section-number">A.1</span> Example opioid equivalence calculation</a></li>
+  <li><a href="#mathematical-proofs" id="toc-mathematical-proofs" class="nav-link" data-scroll-target="#mathematical-proofs"><span class="header-section-number">A.2</span> Mathematical proofs</a>
+  <ul class="collapse">
+  <li><a href="#sec-equation-proof" id="toc-sec-equation-proof" class="nav-link" data-scroll-target="#sec-equation-proof"><span class="header-section-number">A.2.1</span> Rearrangement of Equation&nbsp;<span class="quarto-unresolved-ref">eq-mu-ome-1</span> to Equation&nbsp;<span class="quarto-unresolved-ref">eq-mu-ome-final</span></a></li>
+  <li><a href="#sec-ome-difference-proof" id="toc-sec-ome-difference-proof" class="nav-link" data-scroll-target="#sec-ome-difference-proof"><span class="header-section-number">A.2.2</span> Sensitivity of the arithmetic mean to differing proportions of <span class="math inline">\(\bar{d_i}\)</span></a></li>
+  <li><a href="#simulation-study" id="toc-simulation-study" class="nav-link" data-scroll-target="#simulation-study"><span class="header-section-number">A.2.3</span> Simulation study</a></li>
+  <li><a href="#clinical-significance" id="toc-clinical-significance" class="nav-link" data-scroll-target="#clinical-significance"><span class="header-section-number">A.2.4</span> Clinical Significance</a></li>
+  </ul></li>
+  <li><a href="#literature-search" id="toc-literature-search" class="nav-link" data-scroll-target="#literature-search"><span class="header-section-number">A.3</span> Literature search</a></li>
+  <li><a href="#sec-appendix-pubmed-1" id="toc-sec-appendix-pubmed-1" class="nav-link" data-scroll-target="#sec-appendix-pubmed-1"><span class="header-section-number">A.4</span> PUBMED search terms</a>
+  <ul class="collapse">
+  <li><a href="#sec-appendix-pubmed" id="toc-sec-appendix-pubmed" class="nav-link" data-scroll-target="#sec-appendix-pubmed"><span class="header-section-number">A.4.1</span> PUBMED search terms</a></li>
+  <li><a href="#sec-appendix-cov-extraction" id="toc-sec-appendix-cov-extraction" class="nav-link" data-scroll-target="#sec-appendix-cov-extraction"><span class="header-section-number">A.4.2</span> Covidence extraction form</a></li>
+  </ul></li>
+  <li><a href="#simulation-study-1" id="toc-simulation-study-1" class="nav-link" data-scroll-target="#simulation-study-1"><span class="header-section-number">A.5</span> Simulation study</a>
+  <ul class="collapse">
+  <li><a href="#sec-appendix-sim-1" id="toc-sec-appendix-sim-1" class="nav-link" data-scroll-target="#sec-appendix-sim-1"><span class="header-section-number">A.5.1</span> Effect of <span class="math inline">\(\mu_{\text{OME}}^{\text{(control)}}\)</span> on simple simulation</a></li>
+  <li><a href="#sec-appendix-sim-2" id="toc-sec-appendix-sim-2" class="nav-link" data-scroll-target="#sec-appendix-sim-2"><span class="header-section-number">A.5.2</span> Effect of <span class="math inline">\(\Delta \mu_{\text{OME}}\)</span> on simple simulation</a></li>
+  <li><a href="#sec-appendix-simulation-power" id="toc-sec-appendix-simulation-power" class="nav-link" data-scroll-target="#sec-appendix-simulation-power"><span class="header-section-number">A.5.3</span> Power calculation</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./appendix.html">Appendices</a></li><li class="breadcrumb-item"><a href="./appendix.html"><span class="chapter-number">A</span>&nbsp; <span class="chapter-title">Supplementary materials</span></a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Appendix A — Supplementary materials</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="sec-conversion-example" class="level2" data-number="A.1">
+<h2 data-number="A.1" class="anchored" data-anchor-id="sec-conversion-example"><span class="header-section-number">A.1</span> Example opioid equivalence calculation</h2>
+<p><strong>Question</strong>: What dose of intravenous fentanyl will provide equal analgesic benefit to 5 mg of intravenous morphine, assuming IV fentanyl is 100 times more potent.</p>
+<p><span class="math display">\[\begin{align}
+\rho_{\text{fentanyl,IV}} = 100 \\
+c_{\text{fentanyl,IV}} = \frac{1}{\rho_{\text{fentanyl,IV}}} \\
+c_{\text{fentanyl,IV}} = \frac{1}{100} = 0.01 \\
+\end{align}\]</span></p>
+<p>First we use the potency value to find the conversion value to be 0.01.</p>
+<p><span class="math display">\[\begin{align}
+d_{\text{morphine}} \times c_{\text{fentanyl,IV}} = d_{\text{fentanyl}} \\
+5 \times 0.01 = 0.05\text{mg} = 50\text{mcg}
+\end{align}\]</span></p>
+<p>Then we multiple our reference dose of 5mg of morphine by the conversion value to find the equivalent dose of fentanyl to be 0.05 mg or 50 mcg.</p>
+<p>This approach can also be used to convert from two non-reference medications by firstly converting to the reference (often oral morphine) and then to the target medication.</p>
+</section>
+<section id="mathematical-proofs" class="level2" data-number="A.2">
+<h2 data-number="A.2" class="anchored" data-anchor-id="mathematical-proofs"><span class="header-section-number">A.2</span> Mathematical proofs</h2>
+<section id="sec-equation-proof" class="level3" data-number="A.2.1">
+<h3 data-number="A.2.1" class="anchored" data-anchor-id="sec-equation-proof"><span class="header-section-number">A.2.1</span> Rearrangement of <a href="#eq-mu-ome-1" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mu-ome-1</span></a> to <a href="#eq-mu-ome-final" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mu-ome-final</span></a></h3>
+<p>The equation for the group mean OME provided <a href="#eq-mu-ome-1" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mu-ome-1</span></a> is is a weighted sum of the OME values for patients <span class="math inline">\(j\)</span> in group <span class="math inline">\(G\)</span>.</p>
+<p><span class="math display">\[
+\begin{align}
+\text{OME}_j &amp;= \sum_{i\in\mathbf{M}} d_i c_{i,r} \\
+\mu_{\text{OME}}^{(G)} &amp;= \frac{1}{|G|} \sum_{j=G} \text{OME}_j
+\end{align}
+\]</span> First the the expression for <span class="math inline">\(\text{OME}_j\)</span> is substituted into the group mean. Then the order of summation is rearranged as both the sets <span class="math inline">\(G\)</span> and <span class="math inline">\(\mathbf{M}\)</span> are finite. Following this, the constant <span class="math inline">\(c_{i,r}\)</span> is factored out of the inner sum whilst the scaling term <span class="math inline">\(\frac{1}{|G|}\)</span> of group size is distributed to the inner term.</p>
+<p><span class="math display">\[
+\begin{align}
+\mu_{\text{OME}}^{(G)} &amp;= \frac{1}{|G|} \sum_{j \in G}  \left( \sum_{i\in\mathbf{M}} d_{j,i} c_{i,r} \right) \\
+\mu_{\text{OME}}^{(G)} &amp;= \frac{1}{|G|} \sum_{j \in G}  \sum_{i\in\mathbf{M}} d_{j,i} c_{i,r} \\
+\mu_{\text{OME}}^{(G)} &amp;= \sum_{i\in\mathbf{M}} \left( \frac{1}{|G|} \sum_{j=1}  d_{j,i}  \right) c_{i,r}
+\end{align}
+\]</span></p>
+<p>We can then define the mean dose <span class="math inline">\(\bar{d}\)</span> of medication <span class="math inline">\(i\)</span> as the arithmetic mean of doses for patients <span class="math inline">\(j \in G\)</span>.</p>
+<p><span class="math display">\[
+\bar{d_i} = \frac{1}{|G|} \sum_{j \in G} d_{j,i}
+\]</span> This mean dose is then substituted back into the equation to yield the final rearrangement as seen in <a href="#eq-mu-ome-final" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mu-ome-final</span></a>.</p>
+<p><span class="math display">\[
+\mu_{\text{OME}}^{(G)}  = \sum_{i\in\mathbf{M}} \bar{d_{i}} c_{i,r}
+\]</span></p>
+</section>
+<section id="sec-ome-difference-proof" class="level3" data-number="A.2.2">
+<h3 data-number="A.2.2" class="anchored" data-anchor-id="sec-ome-difference-proof"><span class="header-section-number">A.2.2</span> Sensitivity of the arithmetic mean to differing proportions of <span class="math inline">\(\bar{d_i}\)</span></h3>
+<section id="true-treatment-effect" class="level4" data-number="A.2.2.1">
+<h4 data-number="A.2.2.1" class="anchored" data-anchor-id="true-treatment-effect"><span class="header-section-number">A.2.2.1</span> True treatment effect</h4>
+<p>Equation <a href="#eq-mu-ome-final" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mu-ome-final</span></a> outlines the calculation of a sample mean OME within a finite group. At the population level, using a simplified linear, confounder-free treatment effect, the expected OME of the treated population <span class="math inline">\(\mathbb{E}[\text{OME} \mid T = 1]\)</span> is modelled as a function of the baseline expectation <span class="math inline">\(\mathbb{E}[\text{OME} \mid T = 0]\)</span> and a standardized treatment effect (<span class="math inline">\(t\)</span>) scaled by the baseline population standard deviation <span class="math inline">\(\sigma_p\)</span> (assuming homoscedasticity)</p>
+<p><span class="math display">\[
+\mathbb{E}[\text{OME} \mid T = 1] = \mathbb{E}[\text{OME} \mid T = 0] + t \cdot \sigma_{p}
+\]</span></p>
+<p>To estimate <span class="math inline">\(t\)</span> we will often measure the difference in the the observed mean of each group (<span class="math inline">\(\mu_{\text{OME}}^{(T = 1)} - \mu_{\text{OME}}^{(T = 0)}\)</span>) divided by the variance <span class="math inline">\(\sigma\)</span>.</p>
+<p><span class="math display">\[
+\begin{align}
+\mu_{\text{OME}}^{(T = 1)} &amp;= \mu_{\text{OME}}^{(T = 0)} + t \cdot \sigma_{p} \\[1em]
+t &amp;= \frac{\mu_{\text{OME}}^{(T = 1)} - \mu_{\text{OME}}^{(T = 0)} }{\sigma_p} = \frac{\Delta \mu_{\text{OME}}}{\sigma_p} \\
+\end{align}
+\]</span></p>
+</section>
+<section id="conditional-component-definition" class="level4" data-number="A.2.2.2">
+<h4 data-number="A.2.2.2" class="anchored" data-anchor-id="conditional-component-definition"><span class="header-section-number">A.2.2.2</span> Conditional Component Definition</h4>
+<p>For any medication <span class="math inline">\(i \in \mathbf{M}\)</span> within a study cohort <span class="math inline">\(G \in \{T=1, T=0\}\)</span>, the unconditional mean dose <span class="math inline">\(\mu_{d_i}^{(G)}\)</span> (as used in <a href="#eq-mu-ome-final" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mu-ome-final</span></a> ) can be decomposed as the product of the prescribing proportion <span class="math inline">\(p_i\)</span> and the conditional mean dose <span class="math inline">\(\hat{d}_i\)</span> amoung treated patients.</p>
+<p><span id="eq-conditional-mean"><span class="math display">\[
+\bar{d}_i^{(G)} = p_i^{(G)} \cdot \hat{d}_i^{(G)}
+\tag{A.1}\]</span></span></p>
+<p>where:</p>
+<ul>
+<li><p><span class="math inline">\(p_i^{(G)} = P(d_i &gt; 0 \mid G)\)</span> represents the proportion of patients in group <span class="math inline">\(G\)</span> receiving medication <span class="math inline">\(i\)</span>.</p></li>
+<li><p><span class="math inline">\(\hat{d}_i^{(G)} = E[d_i \mid d_i &gt; 0, G]\)</span> represents the conditional mean dose among actively treated patients.</p></li>
+</ul>
+</section>
+<section id="group-difference-expansion" class="level4" data-number="A.2.2.3">
+<h4 data-number="A.2.2.3" class="anchored" data-anchor-id="group-difference-expansion"><span class="header-section-number">A.2.2.3</span> Group Difference Expansion</h4>
+<p>Substituting <a href="#eq-conditional-mean" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-conditional-mean</span></a> into <a href="#eq-mu-ome-final" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-mu-ome-final</span></a> for groups <span class="math inline">\(T=1\)</span> and <span class="math inline">\(T=0\)</span>:</p>
+<p><span id="eq-expanded-difference"><span class="math display">\[
+\Delta\mu_{\text{OME}} = \mu_{\text{OME}}^{(T=1)} - \mu_{\text{OME}}^{(T=0)} = \sum_{i\in\mathbf{M}} \left( p_i^{(T=1)}\hat{d}_i^{(T=1)} - p_i^{(T=0)}\hat{d}_i^{(T=0)} \right) c_{i,r}
+\tag{A.2}\]</span></span></p>
+</section>
+<section id="counterfactual-counter-balancing" class="level4" data-number="A.2.2.4">
+<h4 data-number="A.2.2.4" class="anchored" data-anchor-id="counterfactual-counter-balancing"><span class="header-section-number">A.2.2.4</span> Counterfactual Counter-Balancing</h4>
+<p>By adding and subtracting the cross-term <span class="math inline">\(p_i^{(T=0)}\hat{d}_i^{(T=0)\)</span></p>
+<p><span id="eq-algebraic-bridge"><span class="math display">\[
+\Delta\mu_{\text{OME}} = \sum_{i\in\mathbf{M}} \left( p_i^{(T=1)}\hat{d}_i^{(T=1)} - p_i^{(T=1)}\hat{d}_i^{(T=0)} + p_i^{(T=1)}\hat{d}_i^{(T=0)} - p_i^{(T=0)}\hat{d}_i^{(T=0)} \right) c_{i,r}
+\tag{A.3}\]</span></span></p>
+</section>
+<section id="final-structural-decomposition" class="level4" data-number="A.2.2.5">
+<h4 data-number="A.2.2.5" class="anchored" data-anchor-id="final-structural-decomposition"><span class="header-section-number">A.2.2.5</span> Final Structural Decomposition</h4>
+<p>Factoring out the shared terms isolates the two independent drivers of macroscopic OME divergence:</p>
+<p><span id="eq-final-decomposition"><span class="math display">\[
+\Delta\mu_{\text{OME}} = \sum_{i\in\mathbf{M}} \underbrace{p_i^{(T=1)}\left(\hat{d}_i^{(T=1)} - \hat{d}_i^{(T=0)}\right)c_{i,r}}_{\text{treatment effect}} + \sum_{i\in\mathbf{M}} \underbrace{\hat{d}_i^{(T=0)}\left(p_i^{(T=1)} - p_i^{(T=0)}\right)c_{i,r}}_{\text{proportion effect}}
+\tag{A.4}\]</span></span> The first term reflects genuine dose-intensity change among treated patients: this is the component the estimator in <a href="#eq-t-estimator" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-t-estimator</span></a> intends to recover as <span class="math inline">\(t \cdot \sigma_p\)</span>. The second term arises purely from differing prescribing proportions <span class="math inline">\(p_i^{(G)}\)</span> between groups and is not attributable to treatment. This means that the the difference in group means <span class="math inline">\(\Delta\mu_{\text{OME}}\)</span> will only be equal to <span class="math inline">\(t \cdot \sigma_p\)</span> in the special case where the prescribing portions between groups are equal <span class="math inline">\(p_i^{(T=1)} = p_i^{(T=0)}\)</span>, otherwise it only approximates the treatment effect.</p>
+</section>
+</section>
+<section id="simulation-study" class="level3" data-number="A.2.3">
+<h3 data-number="A.2.3" class="anchored" data-anchor-id="simulation-study"><span class="header-section-number">A.2.3</span> Simulation study</h3>
+$$
+<span class="math display">\[\begin{aligned}
+\Delta \mu_{\text{OME}} = -1 \cdot \Delta p_i \cdot \delta c_i \\
+\Delta \mu_{\text{OME}} = -\mu_{\text{OME}}^\text{(control)} \cdot \Delta p_i \cdot \delta c_i \\
+\\
+p_i^{\text{(control)}} - p_i^{\text{(intervention)}}
+\\
+
+\mu_{\text{OME}}^{\text{(control)}} - \mu_{\text{OME}}^{\text{(intervention)}} = -\mu_{\text{OME}}^\text{(control)} \cdot \Delta p_i \cdot \delta c_i \\
+\mu^\text{intervention} = \mu^\text{control}[ 1 + \Delta p_i \cdot \delta c_i]
+\end{aligned}\]</span>
+<p>$$ {#eq-results-simple-2-proof}</p>
+</section>
+<section id="clinical-significance" class="level3" data-number="A.2.4">
+<h3 data-number="A.2.4" class="anchored" data-anchor-id="clinical-significance"><span class="header-section-number">A.2.4</span> Clinical Significance</h3>
+<ul>
+<li><strong>Associational difference:</strong> Quantifies the true statistical association by isolating shifts in the active treatment magnitude while holding the selection rate constant (<span class="math inline">\(p_i^{(A)}\)</span>).</li>
+<li><strong>Medication proportion Effect:</strong> Quantifies the structural selection bias. A shift in the prevalence of medication usage (<span class="math inline">\(p_i^{(A)} \neq p_i^{(B)}\)</span>) alters <span class="math inline">\(\mu_{\text{OME}}\)</span> linearly via <span class="math inline">\(c_{i,r}\)</span>, even if the active proportions of medications are perfectly homogeneous (<span class="math inline">\(\bar{d}_i^{(A)} = \bar{d}_i^{(B)}\)</span>).</li>
+</ul>
+</section>
+</section>
+<section id="literature-search" class="level2" data-number="A.3">
+<h2 data-number="A.3" class="anchored" data-anchor-id="literature-search"><span class="header-section-number">A.3</span> Literature search</h2>
+</section>
+<section id="sec-appendix-pubmed-1" class="level2" data-number="A.4">
+<h2 data-number="A.4" class="anchored" data-anchor-id="sec-appendix-pubmed-1"><span class="header-section-number">A.4</span> PUBMED search terms</h2>
+<p>On 14th of July 2026, a search was performed on the PUBMED online search tool using the following search term to identify the volume of literature using opioid equivalence metrics in research. The search term was “(Milligram morphine equivalent) OR (Oral morphine equivalent)” with a 10 year filter was used and yielded the following full search string. There was 4,031 results.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="PUBMED search term">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+PUBMED search term
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>(((“milligram”[All Fields] OR “milligrams”[All Fields]) AND (“morphine derivatives”[Supplementary Concept] OR “morphine derivatives”[All Fields] OR “morphines”[All Fields] OR “morphine derivatives”[MeSH Terms] OR (“morphine”[All Fields] AND “derivatives”[All Fields]) OR “morphine”[Supplementary Concept] OR “morphine”[All Fields] OR “morphin”[All Fields] OR “morphine”[MeSH Terms] OR “morphine s”[All Fields] OR “morphinic”[All Fields]) AND (“equivalence”[All Fields] OR “equivalences”[All Fields] OR “equivalencies”[All Fields] OR “equivalency”[All Fields] OR “equivalent”[All Fields] OR “equivalently”[All Fields] OR “equivalents”[All Fields])) OR ((“mouth”[MeSH Terms] OR “mouth”[All Fields] OR “oral”[All Fields]) AND (“morphine derivatives”[Supplementary Concept] OR “morphine derivatives”[All Fields] OR “morphines”[All Fields] OR “morphine derivatives”[MeSH Terms] OR (“morphine”[All Fields] AND “derivatives”[All Fields]) OR “morphine”[Supplementary Concept] OR “morphine”[All Fields] OR “morphin”[All Fields] OR “morphine”[MeSH Terms] OR “morphine s”[All Fields] OR “morphinic”[All Fields]) AND (“equivalence”[All Fields] OR “equivalences”[All Fields] OR “equivalencies”[All Fields] OR “equivalency”[All Fields] OR “equivalent”[All Fields] OR “equivalently”[All Fields] OR “equivalents”[All Fields]))) AND (y_10[Filter])</p>
+</div>
+</div>
+<section id="sec-appendix-pubmed" class="level3" data-number="A.4.1">
+<h3 data-number="A.4.1" class="anchored" data-anchor-id="sec-appendix-pubmed"><span class="header-section-number">A.4.1</span> PUBMED search terms</h3>
+<p>The search term was executed on the PUBMED online search tool on 7th July 2026.</p>
+<div class="callout callout-style-simple callout-note callout-titled" title="PUBMED search term">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+PUBMED search term
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>((((((“opioid equivalent” OR “oral morphine equivalence” OR “oral morphine equivalent” OR “oral morphine equivalents” OR “OME” OR “morphine milligram equivalents” OR “morphine milligram equivalence” OR “MME” OR “morphine equivalent daily dose” OR “MEDD”) AND (“perioperative” OR “peri-operative” OR “postoperative” OR “post-operative” OR “surgical” OR “surgery” OR “post-surgical” OR “postsurgical”))) AND (“2025/01/01”[Date - Publication] : “2025/12/31”[Date - Publication]))) AND (“clinical trial”[Filter] OR “clinical trial” OR “controlled clinical trial” OR “randomized controlled trial” OR “interventional” OR “intervention study” OR “clinical trials as topic”[MeSH Terms] OR “cohort studies”[MeSH Terms] OR “cohort” OR “prospective” OR “retrospective” OR “case-control” OR “comparative study” OR “evaluation study”))</p>
+</div>
+</div>
+</section>
+<section id="sec-appendix-cov-extraction" class="level3" data-number="A.4.2">
+<h3 data-number="A.4.2" class="anchored" data-anchor-id="sec-appendix-cov-extraction"><span class="header-section-number">A.4.2</span> Covidence extraction form</h3>
+<p>Data was extracted from selected papers using the following proforma by a single author. Authors could leave notes to highlight specific features for later analysis required.</p>
+<div class="cell">
+<div id="tbl-extraction-form" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-extraction-form-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;A.1: Litrature extraction proforma
+</figcaption>
+<div aria-describedby="tbl-extraction-form-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 19%">
+<col style="width: 64%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Variable</th>
+<th style="text-align: left;">Options</th>
+<th style="text-align: left;">Explanatory text</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Study type</td>
+<td style="text-align: left;">Randomised controlled trial, Cohort study, Case controlled study, Other</td>
+<td style="text-align: left;">What is the format of the study?</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Opioid conversion set</td>
+<td style="text-align: left;">Cited, Included in paper, Not described</td>
+<td style="text-align: left;">In the methods section, is how is the OME metric generated described and how are the conversion values referenced?</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Intervention</td>
+<td style="text-align: left;">Surgical intervention, Anaesthetic intervnetion, Other</td>
+<td style="text-align: left;">What type of intervention is given. For pre/post-operative interventions that include changes to medication select anaesthesia. For descriptive studies analysing differences select other.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Opioid proportions reported between intervetnion groups</td>
+<td style="text-align: left;">Described or Not described</td>
+<td style="text-align: left;">Assess the results section, Is it possible to establish the proprotion, mean or total doses of each opioid between intervention groups. If authros explicilty state only one type of opioid used in the OME/MME metric select ‘Described’.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Outcome</td>
+<td style="text-align: left;">Difference in opioid requirement/treatment, No difference</td>
+<td style="text-align: left;">In the primary outcome of OME/MME, is there a significant difference reported between intervention groups.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Data avalibility</td>
+<td style="text-align: left;">Publically avalible, Not publically avaliable, Database study</td>
+<td style="text-align: left;">Is data avalible for readers to ascertain the proportions of opioids between groups? If OME/MME metric only avaliable then select ‘Not avalible’.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</section>
+</section>
+<section id="simulation-study-1" class="level2" data-number="A.5">
+<h2 data-number="A.5" class="anchored" data-anchor-id="simulation-study-1"><span class="header-section-number">A.5</span> Simulation study</h2>
+<section id="sec-appendix-sim-1" class="level3" data-number="A.5.1">
+<h3 data-number="A.5.1" class="anchored" data-anchor-id="sec-appendix-sim-1"><span class="header-section-number">A.5.1</span> Effect of <span class="math inline">\(\mu_{\text{OME}}^{\text{(control)}}\)</span> on simple simulation</h3>
+<p>To investigate the scaling term of <span class="math inline">\(\mu_{\text{OME}}^{\text{(control)}}\)</span> on the observed treatment effect, 6 further simulations were performed, each as described in <a href="#sec-manuscript-simple-sim" class="quarto-xref"><span class="quarto-unresolved-ref">sec-manuscript-simple-sim</span></a> but with a different <span class="math inline">\(\mu_{\text{OME}}^{\text{(control)}}\)</span> between 0 OME mg and 10 OME mg. The treatment effect was fixed at 0.</p>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+</div>
+<div class="cell" data-fig-title="Effect of scale of the control group average dose (OME mg) on observed effect size">
+<div class="cell-output-display">
+<div id="fig-appendix-simple-sim-mu" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-appendix-simple-sim-mu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="appendix_files/figure-html/fig-appendix-simple-sim-mu-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-appendix-simple-sim-mu-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;A.1: Plots of the difference in proportion over the error in conversion values provided faceted by the expected mean dose of the control group. Colour scale demonstrates the observed difference in the treatment group. True effect size is set to 0.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-appendix-sim-2" class="level3" data-number="A.5.2">
+<h3 data-number="A.5.2" class="anchored" data-anchor-id="sec-appendix-sim-2"><span class="header-section-number">A.5.2</span> Effect of <span class="math inline">\(\Delta \mu_{\text{OME}}\)</span> on simple simulation</h3>
+<p>To investigate the interaction of a true treatment effect on the observed treatment effect, 9 further simulations were performed, each as described in <a href="#sec-manuscript-simple-sim" class="quarto-xref"><span class="quarto-unresolved-ref">sec-manuscript-simple-sim</span></a> but with a different true treatment effect between the values of -1 and 1.</p>
+<div class="cell" data-fig-title="Effect of differing true effect size on observed effect size">
+<div class="cell-output-display">
+<div id="fig-appendix-simple-sim-t" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-appendix-simple-sim-t-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="appendix_files/figure-html/fig-appendix-simple-sim-t-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-appendix-simple-sim-t-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;A.2: Plots of the difference in proportion over the error in conversion values provided faceted by the expected mean dose of the control group. Colour scale demonstrates the observed difference in the treatment group. The mean value of the control group is set to 10 OME mg .
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-appendix-simulation-power" class="level3" data-number="A.5.3">
+<h3 data-number="A.5.3" class="anchored" data-anchor-id="sec-appendix-simulation-power"><span class="header-section-number">A.5.3</span> Power calculation</h3>
+<p>In the first part of the experiment a large effect size is used.</p>
+<p>For a study period of 5.9904306 years and a annual case volume of 100 the total number of expected study participants is 599.0430622, of which we would expect 239.5078606 to be robotic cases and 359.5352016 given a 2.9938483year period where 80% of cases are performed robotically.</p>
+<p>Assuming a 50 mg (SD: 10 mg) mean opioid requirement for the non-robotic population, we can calculate the expected mean OME requirement for robotic and non-robotic cases given a 0.8 effect size. The expected mean OME requirement for robotic cases is 40 mg giving a mean difference of -10 mg or -1 standard deviations.</p>
+<p>Given the inital experimental set up it is clear that the study is very highly powered with the power value to be calculated at 100%.</p>
+<p><a href="#fig-power-curve" class="quarto-xref">Figure&nbsp;<span class="quarto-unresolved-ref">fig-power-curve</span></a> demonstrated the power curve for the comparison of OME between robotic and non-robotic surgical groups. The dashed lines indicate the minimum detectable effect size at 80% power.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-power-curve" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-power-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="appendix_files/figure-html/fig-power-curve-1.png" class="img-fluid figure-img" width="672">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-power-curve-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;A.3: Power curve for the comparison of OME between robotic and non-robotic surgical groups. The dashed lines indicate the minimum detectable effect size at 80% power.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>With the observed sample sizes, the minimum detectable effect size at 80% power is <em>d</em> = 0.234, which equates to a mean difference of 2.34 mg OME.</p>
+<p>The effect size is use to inform the weakly powered study in</p>
+<p>```</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./references.html" class="pagination-link" aria-label="References">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">References</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./simulation.html" class="pagination-link" aria-label="Code for simulation study">
+        <span class="nav-page-text"><span class="chapter-number">B</span>&nbsp; <span class="chapter-title">Code for simulation study</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

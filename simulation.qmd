@@ -285,9 +285,34 @@ max_val <- max(results_grid$mean_diff_ome, na.rm = TRUE)
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
-    panel.grid = element_blank()
+    panel.grid = element_blank(),
+    legend.position = "bottom"
   )
  
+}
+
+```
+
+`symetic_fill_scale` is a colour gradient scale that allows control of the scale to ensure consistancy between plots 
+
+```{r}
+
+
+symmetric_fill_scale <- function(limit, type="fill") {
+  
+  if(type=="fill"){
+  scale_fill_gradientn(
+    colours = c("darkblue", "blue", "dodgerblue", "white", "orange", "red", "darkred"),
+    values  = scales::rescale(c(-limit, -limit/2, 0, limit/2, limit)),
+    limits  = c(-limit, limit)
+  )
+    }else{
+    scale_colour_gradientn(
+    colours = c("darkblue", "blue", "dodgerblue", "white", "orange", "red", "darkred"),
+    values  = scales::rescale(c(-limit, -limit/2, 0, limit/2, limit)),
+    limits  = c(-limit, limit)
+  )
+  }
 }
 
 ```

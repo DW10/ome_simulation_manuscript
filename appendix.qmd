@@ -2,8 +2,6 @@
 output: html_document
 editor_options: 
   chunk_output_type: console
-params:
-  quality: "low"
 ---
 # Supplementary materials
 ```{r echo=FALSE, message=FALSE}
@@ -254,30 +252,13 @@ for(p in seq(p_min, p_max, by = space)){
 }
 ```
 
-```{r}
+```{r plot functions}
 #| label: fig-appendix-simple-sim-mu
 #| fig-title: Effect of scale of the control group average dose (OME mg) on observed effect size
 #| fig-cap: Plots of the difference in proportion over the error in conversion values provided faceted by the expected mean dose of the control group. Colour scale demonstrates the observed difference in the treatment group. True effect size is set to 0. 
 
 label_function <- function(val) {
-  paste0('mu["OME"]^"(control)" == ', val )
-}
-
-symmetric_fill_scale <- function(limit, type="fill") {
-  
-  if(type=="fill"){
-  scale_fill_gradientn(
-    colours = c("darkblue", "blue", "dodgerblue", "white", "orange", "red", "darkred"),
-    values  = scales::rescale(c(-limit, -limit/2, 0, limit/2, limit)),
-    limits  = c(-limit, limit)
-  )
-    }else{
-    scale_colour_gradientn(
-    colours = c("darkblue", "blue", "dodgerblue", "white", "orange", "red", "darkred"),
-    values  = scales::rescale(c(-limit, -limit/2, 0, limit/2, limit)),
-    limits  = c(-limit, limit)
-  )
-  }
+  paste0('mu["OME"] == ', val)
 }
 
 plot_simple_grid_mu <- ggplot(simple_results_mu, aes(y = p, x = e, fill = diff)) +

@@ -4,6 +4,7 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
+
 ```{r source_files}
 #| echo: FALSE
 #| message: FALSE
@@ -49,6 +50,13 @@ scale_fill_academic <- function() {
 }
 
 ```
+
+
+
+
+
+
+
 
 
 ## Origin of opioid equivalence and eqipotency
@@ -128,6 +136,13 @@ We will aim to:
 
 A rapid literature review of the use of opioid equivalence metrics in peri-operative and surgical studies over 2025 was performed. A structured search of the PUBMED database as detailed in @sec-appendix-pubmed on 7th July 2026. Papers were screened and data extracted using the Covidence platform @zotero-item-670 with a custom proforma (@sec-appendix-cov-extraction). Where conversion values were cited or written within the study, these values were extracted and compiled.
 
+
+
+
+
+
+
+
 ```{r}
 # TO get screening data:
 # Covidence -> Export -> References subsection -> Title and absract screening -> Export as .csv -> Drag to data foler -> Rename to lit_screen.csn
@@ -142,11 +157,25 @@ n_lit_data <- nrow(lit_data)
 
 ```
 
+
+
+
+
+
+
+
 ## Simulated study
 
 Two simulated studies were performed to demonstrate the sensitivity of the opioid burden metric to differences in the proportions of medications between groups and the conversion values used. The first, @sec-manuscript-simple-sim uses a simplied simulation set up to understand the variation in results across the full of the event space and the second, @sec-manuscript-exemplar-sim takes a realistic hypothetical experimental setup to establish the extent of the variation. 
 
 ### Simple simulation {#sec-manuscript-simple-sim}
+
+
+
+
+
+
+
 
 ```{r sim simple}
 
@@ -178,6 +207,13 @@ for(p in seq(p_min, p_max, by = 0.05)){
 }
 ```
 
+
+
+
+
+
+
+
 The first simulation aimed to describe the relationship between the **difference in proportion** of a binary choice of medication between two groups, $\Delta p_i$ and the **error in the conversion value** used for the non-reference medication $\delta c_{i}$ on the observed difference in mean OME between the two groups ($\Delta \mu_{\text{OME}}$). 
 
 In this simulation, `r comma(n)` patients were created and divided equally into two groups, control and intervention. For each patient an opioid was randomly sampled of either morphine or oxycodone to give a distribution set by $\Delta p_i$. For each patient a expected opioid requirement is sampled from a normal distribution with mean of `r mu_opioid_requirment_control` and standard deviation of `r sigma`. For patients the medication was sampled to be oxycodone, the expected opioid requirement is converted to a oxycodone dose using `potency_oxycodone` and then converted back into expected dose of morphine (the OME) using the conversion factor `potency_oxycodone` +/- an error term $\epsilon$. The difference in the total OME $\Delta \mu_{\text{OME}}$ between each group was then calculated and reported. For this simulation, the effect size between the control and treatment groups was set to `r treatment_effect`,thus $\mathbb{E}(\text{OME})_{\text{control}} = \mathbb{E}(\text{OME})_{\text{intervention}}$ and hence the expected value of $\mu_{\text{OME}} = 0$. The simulation was then repeated the range of grid values for $\Delta p_i$ and $\epsilon$ with all other parameters the same. 
@@ -191,6 +227,13 @@ $$
 \end{align}
 $$ 
 ### Exemplar simulation study {#sec-manuscript-exemplar-sim}
+
+
+
+
+
+
+
 
 ```{r}
 case_volume <- 100
@@ -210,6 +253,13 @@ annual_n = 30
 robot_effect_size = 0.90
 robot_effect_mg = mu_tot * (robot_effect_size-1)
 ```
+
+
+
+
+
+
+
 
 Following this, a realistic exemplar study was performed to, the summary of the study set up is provided in @nte-sim-design. The difference in proportion between groups is simulated using a medication shortage that alters practice. Due to temporal differneces in the groups, this shortage effects one group to a greater extent thus scaling the change in proportion in a divergent manner. In this simulation the effect size of the robot is set to `r robot_effect_mg` OME mg. 
 
@@ -240,6 +290,13 @@ All simulations were performed in `r version$version.string` and all code is ava
 Of the 480 studies identified in the rapid literature search, `r nrow(lit_data)` fit the eligibility criteria and data was extracted. 
 
 The majority of studies were cohort studies and most commonly looked at anaesthetic type interventions (@fig-study-types)
+
+
+
+
+
+
+
 
 ```{r}
 #| label: fig-study-types
@@ -274,7 +331,21 @@ plot_lit_study_type + plot_lit_intervnetion_type
 
 ```
 
+
+
+
+
+
+
+
 With regards to the opioid conversion sets used `r lit_data %>% filter(Opioid.conversion.set == "Cited") %>% nrow()` cited another paper, whilst `r lit_data %>% filter(Opioid.conversion.set == "Included in text") %>% nrow()` included the conversion values in the methods. However for `r lit_data %>% filter(Opioid.conversion.set == "Not described") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.conversion.set == "Not described") %>% nrow()/n_lit_data)`) papers did not include any reference or citation to the opioid conversion sets used. Only `r lit_data %>% filter(Opioid.proportions.within.group == "Described") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.proportions.within.group == "Described") %>% nrow()/n_lit_data)`) papers described the proportions of opioids used between intervention groups as shown in @fig-study-results. 
+
+
+
+
+
+
+
 
 ```{r}
 #| label: fig-study-results
@@ -303,6 +374,13 @@ ggplot(heatmap_data, aes(x = Opioid.proportions.within.group, y = Opioid.convers
     legend.position = "none")
 ```
 
+
+
+
+
+
+
+
 ### Conversion values
 
 Of the `r lit_data %>% filter(Opioid.conversion.set == "Cited") %>% nrow()` papers were a conversion value set was cited, `r nrow(conversion)` unique papers were extracted. Generally across the literature, conversion values with the intention of research were in the minority (`r percent((nrow(conversion %>% filter(aim == "for research")))/(nrow(conversion)))`) and most had compiled the conversion value sets for use in clinical care. 
@@ -312,6 +390,13 @@ Of the `r lit_data %>% filter(Opioid.conversion.set == "Cited") %>% nrow()` pape
 ### Simple simulation {#sec-manuscript-results-simple}
 
 `r comma(nrow(simple_results))` different simulations where performed across the grid values of $\Delta p_{\text{oxycodone}}$ between `r p_max` (all of the control group were treated with morphine and all of the control group were treated with oxycodone) and `r p_min` (the inverse) and $\epsilon$ between `r e_min`(estimated value was 1) and `r e_max` (estimated value was double the true value). 
+
+
+
+
+
+
+
 
 ```{r}
 #| label: fig-simple-grid-1
@@ -348,6 +433,13 @@ plot_simple_grid
 
 ```
 
+
+
+
+
+
+
+
 @fig-simple-grid-1 demonstrates the observed difference between the control group and treatment group. Where the proportion of medication in the control and intervention groups are the same ($\Delta p_i = 0$) then we note that the true effect size of 0 is recovered, regardless of any error in the conversion value ($\delta c_i$) used. Also, where the conversion values used are correct to the ground truth, any difference in proportion is accounted for and the true effect is again recovered. However, as the proportions between the control and treatment group deviate, resulting difference observed is biased by any error in the conversion values. Where the groups are completely unmatched ($\Delta p_i \in 1,-1$) the resulting observed difference is the due entirely to the error in potency.
 
 @eq-results-simple-1 demonstrates the hyperbolic parabolic relationship observed in @fig-simple-grid-1. 
@@ -370,6 +462,13 @@ This saddle geometry illustrates a critical vulnerability in aggregate OME compa
 
 ### Exemplar simulation study
 
+
+
+
+
+
+
+
 ```{r }
 df <- sim_patient(
   mu_tot = mu_tot,
@@ -386,7 +485,21 @@ df <- sim_patient(
 
 ```
 
+
+
+
+
+
+
+
 `r nrow(df)` procedures were simulated using the parameters described in @nte-sim-design. The OME value for each patient was calculated use $c_{\text{morphine}}$ as 1 (as the reference medication) and $c_{\text{oxycodone}}$ as `r 1/potency_oxycodone_ome`, in contract to the ground truth value of `r 1/potency_oxycodone_truth`. The mean dose (mg), opioid and OME value for each group is shown in @tbl-sim-demo.
+
+
+
+
+
+
+
 
 ```{r}
 #| label: tbl-sim-demo
@@ -403,7 +516,21 @@ table_1 <- CreateTableOne(data=df,
 kableone(table_1)
 ```
 
+
+
+
+
+
+
+
 ::: {#fig-sim-density layout-ncol=3}
+
+
+
+
+
+
+
 ```{r}
 #| label: fig-sim-dose-density
 #| fig-title: "Density plot of dose by medication"
@@ -454,9 +581,23 @@ df %>%
                      labels = scales::percent_format()) 
 
 ```
+
+
+
+
+
+
+
 :::
 
 @fig-sim-density Demonstrates the distribution of the dose (in mg) of each medication (@fig-sim-dose-density) and the distribution of OME values (in OME mg) by surgery type (@fig-sim-ome-density). @fig-sim-ome-proportion shoes that within the robotic and non-robotic groups the proportion of each opioid is not equal, and the effect of the oxycodone shortage has had a larger impact on the robotic group.
+
+
+
+
+
+
+
 
 ```{r}
 obs_robotic_ome <- df %>% filter(robotic == "Robotic") %>% summarise(mean(ome)) %>% pull() 
@@ -464,11 +605,32 @@ obs_non_robotic_ome <- df %>% filter(robotic != "Robotic") %>% summarise(mean(om
 obs_robot_effect_mg <- obs_robotic_ome - obs_non_robotic_ome
 ```
 
+
+
+
+
+
+
+
 The mean OME value for the robotic surgery group was `r round(obs_robotic_ome, 1)` OME mg and for the non-robotic surgery group was `r  round(obs_non_robotic_ome, 1)` OME mg. This gives an observed effect size of the robot as `r round(obs_robot_effect_mg,1)` OME mg. 
+
+
+
+
+
+
+
 
 ```{r}
 result <- analyse_dataset(df)
 ```
+
+
+
+
+
+
+
 
 Using a two sided t-test to assess if there is a significant difference in mean OME between the robotic and standard surgery groups, the mean difference was `r round(result$mean_diff_ome,1)` OME mg (95% CI `r paste(round(result$conf_int_ome, 1), collapse = " to ")`) with a p-value of `r signif(result$p_value_ome, 3)`.
 
@@ -477,6 +639,13 @@ Thus the researched from St Somewhere Hospital were able to conclude that the ro
 ### Impact of conversion set and proportions
 
 The study was then recreated using a grid search of across different conversion values and different proportion of post-operative oxycodone prescribing. The prior was informed by ranges observed in the literature and the latter to infulence the degree of different in opioid proportions between groups.
+
+
+
+
+
+
+
 
 ```{r}
 #| label: fig-sim-grid-search-1
@@ -497,11 +666,25 @@ plot_grid(simulation1,
 
 ```
 
+
+
+
+
+
+
+
 Given a `r mu_tot` mg expected opioid requirement and a treatment effect of `r scales::percent(robot_effect_size-1)` mg we would expect the mean difference in OME of the robotic group to be `r (mu_tot * robot_effect_size)-mu_tot` mg OME.
 
 The results shown in @fig-sim-grid-search-1 show that where the proportions of morphine morphine prescribed post-op, (thus meaning a shortage of oxycodone has little influence on prescribing patterns and hence the effect of the exogenous shock is little) then across the values of $c_{\text{Oxycodone}}$, the true difference in treatment groups is well observed. With all situations being statistically significant. However as the proportion of post-operative prescribing shifts towards oxycodone, the observed difference in OME between the two groups becomes highly sensitive to the conversion value used. This is due to the exogenous effect of the oxycodone shortage impacting the robotic group more than the the standard surgery group. 
 
 In this study set up, the true effect of the robot is powerful with an true effect of -10mg which is equal to 1 SD. Power calculations in @sec-appendix-simulation-power demonstrate that this is a very highly powered study. 
+
+
+
+
+
+
+
 
 ```{r}
 robot_effect_mg = -4
@@ -509,7 +692,21 @@ robot_effect_size = (mu_tot + robot_effect_mg)/mu_tot
 
 ```
 
+
+
+
+
+
+
+
 The experiment was run again but with a more modest effect of `r robot_effect_mg`mg or a post-operative OME `r scales::percent(robot_effect_size)` percent of the non-robotic group.
+
+
+
+
+
+
+
 
 ```{r}
 #| label: fig-sim-grid-search-2
@@ -531,7 +728,21 @@ plot_grid_2 <- plot_grid(simulation2,
 
 ```
 
+
+
+
+
+
+
+
 The parameters of this exemplar simulation can be mapped to the previous simple simulation. Firstly the values of $\delta p_i$ are $\epsilon$ are recovered for each trial in the grid search. These are then plotted side by side with the results of the first simulation when the same parameters as the exemplaer experiment is used. @fig-compare demonstrates that the experiment space for the example covered only values where $\Delta p_i < 0$ and for values of $ -0.5 < \epsilon < 1 $. Despite being a relativity narrow section of the possible gird space detailed in @sec-manuscript-results-simple with a modest effect size of `r robot_effect_mg` OME mg there are still values where the observed effect size is significantly different. 
+
+
+
+
+
+
+
 
 ```{r}
 #| label: fig-compare
@@ -608,6 +819,13 @@ plot_simple_grid + plot_grid_2 +
 
 ```
 
+
+
+
+
+
+
+
 ### Simulation of ...et al 
 
 The final simulation looks at a study performed by xx et al. This study looked at the effect of xxx on yyyy and found a observed effect size of xxx. 
@@ -642,6 +860,7 @@ In the simulation studies we have only considered situations where medication ch
 ## Generative AI statement
 
 Generative artificial intelligence tools where used to aid the writing of this manuscript and in production of code. These tools included Gemini 3.1 models (Pro, Flash and Flash-Lite), Claude sonnet 4.6 (via Posit AI) and Github Copilot (via Posit Code Assistant). All ideas and methods are of the authors own, all text and code was reviewed and edited following generation.
+
 
 
 

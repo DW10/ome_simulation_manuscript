@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="quarto-1.6.42" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+
+<meta name="author" content="Dylan Whitaker" />
+<meta name="author" content="Matthew Wilson" />
+<meta name="author" content="Steve Harris" />
+
+<title>1  Manuscript – The problem with the OME metric</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+<!-- htmldependencies:E3FAD763 -->
+<script id="quarto-search-options" type="application/json">{
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn"
+      data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" 
+      aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation"
+      onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <h1 class="quarto-secondary-nav-title no-breadcrumbs"></h1>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" role="link"
+        aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation"
+        onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="/">
+      The problem with the OME metric
+      </a> 
+    </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="/index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Abstract</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="/manuscript.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class='chapter-number'>1</span>  <span class='chapter-title'>Manuscript</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="/references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1"  role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="/appendix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class='chapter-number'>A</span>  <span class='chapter-title'>Supplementary materials</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="/simulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class='chapter-number'>B</span>  <span class='chapter-title'>Code for simulation study</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" ></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <div id="quarto-toc-target"></div>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">1</span>  <span class="chapter-title">Manuscript</span></h1>
+</div>
+
+
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Authors</div>
+  <div class="quarto-title-meta-heading">Affiliations</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Dylan Whitaker <a href="mailto:dylan.whitaker.25@ucl.ac.uk" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> <a href="https://orcid.org/0000-0002-6619-5846" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Institute of Health Informatics, University College London, London, United Kingdom
+          </p>
+        <p class="affiliation">
+            Department of Critical Care, University College London Hospitals NHS Foundation Trust, London, United Kingdom
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Matthew Wilson <a href="https://orcid.org/0000-0002-5001-0253" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Department of Anaesthesia and Perioperative Medicine, University College London Hospitals NHS Foundation Trust, London, United Kingdom
+          </p>
+        <p class="affiliation">
+            Division of Surgery and Interventional Science, University College London, London, United Kingdom
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Steve Harris <a href="https://orcid.org/0000-0002-5001-0253" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Institute of Health Informatics, University College London, London, United Kingdom
+          </p>
+        <p class="affiliation">
+            Department of Critical Care, University College London Hospitals NHS Foundation Trust, London, United Kingdom
+          </p>
+      </div>
+  </div>
+
+<div class="quarto-title-meta">
+
+      
+  
+    
+  </div>
+  
+
+
+</header>
+
+<nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#origin-of-opioid-equivalence-and-eqipotency" id="toc-origin-of-opioid-equivalence-and-eqipotency"><span class="header-section-number">1.1</span> Origin of opioid equivalence and eqipotency</a></li>
+  <li><a href="#calculating-opioid-equivalence-in-clinical-practise" id="toc-calculating-opioid-equivalence-in-clinical-practise"><span class="header-section-number">1.2</span> Calculating opioid equivalence in clinical practise</a></li>
+  <li><a href="#calculating-opioid-equivalence-in-research" id="toc-calculating-opioid-equivalence-in-research"><span class="header-section-number">1.3</span> Calculating opioid equivalence in research</a></li>
+  <li><a href="#aims" id="toc-aims"><span class="header-section-number">1.4</span> Aims</a></li>
+  <li><a href="#methods" id="toc-methods"><span class="header-section-number">2</span> Methods</a>
+  <ul>
+  <li><a href="#rapid-literature-review" id="toc-rapid-literature-review"><span class="header-section-number">2.1</span> Rapid Literature Review</a></li>
+  <li><a href="#simulated-study" id="toc-simulated-study"><span class="header-section-number">2.2</span> Simulated study</a>
+  <ul>
+  <li><a href="#sec-manuscript-simple-sim" id="toc-sec-manuscript-simple-sim"><span class="header-section-number">2.2.1</span> Simple simulation</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#results" id="toc-results"><span class="header-section-number">3</span> Results</a>
+  <ul>
+  <li><a href="#rapid-literature-review-1" id="toc-rapid-literature-review-1"><span class="header-section-number">3.1</span> Rapid Literature Review</a>
+  <ul>
+  <li><a href="#conversion-values" id="toc-conversion-values"><span class="header-section-number">3.1.1</span> Conversion values</a></li>
+  </ul></li>
+  <li><a href="#simulation-study" id="toc-simulation-study"><span class="header-section-number">3.2</span> Simulation study</a>
+  <ul>
+  <li><a href="#sec-manuscript-results-simple" id="toc-sec-manuscript-results-simple"><span class="header-section-number">3.2.1</span> Simple simulation</a></li>
+  <li><a href="#exemplar-simulation-study" id="toc-exemplar-simulation-study"><span class="header-section-number">3.2.2</span> Exemplar simulation study</a></li>
+  <li><a href="#impact-of-conversion-set-and-proportions" id="toc-impact-of-conversion-set-and-proportions"><span class="header-section-number">3.2.3</span> Impact of conversion set and proportions</a></li>
+  <li><a href="#simulation-of-et-al" id="toc-simulation-of-et-al"><span class="header-section-number">3.2.4</span> Simulation of …et al</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion"><span class="header-section-number">4</span> Conclusion</a>
+  <ul>
+  <li><a href="#implications" id="toc-implications"><span class="header-section-number">4.1</span> Implications</a></li>
+  <li><a href="#limitations" id="toc-limitations"><span class="header-section-number">4.2</span> Limitations</a></li>
+  <li><a href="#recommendations" id="toc-recommendations"><span class="header-section-number">4.3</span> Recommendations:</a></li>
+  <li><a href="#generative-ai-statement" id="toc-generative-ai-statement"><span class="header-section-number">4.4</span> Generative AI statement</a></li>
+  </ul></li>
+  </ul>
+</nav>
+<section id="origin-of-opioid-equivalence-and-eqipotency" class="level2" data-number="1.1">
+<h2 data-number="1.1"><span class="header-section-number">1.1</span> Origin of opioid equivalence and eqipotency</h2>
+<p>Opioid medications are an important pillar of analgesia in medicine, used across a range of specialities and patients. There are a wide range of opioids, some naturally derived with others synthetic, each with their own potency. Whilst a wide range of factors may influence the potency of a specific opioid in a specific patient, there has long been a need to calculate the eqi-analgesic dose, or the dose of a medication that would provide an equal amount of analgesia compared to a reference.</p>
+<p>The need for agreed conversion values has lead to a number of publications over the last 20 years aiming to formalise the differing potencies. Much of this literature comes from the domain of palliative care in the context of opioid rotation and looked at multiple single opioid small studies to establish conversion values. McPherson described a range of limitations in the use of these equialangesic tables including the source of the data, lack of patient specific variables and bi-directionality of equivalence values. <span class="citation" data-cites="mcphersonWhyEquianalgesicTables2020">[<a href="#ref-mcphersonWhyEquianalgesicTables2020" role="doc-biblioref">1</a>]</span>. Despite this, a set of approximate conversion values, taken with clinical experience offer a helpful set of starting points when prescribing different opioids</p>
+<p>The equi-analgesic conversion set have offered a new opportunity in research, the ability to quantify the total opioid burden for a group of patients. With the increase in electronic health records, opportunities to now use total opioid use as either a feature or an outcome has become increasingly prevalent. In the last 5 years there have been 4,031 papers using the terms <em>“Milligram morphine equivalent”</em> (MME) or <em>“Oral morphine equivalent”</em> (OME) (see <a href="#sec-appendix-pubmed-1" class="quarto-xref"><span class="quarto-unresolved-ref">sec-appendix-pubmed-1</span></a>).</p>
+<p>In 2016 Neilsen et al published on the first formal OME conversion tables for the intention of research <span class="citation" data-cites="nielsenSynthesisOralMorphine2016">[<a href="#ref-nielsenSynthesisOralMorphine2016" role="doc-biblioref">2</a>]</span>. The authors aimed to source a range of national guidelines and recommended a single value for each opioid and route with a upper and lower quartile. This “common conversion set” paved the way for the idea that all opioid research should be using a single unifed conversion set. It was clear in the literature that using a range of different conversion sets would not produce equitable or comparable results. To the extent that in 2022 the CDC produced their own value set an obligated any NIH researches working in opioid research to use their opioid conversions <span class="citation" data-cites="dowellCDCClinicalPractice2022">[<a href="#ref-dowellCDCClinicalPractice2022" role="doc-biblioref">3</a>]</span>.</p>
+<p>A range of papers have highlightes some of the limitations and issues with opioid conversions sets in research. Namely the lack of accounting for inter-patient variability and the differential applicaiton of conversion sets. [Add citations]</p>
+<p>Two aspects that have not been covered are the dependance on the proportion of each opioid and the error within the conversion values used. [Add citations about who said/didnt say what]</p>
+</section>
+<section id="calculating-opioid-equivalence-in-clinical-practise" class="level2" data-number="1.2">
+<h2 data-number="1.2"><span class="header-section-number">1.2</span> Calculating opioid equivalence in clinical practise</h2>
+<p>Often in clinical practice the term potency is used to describe the relative strength of one opioid compared to another. The eqi-potency of a medication is commonly understood to be the dose required to achieve equal effect, and in the case of opioids, the equianalgesic effect. Thus <a href="#eq-potency" class="quarto-xref">Equation <span class="quarto-unresolved-ref">eq-potency</span></a> describes the relationship between the conversion value <span class="math inline">\(c\)</span> and the potency <span class="math inline">\(\rho\)</span> of a given medication <span class="math inline">\(i\)</span> via a given route <span class="math inline">\(r\)</span>.</p>
+<p><span id="eq-potency"><span class="math display">\[c_{i,r} = \frac{1}{\rho_{i,r}}
+\tag{1.1}\]</span></span></p>
+<p>The value of <span class="math inline">\(c\)</span>, then allows for the calculation of the equivalent effective dose of a target medication <span class="math inline">\(d_{\text{target}}\)</span>, given a dose of a reference medication <span class="math inline">\(d_{\text{referance}}\)</span> (<a href="#eq-equivelent-dose" class="quarto-xref">Equation <span class="quarto-unresolved-ref">eq-equivelent-dose</span></a>).</p>
+<p><span id="eq-equivelent-dose"><span class="math display">\[
+d_{\text{referance}} \times c_{i,r} = d_{\text{target}}
+\tag{1.2}\]</span></span></p>
+<p>A full worked example of this is process of opioid conversion calculation is provided in <a href="#sec-conversion-example" class="quarto-xref"><span class="quarto-unresolved-ref">sec-conversion-example</span></a>.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+</section>
+<section id="calculating-opioid-equivalence-in-research" class="level2" data-number="1.3">
+<h2 data-number="1.3"><span class="header-section-number">1.3</span> Calculating opioid equivalence in research</h2>
+<p>The technique of comparing opioid equivalent doses has lead to the development of a new metric, the sum opioid burden. By converting each medication into its equi-analgesic dose of the referance medication (almost exclusivly oral morphine) and then calculating the sum, one could estimate the total opioid analgesic effect administered.</p>
+<p>The opioid burden metric is often presented as the weighted sum of opioids administered. We can define <span class="math inline">\(\text{OME}_j\)</span> as the sum of the dose <span class="math inline">\(d\)</span> for medication <span class="math inline">\(i\)</span> in the set of medications <span class="math inline">\(\mathbf{M}\)</span> multiplied by the conversion value <span class="math inline">\(c\)</span> for a given route <span class="math inline">\(r\)</span> for patient <span class="math inline">\(j\)</span> as shown in <a href="#eq-ome" class="quarto-xref">Equation <span class="quarto-unresolved-ref">eq-ome</span></a>.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> <span class="math inline">\(\text{OME}_j\)</span> can often be expressed as a total of all opioids administered or within a specific time frame (<em>e.g.</em> 24 hours post-operative).</p>
+<p><span id="eq-ome"><span class="math display">\[\text{OME}_j = \sum_{i\in\mathbf{M}} d_i c_{i,r}
+\tag{1.3}\]</span></span></p>
+<p>This is a powerful metric as it allows for the estimation of the total burden of pain. Assuming a patient’s pain is well controlled and the analgesia provided is due predominalty to the opioid burden then the total opioid burden of a patient $_j $ is equivelent to the total pain burden (<a href="#eq-pain-burden" class="quarto-xref">Equation <span class="quarto-unresolved-ref">eq-pain-burden</span></a>).</p>
+<p><span id="eq-pain-burden"><span class="math display">\[
+\begin{align}
+\text{Pain}_{\text{total}} &amp;= \text{Pain}_{\text{experienced}} + \text{Analgesia} \\[1em]
+&amp; \text{Where} \qquad  \text{Pain}_{\text{experienced}} \approx 0 \\
+&amp; \text{and }  \qquad \text{Opioid burden} \approx \text{Analgesia} \\
+&amp; \text{then: }  \qquad  \text{OME}_j   \approx \text{Pain}_{\text{total}}
+\end{align}
+\tag{1.4}\]</span></span></p>
+<p>The ability to now approximate the total burden of pain in a specific and quantified value offers an attractive primary outcome for any study looking to reduce the amount of pain caused. However, whilst <span class="math inline">\(\text{OME}_j\)</span> provides an estimate of a specific patients opioid burden, for use within research, further statistical tools are often applied for hypothesis testing. Given a likley parametric distribution, the arithmetic mean of a groups OME value <span class="math inline">\(\mu_{\text{OME}}\)</span> is often calculated as the sum of OME values in the group <span class="math inline">\(G\)</span> divided by the group size as shown in as <a href="#eq-mu-ome-1" class="quarto-xref">Equation <span class="quarto-unresolved-ref">eq-mu-ome-1</span></a>. <span id="eq-mu-ome-1"><span class="math display">\[
+\mu_{\text{OME}}^{(G)} = \frac{1}{|G|} \sum_{j=G} \text{OME}_j
+\tag{1.5}\]</span></span></p>
+<p>As the mean OME is a <strong>mean of weighted sums</strong> it can instead be expressed as a <strong>weighted sum of mean doses</strong> whereby the mean dose of a given medication within the group <span class="math inline">\(\bar{d_i}\)</span> is weighted by the conversion values <span class="math inline">\(c_{i,r}\)</span> as shown in <a href="#eq-mu-ome-final" class="quarto-xref">Equation <span class="quarto-unresolved-ref">eq-mu-ome-final</span></a>. This rearrangement is provided in <a href="#sec-equation-proof" class="quarto-xref"><span class="quarto-unresolved-ref">sec-equation-proof</span></a>.</p>
+<p><span id="eq-mu-ome-final"><span class="math display">\[\mu_{\text{OME}}^{(G)}  = \sum_{i\in\mathbf{M}} \bar{d_{i}} c_{i,r}
+\tag{1.6}\]</span></span></p>
+<p><a href="#eq-mu-ome-final" class="quarto-xref">Equation <span class="quarto-unresolved-ref">eq-mu-ome-final</span></a> shows that the group mean <span class="math inline">\(\mu_{\text{OME}}\)</span> calculated for group <span class="math inline">\(G\)</span> is dependant on the relative proportions of the medications within each group. For two groups <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> where the mean dose of a given opioid <span class="math inline">\(i\)</span> is not then same (<span class="math inline">\(\bar{d_{i}}^{(A)} \neq \bar{d_{i}}^{(B)}\)</span>) then the resulting means OME values are not equivalent (<span class="math inline">\(\mu_{\text{OME}}^{(A)} \not\equiv \mu_{\text{OME}}^{(B)}\)</span>). Additionally, we see that the conversion value <span class="math inline">\(c_{i,r}\)</span> is a scaler applied to the mean dose <span class="math inline">\({\bar{d_i}}\)</span>. The accuracy of the conversion values (how close the value used for <span class="math inline">\(c_{i,r}\)</span> is to the true value) is not well described.</p>
+</section>
+<section id="aims" class="level2" data-number="1.4">
+<h2 data-number="1.4"><span class="header-section-number">1.4</span> Aims</h2>
+<p>We will aim to:</p>
+<ol type="1">
+<li><p>Investigate the methods of calculating total opioid burden in the peri-operative and surgical literature.</p></li>
+<li><p>Simulate and describe the dependence of differing opioid proportions and errors in conversion values on the results of an experiment.</p></li>
+</ol>
+</section>
+<section id="methods" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Methods</h1>
+<section id="rapid-literature-review" class="level2" data-number="2.1">
+<h2 data-number="2.1"><span class="header-section-number">2.1</span> Rapid Literature Review</h2>
+<p>A rapid literature review of the use of opioid equivalence metrics in peri-operative and surgical studies over 2025 was performed. A structured search of the PUBMED database as detailed in <a href="#sec-appendix-pubmed" class="quarto-xref"><span class="quarto-unresolved-ref">sec-appendix-pubmed</span></a> on 7th July 2026. Papers were screened and data extracted using the Covidence platform <span class="citation" data-cites="zotero-item-670">[<a href="#ref-zotero-item-670" role="doc-biblioref">4</a>]</span> with a custom proforma (<a href="#sec-appendix-cov-extraction" class="quarto-xref"><span class="quarto-unresolved-ref">sec-appendix-cov-extraction</span></a>). Where conversion values were cited or written within the study, these values were extracted and compiled.</p>
+</section>
+<section id="simulated-study" class="level2" data-number="2.2">
+<h2 data-number="2.2"><span class="header-section-number">2.2</span> Simulated study</h2>
+<p>Two simulated studies were performed to demonstrate the sensitivity of the opioid burden metric to differences in the proportions of medications between groups and the conversion values used. The first, <a href="#sec-manuscript-simple-sim" class="quarto-xref"><span class="quarto-unresolved-ref">sec-manuscript-simple-sim</span></a> uses a simplied simulation set up to understand the variation in results across the full of the event space and the second, <a href="#sec-manuscript-exemplar-sim" class="quarto-xref"><span class="quarto-unresolved-ref">sec-manuscript-exemplar-sim</span></a> takes a realistic hypothetical experimental setup to establish the extent of the variation.</p>
+<section id="sec-manuscript-simple-sim" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1"><span class="header-section-number">2.2.1</span> Simple simulation</h3>
+<p>The first simulation aimed to describe the relationship between the <strong>difference in proportion</strong> of a binary choice of medication between two groups, <span class="math inline">\(\Delta p_i\)</span> and the <strong>error in the conversion value</strong> used for the non-reference medication <span class="math inline">\(\delta c_{i}\)</span> on the observed difference in mean OME between the two groups (<span class="math inline">\(\Delta \mu_{\text{OME}}\)</span>).</p>
+<p>In this simulation, 10,000 patients were created and divided equally into two groups, control and intervention. For each patient an opioid was randomly sampled of either morphine or oxycodone to give a distribution set by <span class="math inline">\(\Delta p_i\)</span>. For each patient a expected opioid requirement is sampled from a normal distribution with mean of 10 and standard deviation of 0.1. For patients the medication was sampled to be oxycodone, the expected opioid requirement is converted to a oxycodone dose using <code>potency_oxycodone</code> and then converted back into expected dose of morphine (the OME) using the conversion factor <code>potency_oxycodone</code> +/- an error term <span class="math inline">\(\epsilon\)</span>. The difference in the total OME <span class="math inline">\(\Delta \mu_{\text{OME}}\)</span> between each group was then calculated and reported. For this simulation, the effect size between the control and treatment groups was set to 0,thus <span class="math inline">\(\mathbb{E}(\text{OME})_{\text{control}} = \mathbb{E}(\text{OME})_{\text{intervention}}\)</span> and hence the expected value of <span class="math inline">\(\mu_{\text{OME}} = 0\)</span>. The simulation was then repeated the range of grid values for <span class="math inline">\(\Delta p_i\)</span> and <span class="math inline">\(\epsilon\)</span> with all other parameters the same.</p>
+<p><span class="math display">\[
+\begin{align}
+\text{for } i \in \{\text{morphine, oxycodone} \} \\[1em]
+\Delta p_i &amp;= \Delta p_{\text{oxycodone}} = p_{\text{oxycodone}}^{\text{(control)}} - p_{\text{oxycodone}}^{\text{(intervention)}} \\
+\delta c_i &amp;= c_{\text{oxycodone}} + (c_{\text{oxycodone}} * \epsilon) \\
+\Delta \mu_{\text{OME}} &amp;= \mu_{\text{OME}}^{\text{(control)}} - \mu_{\text{OME}}^{\text{(intervention)}}
+\end{align}
+\]</span> ### Exemplar simulation study {#sec-manuscript-exemplar-sim}</p>
+<p>Following this, a realistic exemplar study was performed to, the summary of the study set up is provided in <a href="#nte-sim-design" class="quarto-xref">Note <span class="quarto-unresolved-ref">nte-sim-design</span></a>. The difference in proportion between groups is simulated using a medication shortage that alters practice. Due to temporal differneces in the groups, this shortage effects one group to a greater extent thus scaling the change in proportion in a divergent manner. In this simulation the effect size of the robot is set to -5 OME mg.</p>
+<div id="nte-sim-design" class="callout callout-style-default callout-note callout-titled" title="Simulated trial design">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class='callout-icon'></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note 2.1: Simulated trial design
+</div>
+<div class='callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end'><i class='callout-toggle'></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>A research team at St Somewhere Hospital want to establish if the use of a robot for a surgical procedure, reduces the post-operative opioid requirement.</p>
+<p>They design a cohort controlled trial with two intervention groups: 1) robot-assisted surgery - known as “robotic” 2) standard open surgery - known as “non-robotic”</p>
+<p>The primary outcome is the total opioid requirement, as measured in OME mg, in the first 24 hours post-operatively as a surrogate for the total pain caused by the surgical procedure.</p>
+<p>The usual case volume is 100 procedures per year, these were all performed using standard surgery until 2023-01-01 when a robot was acquired, and since 80% of cases are performed with the robot. Data was collected between 2020-01-01 and 2025-12-31.</p>
+<p>All patients are treated with a Patient Controlled Analgesia (PCA) after their operation and on average the anaesthetist will prescribe a morphine PCA to 70% of patients and an oxycodone PCA to the remainder. No other opioid medication was administered.</p>
+<p>During the study there was a national shortage of oxycodone from 2024-01-01 to 2024-12-31 and at which time all patients were prescribed a morphine PCA. Whilst the authors described this in their methods section, they did feel it would impact their results as the differing opioids were already accounted for in their OME metric.</p>
+<p>Patients in the standard surgery group have an expected opioid requirement (<span class="math inline">\(\mu_{\text{OME}}\)</span>) of 50mg (sd 10) of morphine equivalents in the first 24 hours post-operatively. The authors expect that the robot-assisted surgery will reduce the opioid requirement by 10% and thus the expected opioid requirement for this group is 45mg of morphine equivalents in the first 24 hours post-operatively. The ground truth oxycodone potency is 185% relative to morphine morphine and thus the conversion value for oxycodone (<span class="math inline">\(c_{\text{oxycodone}}\)</span>) is 0.5405405.</p>
+</div>
+</div>
+</div>
+<p>All simulations were performed in R version 4.6.0 (2026-04-24) and all code is available in <a href="#sec-sim" class="quarto-xref"><span class="quarto-unresolved-ref">sec-sim</span></a>.</p>
+</section>
+</section>
+</section>
+<section id="results" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Results</h1>
+<section id="rapid-literature-review-1" class="level2" data-number="3.1">
+<h2 data-number="3.1"><span class="header-section-number">3.1</span> Rapid Literature Review</h2>
+<p>Of the 480 studies identified in the rapid literature search, 32 fit the eligibility criteria and data was extracted.</p>
+<p>The majority of studies were cohort studies and most commonly looked at anaesthetic type interventions (<a href="#fig-study-types" class="quarto-xref">Figure <span class="quarto-unresolved-ref">fig-study-types</span></a>)</p>
+<div class="cell" data-fig-title="Bar charts of litrature study design and intervention types">
+<div class="cell-output-display">
+<div id="fig-study-types" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-study-types-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="manuscript_files/figure-html/fig-study-types-1.png" class="img-fluid" width="960" />
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-study-types-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure 3.1: Bar charts to summarise the types of studies. Left hand side demonstrated the count of each study type and the right hand sid demonstrates the count of each intervention type studied.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>With regards to the opioid conversion sets used 14 cited another paper, whilst 2 included the conversion values in the methods. However for 16 (50%) papers did not include any reference or citation to the opioid conversion sets used. Only 3 (9%) papers described the proportions of opioids used between intervention groups as shown in <a href="#fig-study-results" class="quarto-xref">Figure <span class="quarto-unresolved-ref">fig-study-results</span></a>.</p>
+<div class="cell" data-fig-title="Proportion of studies reporting conversion set and opiooid proportions">
+<div class="cell-output-display">
+<div id="fig-study-results" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-study-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="manuscript_files/figure-html/fig-study-results-1.png" class="img-fluid" width="672" />
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-study-results-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure 3.2: Heatmap depicting the relative size of each group by the opioid conversion value set supplie and if the opioid proportions within groups was reported. Count of observations within each group shown in text.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<section id="conversion-values" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1"><span class="header-section-number">3.1.1</span> Conversion values</h3>
+<p>Of the 14 papers were a conversion value set was cited, 11 unique papers were extracted. Generally across the literature, conversion values with the intention of research were in the minority (36%) and most had compiled the conversion value sets for use in clinical care.</p>
+</section>
+</section>
+<section id="simulation-study" class="level2" data-number="3.2">
+<h2 data-number="3.2"><span class="header-section-number">3.2</span> Simulation study</h2>
+<section id="sec-manuscript-results-simple" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1"><span class="header-section-number">3.2.1</span> Simple simulation</h3>
+<p>1,681 different simulations where performed across the grid values of <span class="math inline">\(\Delta p_{\text{oxycodone}}\)</span> between 1 (all of the control group were treated with morphine and all of the control group were treated with oxycodone) and -1 (the inverse) and <span class="math inline">\(\epsilon\)</span> between -1(estimated value was 1) and 1 (estimated value was double the true value).</p>
+<div class="cell" title="Heatmap of the observed difference group means across the grid values of differing opioid proportion and and the error in conversion value">
+<div class="cell-output-display">
+<div id="fig-simple-grid-1" class="quarto-float quarto-figure quarto-figure-center" width="672">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-simple-grid-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="manuscript_files/figure-html/fig-simple-grid-1-1.png" id="fig-simple-grid-1" class="img-fluid" width="672" />
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-simple-grid-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure 3.3
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p><a href="#fig-simple-grid-1" class="quarto-xref">Figure <span class="quarto-unresolved-ref">fig-simple-grid-1</span></a> demonstrates the observed difference between the control group and treatment group. Where the proportion of medication in the control and intervention groups are the same (<span class="math inline">\(\Delta p_i = 0\)</span>) then we note that the true effect size of 0 is recovered, regardless of any error in the conversion value (<span class="math inline">\(\delta c_i\)</span>) used. Also, where the conversion values used are correct to the ground truth, any difference in proportion is accounted for and the true effect is again recovered. However, as the proportions between the control and treatment group deviate, resulting difference observed is biased by any error in the conversion values. Where the groups are completely unmatched (<span class="math inline">\(\Delta p_i \in 1,-1\)</span>) the resulting observed difference is the due entirely to the error in potency.</p>
+<p><a href="#eq-results-simple-1" class="quarto-xref">Equation <span class="quarto-unresolved-ref">eq-results-simple-1</span></a> demonstrates the hyperbolic parabolic relationship observed in <a href="#fig-simple-grid-1" class="quarto-xref">Figure <span class="quarto-unresolved-ref">fig-simple-grid-1</span></a>.</p>
+<p><span id="eq-results-simple-1"><span class="math display">\[
+\Delta \mu_{\text{OME}} = -1 \cdot \Delta p_i \cdot \delta c_i
+\tag{3.1}\]</span></span></p>
+<p><a href="#fig-appendix-simple-sim-mu" class="quarto-xref">Figure <span class="quarto-unresolved-ref">fig-appendix-simple-sim-mu</span></a> shows that the scaling constant (1 in this simulation) is the expected dose for the control group. This relationship can be rearranged as <a href="#eq-results-simple-2" class="quarto-xref">Equation <span class="quarto-unresolved-ref">eq-results-simple-2</span></a> (as expanded in in <a href="#eq-results-simple-2-proof" class="quarto-xref">Equation <span class="quarto-unresolved-ref">eq-results-simple-2-proof</span></a>).</p>
+<p><span id="eq-results-simple-2"><span class="math display">\[
+\mu^\text{intervention} = \mu^\text{control}[ 1 + \Delta p_i \cdot \delta c_i]
+\tag{3.2}\]</span></span></p>
+<p>However, in all of the simulations described thus far the treatment effect was set at 0 meaning <span class="math inline">\(\mathbb{E}(\text{OME}^\text{control}) = \mathbb{E}(\text{OME}^\text{intervention})\)</span>. This demonstrated that despite have no true treatment effect, difference in the proportion and error in conversion size, can lead to the observation of a treatment effect. This phenomenon can be explained by Simpsons paradox, whereby the observed treatment effect is conditioned on the proportion of the the medications within each group, thus creating the observation of a false treatment effect <span class="citation" data-cites="pearlBookWhyNew2019">[<a href="#ref-pearlBookWhyNew2019" role="doc-biblioref">5</a>]</span>.</p>
+<p><a href="#sec-appendix-sim-2" class="quarto-xref"><span class="quarto-unresolved-ref">sec-appendix-sim-2</span></a> demonstrates that as the treatment effect is increased (of decreased) it stretched the hyperbolic parabola in the Z direction.</p>
+<p>This saddle geometry illustrates a critical vulnerability in aggregate OME comparisons: if a conversion factor for the medication <span class="math inline">\(i\)</span> is over-estimated (<span class="math inline">\(\epsilon_i &gt; 0\)</span>) and prevalence is simultaneously higher in the intervention group (<span class="math inline">\(\Delta p_i &gt; 0\)</span>), the error in the effect size compounds quadratically. Conversely, opposing directional errors will collapse and at the extreme values may invert the direction of the observed treatment effect.</p>
+</section>
+<section id="exemplar-simulation-study" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2"><span class="header-section-number">3.2.2</span> Exemplar simulation study</h3>
+<p>180 procedures were simulated using the parameters described in <a href="#nte-sim-design" class="quarto-xref">Note <span class="quarto-unresolved-ref">nte-sim-design</span></a>. The OME value for each patient was calculated use <span class="math inline">\(c_{\text{morphine}}\)</span> as 1 (as the reference medication) and <span class="math inline">\(c_{\text{oxycodone}}\)</span> as 0.5, in contract to the ground truth value of 0.5405405. The mean dose (mg), opioid and OME value for each group is shown in <a href="#tbl-sim-demo" class="quarto-xref">Table <span class="quarto-unresolved-ref">tbl-sim-demo</span></a>.</p>
+<div id="tbl-sim-demo" class="cell" data-tbl-title="Demographic table of simulated study population">
+<div class="cell-output-display">
+<table class="caption-top">
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: left;">Overall</th>
+<th style="text-align: left;">Non-Robotic</th>
+<th style="text-align: left;">Robotic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">n</td>
+<td style="text-align: left;">180</td>
+<td style="text-align: left;">105</td>
+<td style="text-align: left;">75</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">dose (mean (SD))</td>
+<td style="text-align: left;">41.94 (13.40)</td>
+<td style="text-align: left;">41.77 (14.82)</td>
+<td style="text-align: left;">42.17 (11.21)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">opioid = Oxycodone (%)</td>
+<td style="text-align: left;">53 (29.4)</td>
+<td style="text-align: left;">38 (36.2)</td>
+<td style="text-align: left;">15 (20.0)</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ome (mean (SD))</td>
+<td style="text-align: left;">49.95 (13.57)</td>
+<td style="text-align: left;">51.38 (13.72)</td>
+<td style="text-align: left;">47.95 (13.17)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="fig-sim-density" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-sim-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell quarto-layout-cell-subref quarto-layout-cell" data-fig-title="Density plot of dose by medication" data-ref-parent="fig-sim-density" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div class="cell-output-display quarto-layout-cell-subref" data-ref-parent="fig-sim-density">
+<div id="fig-sim-dose-density" class="quarto-float quarto-figure quarto-figure-center" width="672">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-sim-dose-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="manuscript_files/figure-html/fig-sim-dose-density-1.png" id="fig-sim-dose-density" class="img-fluid" data-ref-parent="fig-sim-density" width="672" />
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-sim-dose-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell quarto-layout-cell-subref quarto-layout-cell" data-fig-title="Density plot of ome by surgery type" data-ref-parent="fig-sim-density" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div class="cell-output-display quarto-layout-cell-subref" data-ref-parent="fig-sim-density">
+<div id="fig-sim-ome-density" class="quarto-float quarto-figure quarto-figure-center" width="672">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-sim-ome-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="manuscript_files/figure-html/fig-sim-ome-density-1.png" id="fig-sim-ome-density" class="img-fluid" data-ref-parent="fig-sim-density" width="672" />
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-sim-ome-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell quarto-layout-cell-subref quarto-layout-cell" data-fig-title="Bar chart demonstrating the proporotion of mediations by by surgery type" data-ref-parent="fig-sim-density" style="flex-basis: 33.3%;justify-content: flex-start;">
+<div class="cell-output-display quarto-layout-cell-subref" data-ref-parent="fig-sim-density">
+<div id="fig-sim-ome-proportion" class="quarto-float quarto-figure quarto-figure-center" width="672">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-sim-ome-proportion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="manuscript_files/figure-html/fig-sim-ome-proportion-1.png" id="fig-sim-ome-proportion" class="img-fluid" data-ref-parent="fig-sim-density" width="672" />
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-sim-ome-proportion-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(c)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-sim-density-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure 3.4
+</figcaption>
+</figure>
+</div>
+<p><a href="#fig-sim-density" class="quarto-xref">Figure <span class="quarto-unresolved-ref">fig-sim-density</span></a> Demonstrates the distribution of the dose (in mg) of each medication (<a href="#fig-sim-dose-density" class="quarto-xref">Figure <span class="quarto-unresolved-ref">fig-sim-dose-density</span></a>) and the distribution of OME values (in OME mg) by surgery type (<a href="#fig-sim-ome-density" class="quarto-xref">Figure <span class="quarto-unresolved-ref">fig-sim-ome-density</span></a>). <a href="#fig-sim-ome-proportion" class="quarto-xref">Figure <span class="quarto-unresolved-ref">fig-sim-ome-proportion</span></a> shoes that within the robotic and non-robotic groups the proportion of each opioid is not equal, and the effect of the oxycodone shortage has had a larger impact on the robotic group.</p>
+<p>The mean OME value for the robotic surgery group was 47.9 OME mg and for the non-robotic surgery group was 51.4 OME mg. This gives an observed effect size of the robot as -3.4 OME mg.</p>
+<p>Using a two sided t-test to assess if there is a significant difference in mean OME between the robotic and standard surgery groups, the mean difference was -3.4 OME mg (95% CI -0.6 to 7.4) with a p-value of 0.092.</p>
+<p>Thus the researched from St Somewhere Hospital were able to conclude that the robotic surgery was associated with a significantly different post-operative OME dose.</p>
+</section>
+<section id="impact-of-conversion-set-and-proportions" class="level3" data-number="3.2.3">
+<h3 data-number="3.2.3"><span class="header-section-number">3.2.3</span> Impact of conversion set and proportions</h3>
+<p>The study was then recreated using a grid search of across different conversion values and different proportion of post-operative oxycodone prescribing. The prior was informed by ranges observed in the literature and the latter to infulence the degree of different in opioid proportions between groups.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-sim-grid-search-1" class="quarto-float quarto-figure quarto-figure-center" width="672">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-sim-grid-search-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="manuscript_files/figure-html/fig-sim-grid-search-1-1.png" id="fig-sim-grid-search-1" class="img-fluid" width="672" />
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-sim-grid-search-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure 3.5
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Given a 50 mg expected opioid requirement and a treatment effect of -10% mg we would expect the mean difference in OME of the robotic group to be -5 mg OME.</p>
+<p>The results shown in <a href="#fig-sim-grid-search-1" class="quarto-xref">Figure <span class="quarto-unresolved-ref">fig-sim-grid-search-1</span></a> show that where the proportions of morphine morphine prescribed post-op, (thus meaning a shortage of oxycodone has little influence on prescribing patterns and hence the effect of the exogenous shock is little) then across the values of <span class="math inline">\(c_{\text{Oxycodone}}\)</span>, the true difference in treatment groups is well observed. With all situations being statistically significant. However as the proportion of post-operative prescribing shifts towards oxycodone, the observed difference in OME between the two groups becomes highly sensitive to the conversion value used. This is due to the exogenous effect of the oxycodone shortage impacting the robotic group more than the the standard surgery group.</p>
+<p>In this study set up, the true effect of the robot is powerful with an true effect of -10mg which is equal to 1 SD. Power calculations in <a href="#sec-appendix-simulation-power" class="quarto-xref"><span class="quarto-unresolved-ref">sec-appendix-simulation-power</span></a> demonstrate that this is a very highly powered study.</p>
+<p>The experiment was run again but with a more modest effect of -4mg or a post-operative OME 92% percent of the non-robotic group.</p>
+<p>The parameters of this exemplar simulation can be mapped to the previous simple simulation. Firstly the values of <span class="math inline">\(\delta p_i\)</span> are <span class="math inline">\(\epsilon\)</span> are recovered for each trial in the grid search. These are then plotted side by side with the results of the first simulation when the same parameters as the exemplaer experiment is used. <a href="#fig-compare" class="quarto-xref">Figure <span class="quarto-unresolved-ref">fig-compare</span></a> demonstrates that the experiment space for the example covered only values where <span class="math inline">\(\Delta p_i &lt; 0\)</span> and for values of $ -0.5 &lt; &lt; 1 $. Despite being a relativity narrow section of the possible gird space detailed in <a href="#sec-manuscript-results-simple" class="quarto-xref"><span class="quarto-unresolved-ref">sec-manuscript-results-simple</span></a> with a modest effect size of -4 OME mg there are still values where the observed effect size is significantly different.</p>
+<div class="cell" data-fig-title="Comparsion of simple simulation results and exemplar simulation results.">
+<div class="cell-output-display">
+<div id="fig-compare" class="quarto-float quarto-figure quarto-figure-center" width="672">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="manuscript_files/figure-html/fig-compare-1.png" id="fig-compare" class="img-fluid" width="672" />
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-compare-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure 3.6
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="simulation-of-et-al" class="level3" data-number="3.2.4">
+<h3 data-number="3.2.4"><span class="header-section-number">3.2.4</span> Simulation of …et al</h3>
+<p>The final simulation looks at a study performed by xx et al. This study looked at the effect of xxx on yyyy and found a observed effect size of xxx.</p>
+<p>They did not report the difference of proportion of medications between their treatment groups. We will apply conversion values that have been used across the literature to calculate. One issue is that we do not know the true conversion values of the medications.</p>
+</section>
+</section>
+</section>
+<section id="conclusion" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Conclusion</h1>
+<p>We have demonstrated that the use of opioid equivalence metrics such as OME or MME are sensitivity to the proportions of different opioids and the conversion sets used. We have demonstrated that the difference measured between the observed <span class="math inline">\(\mu_{\text{OME}}^{(A)}\)</span> and <span class="math inline">\(\mu_{\text{OME}}^{(B)}\)</span> is a product of not only the association of the two groups (be it statistical or causal), but also the difference in proportions of medications within each group. This is explicitly demonstrated in <a href="#sec-ome-difference-proof" class="quarto-xref"><span class="quarto-unresolved-ref">sec-ome-difference-proof</span></a>.</p>
+<p>In addition, the opioid equivalence metric is also sensitivity to any error in the true conversion value of the underlying population and the conversion value used for calculations. As expressed across the literature, it is difficult to ascertain all of the inter-patient difference and inter-opioid interactions that would provide the true conversion value. None the less, any difference in the true population level conversion value and the values used will also lead to systematic under or over estimation of the true value.</p>
+<p>Where the opioid equivalence metric is being used as outcome metric in a comparison between groups, any difference in proportion of differing opioids or the conversion values will lead to a systematic under or over estimation of the true different. If either one of these is exactly correct then the error will cancel out but if both are not matched it can lead to an up to 3 fold error in the estimate of difference.</p>
+<p>This work is particular relevant to retrospective observational work where large datasets with varied treatment lend themselves well to the tool of opioid conversion values. However, even in a RCT where the protocol for analgesia may be fixed and patients randomised between groups, confounding may occur if analgesia protocols contain differing opioids allowing the possibility of diverging proportions between treatment groups.</p>
+<section id="implications" class="level2" data-number="4.1">
+<h2 data-number="4.1"><span class="header-section-number">4.1</span> Implications</h2>
+</section>
+<section id="limitations" class="level2" data-number="4.2">
+<h2 data-number="4.2"><span class="header-section-number">4.2</span> Limitations</h2>
+<p>In the simulation studies we have only considered situations where medication choice is binary between the reference medication and the alternative (oxycodone). We hypothesise that in some situations with multiple opioids, due to Orthogonality, that multiple small errors in the estimate of <span class="math inline">\(c_i\)</span> and the true value of <span class="math inline">\(c_i\)</span> may generally cancel out and thus have little impact on the final estimate. This may be achieved using machine learning tools that consider the co-linearity between the features of the dose of each medication and the outcome of total opioid burden or OME.</p>
+</section>
+<section id="recommendations" class="level2" data-number="4.3">
+<h2 data-number="4.3"><span class="header-section-number">4.3</span> Recommendations:</h2>
+<ol type="1">
+<li><p>All studies using opioid equivalence metrics must publish the proportions of the differing opioids and conversion value sets used for each group.</p></li>
+<li><p>More work is required to estimate the true population level opioid conversion value sets to reduce the error between the true unmeasurable potency and the value sets used.</p></li>
+</ol>
+</section>
+<section id="generative-ai-statement" class="level2" data-number="4.4">
+<h2 data-number="4.4"><span class="header-section-number">4.4</span> Generative AI statement</h2>
+<p>Generative artificial intelligence tools where used to aid the writing of this manuscript and in production of code. These tools included Gemini 3.1 models (Pro, Flash and Flash-Lite), Claude sonnet 4.6 (via Posit AI) and Github Copilot (via Posit Code Assistant). All ideas and methods are of the authors own, all text and code was reviewed and edited following generation.</p>
+<div id="quarto-navigation-envelope" class="hidden">
+<p><span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLWludC1zaWRlYmFyLXRpdGxl">The problem with the OME metric</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLWludC1uYXZiYXItdGl0bGU=">The problem with the OME metric</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLWludC1uZXh0">References</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLWludC1wcmV2">Abstract</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLWludC1zaWRlYmFyOi9pbmRleC5odG1sQWJzdHJhY3Q=">Abstract</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLWludC1zaWRlYmFyOi9tYW51c2NyaXB0Lmh0bWw8c3Bhbi1jbGFzcz0nY2hhcHRlci1udW1iZXInPjE8L3NwYW4+LS08c3Bhbi1jbGFzcz0nY2hhcHRlci10aXRsZSc+TWFudXNjcmlwdDwvc3Bhbj4="><span class="chapter-number">1</span>  <span class="chapter-title">Manuscript</span></span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLWludC1zaWRlYmFyOi9yZWZlcmVuY2VzLmh0bWxSZWZlcmVuY2Vz">References</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLWludC1zaWRlYmFyOnF1YXJ0by1zaWRlYmFyLXNlY3Rpb24tMQ==">Appendices</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLWludC1zaWRlYmFyOi9hcHBlbmRpeC5odG1sPHNwYW4tY2xhc3M9J2NoYXB0ZXItbnVtYmVyJz5BPC9zcGFuPi0tPHNwYW4tY2xhc3M9J2NoYXB0ZXItdGl0bGUnPlN1cHBsZW1lbnRhcnktbWF0ZXJpYWxzPC9zcGFuPg=="><span class="chapter-number">A</span>  <span class="chapter-title">Supplementary materials</span></span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLWludC1zaWRlYmFyOi9zaW11bGF0aW9uLmh0bWw8c3Bhbi1jbGFzcz0nY2hhcHRlci1udW1iZXInPkI8L3NwYW4+LS08c3Bhbi1jbGFzcz0nY2hhcHRlci10aXRsZSc+Q29kZS1mb3Itc2ltdWxhdGlvbi1zdHVkeTwvc3Bhbj4="><span class="chapter-number">B</span>  <span class="chapter-title">Code for simulation study</span></span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLWJyZWFkY3J1bWJzLTxzcGFuLWNsYXNzPSdjaGFwdGVyLW51bWJlcic+MTwvc3Bhbj4tLTxzcGFuLWNsYXNzPSdjaGFwdGVyLXRpdGxlJz5NYW51c2NyaXB0PC9zcGFuPg=="><span class="chapter-number">1</span>  <span class="chapter-title">Manuscript</span></span></p>
+</div>
+<div id="quarto-meta-markdown" class="hidden">
+<p><span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLW1ldGF0aXRsZQ=="><span class="chapter-number">1</span>  <span class="chapter-title">Manuscript</span> – The problem with the OME metric</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLXR3aXR0ZXJjYXJkdGl0bGU="><span class="chapter-number">1</span>  <span class="chapter-title">Manuscript</span> – The problem with the OME metric</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLW9nY2FyZHRpdGxl"><span class="chapter-number">1</span>  <span class="chapter-title">Manuscript</span> – The problem with the OME metric</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLW1ldGFzaXRlbmFtZQ==">The problem with the OME metric</span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLXR3aXR0ZXJjYXJkZGVzYw=="></span> <span class="hidden quarto-markdown-envelope-contents" data-render-id="cXVhcnRvLW9nY2FyZGRkZXNj"></span></p>
+</div>
+<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
+<div id="ref-mcphersonWhyEquianalgesicTables2020" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[1] </div><div class="csl-right-inline">McPherson ML. Why equianalgesic tables are only part of the answer to equianalgesia. Ann Palliat Med 2020;9:53741–541. <a href="https://doi.org/10.21037/apm.2020.03.05">https://doi.org/10.21037/apm.2020.03.05</a>.</div>
+</div>
+<div id="ref-nielsenSynthesisOralMorphine2016" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[2] </div><div class="csl-right-inline">Nielsen S, Degenhardt L, Hoban B, Gisev N. A synthesis of oral morphine equivalents (<span>OME</span>) for opioid utilisation studies. Pharmacoepidemiol Drug Saf 2016;25:733–7. <a href="https://doi.org/10.1002/pds.3945">https://doi.org/10.1002/pds.3945</a>.</div>
+</div>
+<div id="ref-dowellCDCClinicalPractice2022" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[3] </div><div class="csl-right-inline">Dowell D, Ragan KR, Jones CM, Baldwin GT, Chou R. <span>CDC Clinical Practice Guideline</span> for <span>Prescribing Opioids</span> for <span>Pain</span> — <span>United States</span>, 2022. MMWR Recomm Rep 2022;71:1–95. <a href="https://doi.org/10.15585/mmwr.rr7103a1">https://doi.org/10.15585/mmwr.rr7103a1</a>.</div>
+</div>
+<div id="ref-zotero-item-670" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[4] </div><div class="csl-right-inline">Veritas Health Innovation. <a href="https://www.covidence.org">Covidence systematic review software</a> 2026.</div>
+</div>
+<div id="ref-pearlBookWhyNew2019" class="csl-entry" role="listitem">
+<div class="csl-left-margin">[5] </div><div class="csl-right-inline">Pearl J, Mackenzie D. The book of why: The new science of cause and effect. London: Penguin Books; 2019.</div>
+</div>
+</div>
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn1"><p>This approach is used clinically for opioid conversion or rotation and is the origin of the opioid equivalence system. With a small set of opioid equivalence values, it’s possible to convert doses between a wide range of different opioids, often via the reference medication as an intermediate.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Medications administered in different dose units are generally converted to a single dose unit (often <strong>mg</strong>) and the conversion values updated to reflect this but in some cases they may be kept in their administered unit (<strong>e.g. mcg</strong>) and the conversion shifted by an appropriate factor.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id = "quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a  href="/index.html" class="pagination-link" aria-label="Abstract">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Abstract</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a  href="/references.html" class="pagination-link" aria-label="References">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+</body>
+
+</html>

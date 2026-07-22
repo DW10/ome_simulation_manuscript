@@ -12,13 +12,17 @@ PRODUCTION_QUALITY <- FALSE
 
 ::: {.callout-note}
 ```{r print quality statement}
+#| output: asis
 if (PRODUCTION_QUALITY) {
-  print("High quality document - For review")
+  cat("High quality document - For review")
 } else {
-  print("Low quality document, \n edit the index.qmd to ` PRODUCTION_QUALITY <- TRUE ` before review")
+  cat("Low quality document. Edit index.qmd to set `PRODUCTION_QUALITY <- TRUE` before review.")
 }
 ```
 :::
 
-Abstract to be written
+*Abstract to be written*
 
+::: {.content-visible when-format="pdf"}
+\listoffigures
+:::

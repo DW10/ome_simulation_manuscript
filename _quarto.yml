@@ -17,10 +17,25 @@ csl: elsevier-vancouver.csl
 format:
   html:
     toc: true
+    fig-align: center
+    fig-width: 6.5
+    fig-height: 4
+    fig-dpi: 150
   pdf:
     documentclass: scrreprt
+    toc: true
+    fig-align: center
+    fig-width: 5
+    fig-height: 3
+    fig-dpi: 300
   docx:
     toc: true
+    fig-align: center
+    fig-width: 5
+    fig-height: 3
+    fig-dpi: 300
+crossref:
+  lof-title: List of Figures
 execute:
   echo: false
   warning: true

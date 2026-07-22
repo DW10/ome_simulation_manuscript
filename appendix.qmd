@@ -19,46 +19,50 @@ rm(temp_r_file)
 
 ## Example opioid equivalence calculation {#sec-conversion-example}
 
-**Question**: What dose of intravenous fentanyl will provide equal analgesic benefit to 5 mg of intravenous morphine, assuming IV fentanyl is 100 times more potent.
+**Question**: What dose of intravenous (IV) fentanyl will provide equal the analgesic effect of 5 mg of IV morphine, assuming IV fentanyl is 100 times more potent than IV morphine.
 
-$$\begin{align}
+**Calculation:**
+
+**Step 1:** Use the potency value to find the conversion value to be 0.01
+
+$$\begin{aligned}
 \rho_{\text{fentanyl,IV}} = 100 \\
 c_{\text{fentanyl,IV}} = \frac{1}{\rho_{\text{fentanyl,IV}}} \\
 c_{\text{fentanyl,IV}} = \frac{1}{100} = 0.01 \\
-\end{align}$$
+\end{aligned}$$
 
-First we use the potency value to find the conversion value to be 0.01.
+**Step 2:** Multiple the reference dose of 5mg of morphine by the conversion value to find the equivalent dose of fentanyl to be equal to 0.05 mg or 50 mcg.
 
-$$\begin{align}
-d_{\text{morphine}} \times c_{\text{fentanyl,IV}} = d_{\text{fentanyl}} \\
+$$\begin{aligned}
+d_{\text{morphine}} \times c_{\text{fentanyl,IV}} = d_{\text{fentanyl}} \\[1em]
 5 \times 0.01 = 0.05\text{mg} = 50\text{mcg}
-\end{align}$$
+\end{aligned}$$
 
-Then we multiple our reference dose of 5mg of morphine by the conversion value to find the equivalent dose of fentanyl to be 0.05 mg or 50 mcg.
+This approach is used clinically for opioid conversion or rotation and is the origin of the opioid equivalence system. With a small set of opioid equivalence values, it's possible to convert doses between a wide range of different opioids, often via the reference medication as an intermediate.
 
-This approach can also be used to convert from two non-reference medications by firstly converting to the reference (often oral morphine) and then to the target medication.
+Medications administered in different dose units are generally converted to a single dose unit (often **mg**) and the conversion values updated to reflect this however in some cases they may be kept in their administered unit (**e.g. mcg**) and the conversion shifted by an appropriate factor.
 
 
 ## Mathematical proofs
 
-### Rearrangement of @eq-mu-ome-1 to @eq-mu-ome-final {#sec-equation-proof}
+### Rearrangement of @eq-mu-ome-final {#sec-equation-proof}
 
 The equation for the group mean OME provided @eq-mu-ome-1 is is a weighted sum of the OME values for patients $j$ in group $G$.
 
 $$
-\begin{align}
+\begin{aligned}
 \text{OME}_j &= \sum_{i\in\mathbf{M}} d_i c_{i,r} \\
 \mu_{\text{OME}}^{(G)} &= \frac{1}{|G|} \sum_{j=G} \text{OME}_j
-\end{align}
-$$
+\end{aligned}
+$${#eq-mu-ome-1}
 First the the expression for $\text{OME}_j$ is substituted into the group mean. Then the order of summation is rearranged as both the sets $G$ and $\mathbf{M}$ are finite. Following this, the constant $c_{i,r}$ is factored out of the inner sum whilst the scaling term $\frac{1}{|G|}$ of group size is distributed to the inner term. 
 
 $$
-\begin{align}
+\begin{aligned}
 \mu_{\text{OME}}^{(G)} &= \frac{1}{|G|} \sum_{j \in G}  \left( \sum_{i\in\mathbf{M}} d_{j,i} c_{i,r} \right) \\
 \mu_{\text{OME}}^{(G)} &= \frac{1}{|G|} \sum_{j \in G}  \sum_{i\in\mathbf{M}} d_{j,i} c_{i,r} \\
 \mu_{\text{OME}}^{(G)} &= \sum_{i\in\mathbf{M}} \left( \frac{1}{|G|} \sum_{j=1}  d_{j,i}  \right) c_{i,r}
-\end{align}
+\end{aligned}
 $$
 
 We can then define the mean dose $\bar{d}$ of medication $i$ as the arithmetic mean of doses for patients $j \in G$. 
@@ -86,11 +90,11 @@ $$
 To estimate $t$ we will often measure the difference in the the observed mean of each group ($\mu_{\text{OME}}^{(T = 1)} - \mu_{\text{OME}}^{(T = 0)}$) divided by the variance $\sigma$.
 
 $$
-\begin{align}
+\begin{aligned}
 \mu_{\text{OME}}^{(T = 1)} &= \mu_{\text{OME}}^{(T = 0)} + t \cdot \sigma_{p} \\[1em]
  t &= \frac{\mu_{\text{OME}}^{(T = 1)} - \mu_{\text{OME}}^{(T = 0)} }{\sigma_p} = \frac{\Delta \mu_{\text{OME}}}{\sigma_p} \\
-\end{align}
-$$
+\end{aligned}
+$$ {#eq-t-estimator}
 
 #### Conditional Component Definition
 
@@ -116,10 +120,10 @@ $$ {#eq-expanded-difference}
 
 #### Counterfactual Counter-Balancing
 
-By adding and subtracting the cross-term $p_i^{(T=0)}\hat{d}_i^{(T=0)$
+By adding and subtracting the cross-term $p_i^{(T=0)}\hat{d}_i^{(T=0)}$
 
 $$
-\Delta\mu_{\text{OME}} = \sum_{i\in\mathbf{M}} \left( p_i^{(T=1)}\hat{d}_i^{(T=1)} - p_i^{(T=1)}\hat{d}_i^{(T=0)} + p_i^{(T=1)}\hat{d}_i^{(T=0)} - p_i^{(T=0)}\hat{d}_i^{(T=0)} \right) c_{i,r}
+\Delta \mu_{\text{OME}} = \sum_{i\in\mathbf{M}} \left( p_i^{(T=1)}\hat{d}_i^{(T=1)} - p_i^{(T=1)}\hat{d}_i^{(T=0)} + p_i^{(T=1)}\hat{d}_i^{(T=0)} - p_i^{(T=0)}\hat{d}_i^{(T=0)} \right) c_{i,r}
 $$ {#eq-algebraic-bridge}
 
 #### Final Structural Decomposition
@@ -140,8 +144,7 @@ $$
 \Delta \mu_{\text{OME}} = -\mu_{\text{OME}}^\text{(control)} \cdot \Delta p_i \cdot \delta c_i \\
 \\
 p_i^{\text{(control)}} - p_i^{\text{(intervention)}} 
-\\
-
+\\ 
 \mu_{\text{OME}}^{\text{(control)}} - \mu_{\text{OME}}^{\text{(intervention)}} = -\mu_{\text{OME}}^\text{(control)} \cdot \Delta p_i \cdot \delta c_i \\
 \mu^\text{intervention} = \mu^\text{control}[ 1 + \Delta p_i \cdot \delta c_i]
 \end{aligned}

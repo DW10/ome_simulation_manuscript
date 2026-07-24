@@ -262,28 +262,17 @@ midpoint <- robot_effect_mg
 min_val <- min(results_grid$mean_diff_ome, na.rm = TRUE)  # adjust column name as needed
 max_val <- max(results_grid$mean_diff_ome, na.rm = TRUE)
 
- ggplot(results_grid, aes(x=conversion_value, y=morphine_proportion, fill=mean_diff_ome)) +
+  ggplot(results_grid, aes(x=conversion_value, y=morphine_proportion, fill=mean_diff_ome)) +
   geom_tile() +
-  geom_text(aes(label = significant), color = "darkgreen") +
-  scale_fill_gradientn(
-  colours = c("blue", "dodgerblue", "white", "orange", "red"),
-  values = scales::rescale(c(
-    min_val,
-    (min_val + midpoint) / 2,
-    midpoint,
-    (midpoint + max_val) / 2,
-    max_val
-  )),
-  limits = c(min_val, max_val)
-)+
+  geom_point(data = subset(results_grid, significant == "*"), shape = 4, color = "purple") +
+  symmetric_fill_scale(20)+
   labs(title = ,
-       x = "$c_{\text{Oxycodone}}$",
-       y = "Proportion of Morphine",
-       fill = "Mean Difference in OME",
-       caption = "Blue * denotes significant testing with p value < 0.05") +
+       x = TeX(r'(Value used for $c_{oxycodone}$)'),
+       y = "Proportion of post-operative morphine perscribing",
+       fill = "Mean difference in OME") +
    geom_vline(xintercept = potency_oxycodone_truth, linetype = "dashed", color = "red")+
-  theme_minimal() +
-  theme(
+    theme_minimal() +
+    theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
     panel.grid = element_blank(),
     legend.position = "bottom"

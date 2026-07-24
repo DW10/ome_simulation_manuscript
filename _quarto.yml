@@ -5,6 +5,7 @@ brand: ucl_brand.yml
 book:
   title: The problem with the OME metric
   search: false
+  downloads: pdf
   chapters:
     - index.qmd
     - manuscript.qmd

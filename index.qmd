@@ -4,12 +4,11 @@ editor_options:
   chunk_output_type: console
 ---
 
+# Reader Notes{.unnumbered}
+ 
 ```{r set quality}
 PRODUCTION_QUALITY <- FALSE
 ```
-
-# Abstract {.unnumbered}
-
 ::: {.callout-note}
 ```{r print quality statement}
 #| output: asis
@@ -21,8 +20,32 @@ if (PRODUCTION_QUALITY) {
 ```
 :::
 
-*Abstract to be written*
+:::{.callout-danger}
 
-::: {.content-visible when-format="pdf"}
-\listoffigures
+The premise of the paper is that when the the proportions of opioid between groups are different **AND** OR there is an error in the conversions value used **THEN** the OME metric is not comparable between groups. This is *maybe* a version of Simpsons Paradox however it seems to be a metric commonly used as a primary outcome in studies. 
+
+For this issue to have an impact there needs to be:
+
+- Difference in proportions of opioids between groups
+
+  - We show that this is not well reported so we cannot know the extent of this problem
+  
+- An error in the conversion value
+  
+  - We cannot know the "ground truth" so we cannot calculate the exact error
+  
+  - But we can use the "breath" of values used in the literature, this though is generally narrow (Almost everyone uses Neilson's value set)
+  
+The headline conclusions are:
+
+For OME to be a reliable metric we need to report opioid proportions (and potentially find a way to correct post-hoc) AND find a way to estimate the "ground truth" conversion values better than the current estimates. 
+
+
 :::
+
+
+# Abstract {.unnumbered}
+
+
+
+*Abstract to be written*

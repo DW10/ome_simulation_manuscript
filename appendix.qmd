@@ -138,17 +138,105 @@ The first term reflects genuine dose-intensity change among treated patients: th
 
 ### Simulation study
 
+:::{.callout-danger}
+TO REVIEW
+:::
+
+The simple simulation find that the observed difference is a hyperbolic parabola of $\Delta p_i$ and $\delta c_i$ with a scaling constant $k$.
+
 $$
 \begin{aligned}
-\Delta \mu_{\text{OME}} = -1 \cdot \Delta p_i \cdot \delta c_i \\
-\Delta \mu_{\text{OME}} = -\mu_{\text{OME}}^\text{(control)} \cdot \Delta p_i \cdot \delta c_i \\
-\\
-p_i^{\text{(control)}} - p_i^{\text{(intervention)}} 
-\\ 
-\mu_{\text{OME}}^{\text{(control)}} - \mu_{\text{OME}}^{\text{(intervention)}} = -\mu_{\text{OME}}^\text{(control)} \cdot \Delta p_i \cdot \delta c_i \\
-\mu^\text{intervention} = \mu^\text{control}[ 1 + \Delta p_i \cdot \delta c_i]
+\Delta \mu_{\text{OME}} &= k \cdot \Delta p_i \cdot \delta c_i \\
+k &= \frac{\Delta \mu_{\text{OME}}}{\Delta p_i \cdot \delta c_i }
 \end{aligned}
 $$ {#eq-results-simple-2-proof}
+
+**Step 1: Expand $\Delta\mu_{\text{OME}}$ using @eq-expanded-difference.**
+
+Substituting the group-difference expansion, where $\Delta p_i = p_i^{(T=1)} - p_i^{(T=0)}$:
+
+$$
+k = \frac{\displaystyle\sum_{i\in\mathbf{M}} \left( p_i^{(T=1)}\hat{d}_i^{(T=1)} - p_i^{(T=0)}\hat{d}_i^{(T=0)} \right) c_{i,r}}{\Delta p_i \cdot \delta c_i}
+$$
+
+**Step 2: Apply the null treatment effect assumption.**
+
+In the simple simulation there is no true treatment effect, so conditional mean doses are equal across groups: $\hat{d}_i^{(T=1)} = \hat{d}_i^{(T=0)} = \hat{d}_i$. The treatment effect term in @eq-final-decomposition vanishes and only the proportion effect remains:
+
+$$
+\Delta\mu_{\text{OME}} = \sum_{i\in\mathbf{M}} \hat{d}_i \cdot \Delta p_i \cdot c_{i,r}
+$$
+
+**Step 3: Decompose the conversion factor into its true value and its error.**
+
+Let $c_{i,r} = c_{i,r}^{\text{true}} + \delta c_i$, where $\delta c_i$ is the bias in the conversion value for medication $i$. For morphine ($i = M$), the reference drug: $c_M^{\text{true}} = 1$ and $\delta c_M = 0$ by definition (morphine is the OME reference and carries no conversion error). For oxycodone ($i = O$):
+
+$$
+c_{O,r} = c_{O,r}^{\text{true}} + \delta c_O
+$$
+
+**Step 4: Expand for the two-drug system $\mathbf{M} = \{M, O\}$.**
+
+$$
+\begin{aligned}
+\Delta\mu_{\text{OME}} &= \hat{d}_M \cdot \Delta p_M \cdot c_M^{\text{true}} + \hat{d}_O \cdot \Delta p_O \cdot \left(c_{O,r}^{\text{true}} + \delta c_O\right) \\
+&= \hat{d}_M \cdot \Delta p_M + \hat{d}_O \cdot \Delta p_O \cdot c_{O,r}^{\text{true}} + \hat{d}_O \cdot \Delta p_O \cdot \delta c_O
+\end{aligned}
+$$
+
+**Step 5: Apply the proportional constraint.**
+
+Since every patient receives exactly one medication, prescribing proportions within each group sum to unity. Therefore a change in oxycodone proportion is exactly offset by an equal and opposite change in morphine proportion: $\Delta p_M = -\Delta p_O$. Substituting:
+
+$$
+\begin{aligned}
+\Delta\mu_{\text{OME}} &= -\hat{d}_M \cdot \Delta p_O + \hat{d}_O \cdot \Delta p_O \cdot c_{O,r}^{\text{true}} + \hat{d}_O \cdot \Delta p_O \cdot \delta c_O \\
+&= \Delta p_O \underbrace{\left(\hat{d}_O \cdot c_{O,r}^{\text{true}} - \hat{d}_M \right)}_{\text{cancel under equal analgesic requirement}} + \hat{d}_O \cdot \Delta p_O \cdot \delta c_O
+\end{aligned}
+$$
+
+**Step 6: Apply the equal analgesic requirement assumption.**
+
+In the simple simulation, patients have the same underlying pain requirement regardless of which opioid is prescribed. Expressed in morphine equivalents, the conditional mean dose of morphine equals the conditional mean dose of oxycodone scaled by the true conversion factor:
+
+$$
+\hat{d}_M = \hat{d}_O \cdot c_{O,r}^{\text{true}}
+$$
+
+The bracketed term therefore cancels:
+
+$$
+\hat{d}_O \cdot c_{O,r}^{\text{true}} - \hat{d}_M = \hat{d}_O \cdot c_{O,r}^{\text{true}} - \hat{d}_O \cdot c_{O,r}^{\text{true}} = 0
+$$
+
+**Step 7: Collect the remaining term.**
+
+$$
+\Delta\mu_{\text{OME}} = \hat{d}_O \cdot \Delta p_O \cdot \delta c_O
+$$
+
+This confirms the empirically observed hyperbolic paraboloid form, where the spurious signal arises exclusively from the interaction of the proportion shift $\Delta p_i$ and the conversion bias $\delta c_i$.
+
+**Step 8: Solve for $k$.**
+
+$$
+\begin{aligned}
+k &= \frac{\hat{d}_O \cdot \Delta p_O \cdot \delta c_O}{\Delta p_O \cdot \delta c_O} \\[0.5em]
+k &= \hat{d}_i
+\end{aligned}
+$$ {#eq-k-final}
+
+The scaling constant is therefore the **conditional mean dose** of medication $i$ among the patients who receive it. Using @eq-conditional-mean, this can be expressed in terms of the unconditional mean dose $\bar{d}_i$ and prescribing proportion $p_i^{(G)}$:
+
+$$
+k = \hat{d}_i = \frac{\bar{d}_i^{(G)}}{p_i^{(G)}} = E\!\left[d_i \mid d_i > 0,\, G\right]
+$$ {#eq-k-expanded}
+
+And since $\hat{d}_M = \hat{d}_O \cdot c_{O,r}^{\text{true}}$ (Step 6), we can also express $k$ in terms of the underlying analgesic requirement $\hat{d}_M$ and the true potency of oxycodone via @eq-potency:
+
+$$
+k = \frac{\hat{d}_M}{c_{O,r}^{\text{true}}} = \hat{d}_M \cdot \rho_{O,r}^{\text{true}}
+$$ {#eq-k-potency}
 
 ### Clinical Significance
 
@@ -442,6 +530,8 @@ ggplot(power_df, aes(x = d, y = power)) +
 With the observed sample sizes, the minimum detectable effect size at 80% power is 
 *d* = `r round(mdd, 3)`, which equates to a mean difference of `r round(mdd_mg, 2)` mg OME.
 
-The effect size is use to inform the weakly powered study in 
+## List of Figures
 
-```
+::: {.content-visible when-format="pdf"}
+\listoffigures
+:::

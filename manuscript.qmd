@@ -133,25 +133,7 @@ We will aim to:
 
 # Methods
 
-## Rapid Literature Review
-
-A rapid literature review of the use of opioid equivalence metrics in peri-operative and surgical studies published in 2025 was performed. A structured search of the PUBMED database as detailed in @sec-appendix-pubmed was performed on 7th July 2026. Papers were screened and data extracted using the Covidence platform @zotero-item-670 with a custom proforma (@sec-appendix-cov-extraction).
-
-```{r}
-# To get screening data:
-# Covidence -> Export -> References subsection -> Title and absract screening -> Export as .csv -> Drag to data foler -> Rename to lit_screen.csn
-lit_screen <- read.csv("data/lit_screen.csv")
-lit_select <- read.csv("data/lit_select.csv")
-lit_included <- read.csv("data/lit_included.csv")
-lit_excluded <- read.csv("data/lit_excluded.csv")
-lit_data <- read.csv("data/lit_data.csv") %>% filter(Reviewer.Name == "Dylan Whitaker")
-conversion <- read.csv("data/conversion_sets.csv")
-
-n_lit_data <- nrow(lit_data)
-
-```
-
-## Simulated study
+## Part 1 - Simulations
 
 Two simulated studies were performed to demonstrate the sensitivity of the opioid burden metric to differences in the proportions of medications between groups and the conversion values used. In both simulations the outcome was the measured difference in the group mean total opioid burden.
 
@@ -243,6 +225,30 @@ The simulation was performed once with parameters specified in @nte-sim-design a
 
 All simulations were performed in `r version$version.string` and all code is available in @sec-sim. 
 
+## Part 2 - Literature Review
+
+A rapid literature review of the use of opioid equivalence metrics in peri-operative and surgical studies published in 2025 was performed. A structured search of the PUBMED database as detailed in @sec-appendix-pubmed was performed on 7th July 2026. Papers were screened and data extracted using the Covidence platform @zotero-item-670 with a custom proforma (@sec-appendix-cov-extraction).
+
+```{r}
+# To get screening data:
+# Covidence -> Export -> References subsection -> Title and absract screening -> Export as .csv -> Drag to data foler -> Rename to lit_screen.csn
+lit_screen <- read.csv("data/lit_screen.csv")
+lit_select <- read.csv("data/lit_select.csv")
+lit_included <- read.csv("data/lit_included.csv")
+lit_excluded <- read.csv("data/lit_excluded.csv")
+lit_data <- read.csv("data/lit_data.csv") %>% filter(Reviewer.Name == "Dylan Whitaker")
+conversion <- read.csv("data/conversion_sets.csv")
+
+n_lit_data <- nrow(lit_data)
+
+```
+
+
+For each paper where group average doses by opioid were described these were extracted, if only median values were provided, an estimated mean was calculated using Wan et al (2014 approximation) ($\hat{d_i} = \frac{Q_1 + M + Q_2}{3}$ ) to preserve the linearity with in the arithmetic mean. Where opioid routes where not provided then IV was assumed, where a value set was not provided then the Nielsen set was used @nielsenSynthesisOralMorphine2016. 
+
+The group mean of total opioid burden reported by the paper was extracted. Then using the mean doses and the conversion values provided, the group mean was calculated independently. Following this, all possible group means were calculates by applying each of the possible values provided in Table 1 of Neilsens Conversion set, as the range of plausible conversion values an author may use. This range is shown in @appendix-
+
+
 # Results
 
 ## Rapid Literature Review 
@@ -254,8 +260,8 @@ The majority of studies were cohort studies and most commonly looked at anaesthe
 ```{r}
 #| label: fig-study-types
 #| fig-cap: "**Study design and intervention types in included literature** - Bar charts summarising the study design and intervention type of studies included in the rapid literature review. Left panel shows count by study design; right panel shows count by intervention type."
-#| fig-width: 10
-#| fig-height: 5
+#| fig-width: 5
+#| fig-height: 3
 
 # Plot for Study.type proportions
 plot_lit_study_type <- ggplot(lit_data, aes(x = Study.type)) +
@@ -319,7 +325,9 @@ ggplot(heatmap_data, aes(y = Opioid.proportions.within.group, x = Opioid.convers
 Of the `r lit_data %>% filter(Opioid.conversion.set == "Cited") %>% nrow()` papers where a conversion value set was cited, the `r nrow(conversion)` unique source value sets where reviewed. Generally across the literature, conversion values with the intention of research were in the minority (`r percent((nrow(conversion %>% filter(aim == "for research")))/(nrow(conversion)))`) and most had compiled the conversion value sets for use in clinical care. 
 
 :::{.callout-warning}
+
 Can expand this section but not sure if its worth it?
+
 :::
 
 ## Simulation study 
@@ -416,9 +424,6 @@ df <- sim_patient(
 
 ```
 
-:::{.callout-warning}
-REVIEW MARKER
-:::
 
 `r nrow(df)` procedures were simulated using the parameters described in @sec-manuscript-exemplar-sim. 
 
@@ -445,33 +450,18 @@ df |>
   ) |>
   add_overall() |>
   add_p() |>
-  as_kable_extra(booktabs = TRUE, format="latex") |>
+  as_kable_extra(booktabs = TRUE, format="html")|>
   kableExtra::kable_styling(latex_options = "hold_position", full_width = FALSE)
 ```
 
 A simple demographics table for the study is shown in @tbl-sim-demo, this demonstrates the unequal distributions of opioids between groups. @fig-sim-ome-density Demonstrates the distribution of the total opioid burden (OME mg) of patients in the robotic and non-robotic patients. @fig-sim-ome-proportion shows that within the robotic and non-robotic groups the proportion of each opioid is not equal, and the effect of the oxycodone shortage has had a larger impact on the robotic group.
 
-::: {#fig-sim-density layout-ncol=2}
-```{r}
-#| label: fig-sim-dose-density
-#| fig-cap: "**Dose distribution by opioid** - Kernel density of administered dose (mg) for each opioid type across all patients."
-#| eval: false
 
-ggplot(df, aes(x=dose, fill=opioid))+
-  geom_density(alpha=0.8)+
-  theme_academic()+
-  labs(x="Dose (mg)",
-        y="Density",
-        fill="Opioid")+
-  scale_y_continuous(expand = expansion(mult = c(0, 0.05)))+
-  theme(legend.position = "bottom")+
-  paletteer::scale_fill_paletteer_d("MetBrewer::Austria")
-```
 ```{r}
 #| label: fig-sim-ome-proportion
 #| fig-cap: "**Opioid prescribing proportions by surgery type** - Proportion and count of each opioid prescribed within robotic and non-robotic surgery groups."
-#| fig-width: 5
-#| fig-height: 5
+#| fig-width: 3
+#| fig-height: 3
 
 df %>%
   count(robotic, opioid) %>%
@@ -492,11 +482,12 @@ df %>%
   paletteer::scale_fill_paletteer_d("MetBrewer::Austria", direction = )
 
 ```
+
 ```{r}
 #| label: fig-sim-ome-density
 #| fig-cap: "**OME distribution by surgery type** - Kernel density of calculated OME (OME mg) for robotic and non-robotic surgery groups."
-#| fig-width: 5
-#| fig-height: 5
+#| fig-width: 3
+#| fig-height: 3
 
 ggplot(df, aes(x=ome, fill=robotic))+
   geom_density(alpha=0.8)+
@@ -509,7 +500,7 @@ ggplot(df, aes(x=ome, fill=robotic))+
   paletteer::scale_fill_paletteer_d("MetBrewer::Austria", direction = -1)
 
 ```
-:::
+
 
 ```{r}
 obs_robotic_ome <- df %>% filter(robotic == "Robotic") %>% summarise(mean(ome)) %>% pull() 
@@ -541,9 +532,9 @@ Given a `r mu_tot` mg expected opioid requirement and a treatment effect of `r s
 
 ```{r}
 #| label: fig-sim-grid-search-1
-#| fig-cap: "**Sensitivity of observed treatment effect to conversion value and opioid proportion — large effect** - Grid search results showing the observed treatment effect across oxycodone conversion values and post-operative morphine prescribing proportions. Purple cross denotes an average p value of Fishers Exact test <0.05. True treatment effect is -5 mg. The dashed line indicates the ground truth conversion value."
-#| fig-height: 6
-#| fig-width: 6
+#| fig-cap: "**Sensitivity of observed treatment effect to conversion value and opioid proportion** - Grid search results showing the observed treatment effect across oxycodone conversion values and post-operative morphine prescribing proportions. Purple cross denotes an average p value of Fishers Exact test <0.05. True treatment effect is -5 mg. The dashed line indicates the ground truth conversion value."
+#| fig-height: 4
+#| fig-width: 4
 
 
 simulation1 <- run_simulation(trials=trials,
@@ -643,15 +634,124 @@ plot_simple_grid + plot_grid_2 +
 @fig-compare demonstrates that the experiment space for the example simulation values where $\Delta p_i < 0$ and for values of $ -0.5 < \epsilon < 1 $. Despite being a relativity narrow section of the possible gird space detailed in @sec-manuscript-results-simple with a modest effect size of `r robot_effect_mg` OME mg there are still values where the observed effect size is significantly different. 
 
 
-### Simulation of ...et al 
+## Application to real studies
+
+To understand the extent of the systematic bias a series of studies were analysed and simulated. 
+
+
+
+```{r}
+
+papers <- read.csv("data/exemplars.csv") 
+
+excluded_papers <- papers %>% filter(is.na(opioid))
+
+papers <- papers %>% filter(!is.na(opioid)) %>%
+  mutate(control_mean_dose = case_when(is.na(control_mean_dose) ~ (control_q1+control_median_dose+control_q3)/3,
+                                       .default = control_mean_dose),
+         intervention_mean_dose = case_when(is.na(intervention_mean_dose) ~ (intervention_q1 + intervention_median_dose + intervention_q3)/3,
+                                       .default = intervention_mean_dose),
+         control_sd = (control_q3-control_q1)/1.35,
+         control_sd = case_when(is.na(control_sd) ~ (control_q3-control_q1)/1.35,
+                                .default = control_sd)
+         )%>%
+  mutate(Delta_p = intervention_mean_dose - control_mean_dose,
+         delta_p = Delta_p/control_mean_dose) 
+
+papers %>% mutate(control_mean_ome = control_mean_dose*c_i,
+         intervention_mean_ome = intervention_mean_dose*c_i) %>% select(Ref, opioid,control_mean_dose, control_mean_ome, intervention_mean_ome, intervention_mean_dose)
+
+papers_summary <- papers %>% mutate(control_mean_ome = control_mean_dose*c_i,
+         intervention_mean_ome = intervention_mean_dose*c_i) %>%
+  group_by(Ref) %>%
+  summarise(control_total_ome = sum(control_mean_ome),
+            intervention_total_ome = sum(intervention_mean_ome)) %>%
+  mutate(Delta_ome = intervention_total_ome - control_total_ome,
+         delta_ome = Delta_ome/control_total_ome)
+
+# 1. Run the independent grid search (if not already done)
+ranges <- list(
+  "fentanyl" = c(100,150, 200, 300),
+  "oxycodone" = c(1.5,1.3,2,3),
+  "tramadol" = c(0.1, 0.2, 0.25),
+  "morphine" = c(1),
+  "hydromorphone" = c(15,20),
+  "hydrocodone" = c(1, 1.33)
+)
+
+plot_data <- papers %>%
+  group_by(Ref) %>%
+  group_modify(~ {
+    current_data <- .x
+    n_drugs <- nrow(current_data)
+    
+    # Map each drug to its range from the ranges list
+    grid_list <- lapply(current_data$opioid, function(op) {
+      # Match opioid name to ranges key (case-insensitive and stripping ' (assumed)')
+      clean_op <- tolower(gsub(" \\(assumed\\)", "", op))
+      if (clean_op %in% names(ranges)) {
+        ranges[[clean_op]]
+      } else {
+        # Fallback to the existing c_i value if the opioid isn't in ranges
+        unique(current_data$c_i[current_data$opioid == op])
+      }
+    })
+    
+    names(grid_list) <- paste0("m_", 1:n_drugs)
+    
+    expand_grid(!!!grid_list) %>%
+      rowwise() %>%
+      mutate(
+        control_total_ome = sum(current_data$control_mean_dose * c_across(starts_with("m_"))),
+        intervention_total_ome = sum(current_data$intervention_mean_dose * c_across(starts_with("m_")))
+      ) %>%
+      ungroup()
+  }) %>%
+  mutate(
+    delta_ome = (intervention_total_ome - control_total_ome) / control_total_ome
+  )
+
+# 2. Plot with facets
+ggplot(plot_data, aes(x = delta_ome)) +
+  # Use geom_density for a smooth distribution
+  geom_density(fill = "steelblue", alpha = 0.6, color = "black") +
+  # Use facet_wrap with free scales so each study's range is visible
+  facet_wrap(~ Ref, scales = "free", ncol = 3) + 
+  theme_minimal(base_size = 12) +
+  labs(
+    title = "Sensitivity Analysis: OME Relative Difference by Study",
+    subtitle = "Variation based on independent uncertainty in conversion factors (c_i)",
+    x = "Relative Difference (delta_ome)",
+    y = "Density"
+  ) +
+  theme(
+    strip.background = element_rect(fill = "gray95"),
+    panel.spacing = unit(1, "lines")
+  )
+
+grid_summary <- plot_data %>%
+  group_by(Ref) %>%
+  summarise(min_delta = min(delta_ome),
+            max_delta = max(delta_ome)) %>%
+  left_join(papers_summary%>%select(Ref, delta_ome))
+
+ggplot(grid_summary, aes(y=Ref, x=delta_ome))+
+  geom_errorbar(aes(xmin=min_delta, xmax=max_delta), color = "orange")+
+  geom_point(colour = "red")+
+  geom_vline(xintercept = 0, color = "gray")
+
+
+```
 
 The final simulation looks at a study performed by xx et al. This study looked at the effect of xxx on yyyy and found a observed effect size of xxx. 
 
 They did not report the difference of proportion of medications between their treatment groups. We will apply conversion values that have been used across the literature to calculate. One issue is that we do not know the true conversion values of the medications. 
 
-:::{.callout-danger}
+:::{.callout-warning}
+
 Haven't got around to do one, one issue is the lack of reporting of proportions. We also need a study that only has two opioids or otherwise it gets more difficult to simulate end plot/communicate. 
 Another issue is that generally the litrature all uses the same values for the common drugs. 
+
 :::
 
 # Conclusion
@@ -684,7 +784,7 @@ Furthermore, new methods are needed to attempt to estimate the true potency valu
 
 2. More work is required to estimate the true population level opioid conversion value sets to reduce the error between the true unmeasurable potency and the value sets used. 
 
-:::{.callout-danger}
+:::{.callout-warning}
 The further work and recommendations are rather similar and could be consolidated. 
 :::
 
@@ -699,9 +799,16 @@ Generative artificial intelligence tools where used to aid the writing of this m
 ## CRediT statement
 
 ```{r}
+#| echo: false
+#| message: false
+#| warning: false
+options(googlesheets4_quiet = TRUE)
 tbl_authors <- googlesheets4::read_sheet("123JiCxSHvA7Wiaz6tU25B7Wq27Ty_cV7n6UUqlhyvrY",sheet = 2)
 aut <- plume::Plume$new(tbl_authors, dotted_initials = F)
 aut$get_contributions(roles_first = T)
 ```
 
 
+::: {.content-visible when-format="pdf"}
+\listoffigures
+:::

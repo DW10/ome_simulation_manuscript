@@ -8,14 +8,16 @@ editor_options:
  
 ```{r set quality}
 PRODUCTION_QUALITY <- FALSE
+
 ```
 ::: {.callout-note}
 ```{r print quality statement}
+
 #| output: asis
 if (PRODUCTION_QUALITY) {
-  cat("High quality document - For review")
+  cat("High quality render - Ready for review")
 } else {
-  cat("Low quality document. Edit index.qmd to set `PRODUCTION_QUALITY <- TRUE` before review.")
+  cat("Low quality render.  Edit index.qmd to set `PRODUCTION_QUALITY <- TRUE` before review.")
 }
 ```
 :::
@@ -43,9 +45,20 @@ For OME to be a reliable metric we need to report opioid proportions (and potent
 
 :::
 
+# Lay summary
+
+In peri-operative research we use **opioid burden metrics** such as oral morphine equivalent (OME) or milligram morphine equivalent (MME) to pool the opioid dose across different opioids and routes for a patient. Often this pooled result is used to calculate group means and inter-group differences to estimate a treatment/associational effect. It is assumed that it doesn't matter which opioids are in each group as it is accounted for using the opioid burden metric. 
+
+We hypothesis that the differing opioids within the groups can bias the mean opioid metrics in un-equal ways between groups. We also hypothesis that if the conversion value is not exactly the same as the ground truth this will also contribute to bias. 
+
+We describe the equations used in practice and highlight their dependence on the proportions and error in conversion values. We then carried out a simulations to understand this relationship and demonstrate the bias introduced. 
+
+To establish the extent of the issue in research we carried out a literature review to show how many studies publish their conversion metrics and intra-group medication proportions. We demonstrate that only a low percentage report both of the key aspects. 
+
+For papers that did supply the intra-group proportions, we simulated applying a range of different, but accepted, conversion values to demonstrate how the conclusions of the paper are dependant on the opioids used in each group. 
+
+We conclude that going forward all studies using an opioid metric must report the conversion values and proportions of medication within each group. We also call for new approaches to estimate conversion values that are offer a clearer view of the uncertainty involved. 
 
 # Abstract {.unnumbered}
-
-
 
 *Abstract to be written*

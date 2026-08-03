@@ -235,7 +235,7 @@ run_simulation <- function(trials = 5,
   results_grid <- results_grid %>% group_by(conversion_value, morphine_proportion) %>%
     summarise(mean_diff_ome = mean(mean_diff_ome),
             p_value_ome = mean(p_value_ome),
-            p_value_fishers = mean(p_value_fishers),
+            p_value_fishers = median(p_value_fishers),
             delta_p_oxycodone = mean(delta_p_oxycodone),
             epsilon = mean(epsilon),
             .groups = "drop") %>%
@@ -268,7 +268,7 @@ max_val <- max(results_grid$mean_diff_ome, na.rm = TRUE)
   symmetric_fill_scale(20)+
   labs(title = ,
        x = TeX(r'(Value used for $c_{oxycodone}$)'),
-       y = "Proportion of post-operative morphine perscribing",
+       y = "Proportion of morphine perscribed",
        fill = "Mean difference in OME") +
    geom_vline(xintercept = potency_oxycodone_truth, linetype = "dashed", color = "red")+
     theme_minimal() +
@@ -276,7 +276,7 @@ max_val <- max(results_grid$mean_diff_ome, na.rm = TRUE)
     axis.text.x = element_text(angle = 45, hjust = 1),
     panel.grid = element_blank(),
     legend.position = "bottom"
-  )
+  )+scale_y_continuous(labels = scales::percent)
  
 }
 

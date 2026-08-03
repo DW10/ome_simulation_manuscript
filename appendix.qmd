@@ -296,6 +296,25 @@ knitr::kable(tbl_extraction_form,
 
 ```
 
+### Grid search of plausible conversion values to studies {#sec-appendix-neilsen-ranges}
+
+The values of the possible plausible conversion values are taken from Table 1 of Neilsen's paper on a unified conversion value set. These conversion values are sourced from national clinical guideline documents from a range of countries. 
+
+Medication's were assumed to be administered IV with the exception of Tramadol and Hydrocodone as Neilsen only reports oral conversion values for these. 
+
+```{r ranges}
+
+neilsen_ranges_table <- data.frame(
+  Medication = names(neilsen_ranges),
+  `Conversion values` = sapply(neilsen_ranges, paste, collapse = ", "),
+  check.names = FALSE,
+  row.names = NULL
+)
+
+knitr::kable(neilsen_ranges_table)
+```
+
+
 ## Simulation study
 
 ### Effect of $\mu_{\text{OME}}^{\text{(control)}}$ on simple simulation {#sec-appendix-sim-1}
@@ -321,7 +340,7 @@ if (PRODUCTION_QUALITY) {
   space = 0.05
 } else {
   n = 1000
-  space = 0.2
+  space = 0.5
 }
 
 simple_results_mu <- data.frame(p = numeric(), e = numeric(), diff = numeric(), mu=numeric())
@@ -388,7 +407,7 @@ if (PRODUCTION_QUALITY) {
   space = 0.05
 } else {
   n = 1000
-  space = 0.2
+  space = 0.5
 }
 
 simple_results_t <- data.frame(p = numeric(), e = numeric(), diff = numeric(), t=numeric())

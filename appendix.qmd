@@ -314,6 +314,33 @@ neilsen_ranges_table <- data.frame(
 knitr::kable(neilsen_ranges_table)
 ```
 
+@fig-lit-outcome-dist is a density plot for each study, of the possible observed diffreneces by acros the grid search. 
+
+```{r}
+#| label: fig-lit-outcome-dist
+#| eval: false
+
+# 2. Plot with facets
+ggplot(plot_data, aes(x = delta_ome)) +
+  # Use geom_density for a smooth distribution
+  geom_density(fill = "steelblue", alpha = 0.6, color = "black") +
+  # Use facet_wrap with free scales so each study's range is visible
+  facet_wrap(~ authors, scales = "free", ncol = 3) + 
+  theme_minimal(base_size = 12) +
+  labs(
+    title = "Sensitivity Analysis: OME Relative Difference by Study",
+    subtitle = "Variation based on independent uncertainty in conversion factors (c_i)",
+    x = "Relative Difference (delta_ome)",
+    y = "Density"
+  ) +
+  theme(
+    strip.background = element_rect(fill = "gray95"),
+    panel.spacing = unit(1, "lines")
+  )
+
+
+```
+
 
 ## Simulation study
 

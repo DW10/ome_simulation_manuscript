@@ -29,6 +29,9 @@ format:
     fig-width: 5
     fig-height: 3
     fig-dpi: 300
+    include-in-header:
+      text: |
+        \usepackage{pdflandscape}
   docx:
     toc: true
     fig-align: center

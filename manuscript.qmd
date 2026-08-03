@@ -74,45 +74,27 @@ A range of papers have highlighted some of the limitations and issues with opioi
 Two aspects that have not been covered are the dependence on the proportion of each opioid and the error within the conversion values used. 
 \[Add citations about who said/didn't say what\]
 
+:::{.callout-warning}
+We have not explained WHY OME/total opioid burden is a useful or interesting metric. This is an implicit assumption left to the reader, is this ok? 
+:::
 
-## Calculating opioid equivalence in clinical practise
+## Calculating opioid equivalence
 
 In clinical practice the term **potency** is used to describe the relative strength of one opioid compared to another. The **eqi-potency** of a medication is commonly understood to be the dose required to achieve equal effect, and in the case of opioids, the equianalgesic effect.\[**Add citations**\] Thus @eq-potency describes the relationship between the conversion value $c$ and the potency $\rho$ of a given medication $i$ via a given route $r$.
 
 $$c_{i,r} = \frac{1}{\rho_{i,r}}
 $$ {#eq-potency} 
 
-The value of $c$, then allows for the calculation of the equivalent effective dose of a target medication $d_{\text{target}}$, given a dose of a reference medication $d_{\text{referance}}$ (@eq-equivelent-dose). 
+A worked example to demonstrate how opioid conversion is performed in clinical practice is provided in @sec-conversion-example.
 
-$$
-d_{\text{referance}} \times c_{i,r} = d_{\text{target}}
-$$ {#eq-equivelent-dose}
+The technique of comparing opioid equivalent doses has lead to the development of a new metric, the **total opioid burden**. By converting each opioid medication into it's equi-analgesic dose of the reference medication, then calculating the sum, the resulting value is an estimate of the total opioid analgesic effect administered. The total opioid burden metric is often presented as the weighted sum of opioids administered and provided in units of  of **oral morphine equivalent milligrams (OME mg)** or **milligram morphine equivalent (MME)**. 
 
-A worked example is provided in @sec-conversion-example.
-
-## Calculating opioid equivalence in research
-
-The technique of comparing opioid equivalent doses has lead to the development of a new metric, the **total opioid burden**. By converting each medication into it's equi-analgesic dose of the reference medication and then calculating the sum, the resulting value is an estimate of the total opioid analgesic effect administered. The total opioid burden metric is often presented as the weighted sum of opioids administered and provided in units of  of **oral morphine equivalent milligrams (OME mg)** or **milligram morphine equivalent (MME)**. 
-
-In line with the literature we will refer to the total opioid burden as $\text{OME}$. We can define $\text{OME}_j$ as the sum of the dose $d$ for medication $i$ in the set of medications $\mathbf{M}$ multiplied by the conversion value $c$ for a given route $r$ for patient $j$ (@eq-ome). $\text{OME}_j$ is often  expressed as a total of all opioids administered or within a specific time frame (*e.g.* 24 hours post-operative).
+We can define the total opioid burden $\text{OME}_j$ as the sum of the dose $d$ for medication $i$ in the set of medications $\mathbf{M}$ multiplied by the conversion value $c$ for a given route $r$ for patient $j$ (@eq-ome). $\text{OME}_j$ is often  expressed as a total of all opioids administered or within a specific time frame (*e.g.* 24 hours post-operative).
 
 $$\text{OME}_j = \sum_{i\in\mathbf{M}} d_i c_{i,r}
 $${#eq-ome}
 
-Assuming a patient's pain is well controlled and that the analgesia provided is due predominantly to the opioid burden then the total opioid burden of a patient $\text{OME}_j $ is equivalent to the total pain burden (@eq-pain-burden). 
-
-$$
-\begin{aligned}
-\text{Pain}_{\text{total}} &= \text{Pain}_{\text{experienced}} + \text{Analgesia} \\[1em]
-\text{Where} & \qquad  \text{Pain}_{\text{experienced}} \approx 0 \\
- \text{and } & \qquad \text{Opioid burden} \approx \text{Analgesia} \\
- \text{then: } & \qquad  \text{OME}_j   \approx \text{Pain}_{\text{total}}
-\end{aligned}
-$$ {#eq-pain-burden}
-
-Given @eq-pain-burden and the likley parametric distribution of OME values within a group, the arithmetic mean of OME values $\mu_{\text{OME}}$ if often calculated and used as an outcome in studies aiming to estimate the total pain. 
-
-As the $\mu_{\text{OME}}^{(G)}$ is a **mean of weighted sums** it can instead be expressed as a **weighted sum of mean doses** whereby the mean dose of a given medication within the group $\bar{d_i}$ is weighted by the conversion values $c_{i,r}$ (@eq-mu-ome-final - rearrangement provided in @sec-equation-proof).
+From this, the arithmetic mean of OME values $\mu_{\text{OME}}^{(G)}$ for a given group $G$ is often calculated and used as an outcome in studies aiming to estimate the average opioid burden. As the $\mu_{\text{OME}}^{(G)}$ is a **mean of weighted sums** it can instead be expressed as a **weighted sum of means** whereby the mean dose of a given medication within the group $\bar{d_i}$ is weighted by the conversion values $c_{i,r}$ (@eq-mu-ome-final with rearrangement provided in @sec-equation-proof).
 
 $$\begin{aligned}
 \mu_{\text{OME}}^{(G)} &= \frac{1}{|G|} \sum_{j=G} \text{OME}_j\\
@@ -120,21 +102,16 @@ $$\begin{aligned}
 \end{aligned}
 $${#eq-mu-ome-final}
 
-@eq-mu-ome-final demonstrates that the group mean ($\mu_{\text{OME}}^{(G)}$) is dependant on the relative proportions of the medications within each group. For two groups $A$ and $B$ where the mean dose of a given opioid $i$ is not then same then the resulting means OME values are not equivalent.
-$$
-\begin{aligned}
-\text{where } \bar{d}_{i}^{(A)} \neq \bar{d}_{i}^{(B)} &\implies \mu_{\text{OME}}^{(A)} \neq \mu_{\text{OME}}^{(B)}
-\end{aligned}
-$$
-Additionally, the conversion value ($c_{i,r}$) is a scaler applied to the mean dose ${\bar{d_i}}$. Where the conversion value provided is not equal to the ground truth, a further bias will be introduced. If there is a  difference in proportions of medication, the bias introduced by the error in the conversion value will cause the resulting error to diverge. 
+@eq-mu-ome-final demonstrates that the group mean ($\mu_{\text{OME}}^{(G)}$) is dependant on the relative proportions of the medications within each group. For two groups $A$ and $B$ where the mean dose of a given opioid $\bar{d}_{i}$ is not then same then the resulting means OME values are not equivalent. Furthermore, the conversion value ($c_{i,r}$) is a scaler applied to the mean dose ${\bar{d_i}}$. Where the conversion value provided is not equal to the ground truth, a further bias will be introduced. If there is a  difference in proportions of medication, the bias introduced by the error in the conversion value will cause the resulting error to diverge. 
+
 
 ## Aims
 
 We will aim to:
 
-1. Investigate the methods of calculating total opioid burden in the peri-operative and surgical literature.
+1. Simulate and describe the dependence of differing opioid proportions and errors in conversion values on the the OME values calculated. 
 
-2. Simulate and describe the dependence of differing opioid proportions and errors in conversion values on the the OME values calculated. 
+2. Investigate the methods of calculating total opioid burden in the peri-operative and surgical literature.
 
 # Methods
 
@@ -142,9 +119,7 @@ We will aim to:
 
 Two simulated studies were performed to demonstrate the sensitivity of the opioid burden metric to differences in the proportions of medications between groups and the conversion values used. In both simulations the outcome was the measured difference in the group mean total opioid burden.
 
-The first (@sec-manuscript-simple-sim) uses a simplified simulation with no treatment effect between groups to understand the variation in results across the full range of parameters.
-
-The second simulation (@sec-manuscript-exemplar-sim) uses a hypothetical experimental setup with realistic values to establish the extent of the variation in results under realistic conditions. 
+The **first** (@sec-manuscript-simple-sim) uses a simplified simulation with no treatment effect between groups to understand the variation in results across the full range of parameters. The **second** simulation (@sec-manuscript-exemplar-sim) uses a hypothetical experimental setup with realistic values to establish the extent of the variation in results under realistic conditions. 
 
 ### Simple simulation {#sec-manuscript-simple-sim}
 
@@ -184,7 +159,7 @@ for(p in seq(p_min, p_max, by = 0.05)){
 The simulation was then performed for the range of grid values for ($\Delta p_i \in$ `r p_min`, `r p_max` and $\epsilon \in$ `r e_min`, `r e_max` with all other parameters fixed. The result for each study was the measured difference between the group means of the control and intervention groups ($\Delta \mu_{\text{OME}} = \mu_{\text{OME}}^{\text{(control)}} - \mu_{\text{OME}}^{\text{(intervention)}}$).
 
 
-### Exemplar simulation {#sec-manuscript-exemplar-sim}
+### Hypothetical study simulation {#sec-manuscript-exemplar-sim}
 
 ```{r}
 case_volume <- 100
@@ -210,7 +185,7 @@ conversion_value_low = 1
 conversion_value_high = 3
 ```
 
-A exemplar simulation was performed with the parameters outlines in @nte-sim-design. 
+A hypothetical study was designed as outlined in @nte-sim-design and then simulated. 
 
 ::: {#nte-sim-design .callout-note title="Simulated trial design" collapse=true appearance="simple"}
 A research team wish to understand if the use of a robot for a surgical procedure, reduces the post-operative pain.
@@ -245,7 +220,11 @@ conversion <- read.csv("data/conversion_sets.csv")
 n_lit_data <- nrow(lit_data)
 
 ```
-A rapid literature review of the use of opioid equivalence metrics in peri-operative and surgical studies published in 2025 was performed. A structured search of the PUBMED database as detailed in @sec-appendix-pubmed was performed on 7th July 2026. Papers were screened and data extracted using the Covidence platform @zotero-item-670 with a custom proforma (@sec-appendix-cov-extraction).
+A rapid literature review of the use of opioid equivalence metrics in peri-operative and surgical studies published in 2025 was performed. A structured search of the PUBMED database as detailed in @sec-appendix-pubmed was performed on 7th July 2026. Papers were screened and data extracted from a random subset by a single author, using the Covidence platform @zotero-item-670 with a custom proforma (@sec-appendix-cov-extraction). Data extracted included the study design, methodology regarding total opioid metrics and outcomes.
+
+:::{.callout-warning}
+Do we need a second author to check a subset of the extracted articles? 
+:::
 
 ```{r}
 papers <- read.csv("data/exemplars.csv") 
@@ -263,9 +242,6 @@ papers <- papers %>% filter(!is.na(opioid)) %>%
          )%>%
   mutate(Delta_p = intervention_mean_dose - control_mean_dose,
          delta_p = Delta_p/control_mean_dose) 
-
-papers %>% mutate(control_mean_ome = control_mean_dose*c_i,
-         intervention_mean_ome = intervention_mean_dose*c_i) %>% select(authors, opioid,control_mean_dose, control_mean_ome, intervention_mean_ome, intervention_mean_dose)
 
 papers_summary <- papers %>% mutate(control_mean_ome = control_mean_dose*c_i,
          intervention_mean_ome = intervention_mean_dose*c_i) %>%
@@ -325,12 +301,13 @@ papers_grid_summary <- plot_data %>%
             max_Delta = max(Delta_ome),
             min_delta = min(delta_ome),
             max_delta = max(delta_ome)) %>%
-  left_join(papers_summary%>%select(authors, delta_ome))
+  left_join(papers_summary%>%select(authors, delta_ome), join_by(authors))
 
 ```
-For each paper where group average doses by opioid were described these were extracted, if only median values were provided, an estimated mean was calculated using Wan 2014 approximation ($\hat{d_i} = \frac{Q_1 + M + Q_2}{3}$ ) to preserve the linearity with in the arithmetic mean @wanEstimatingSampleMean2014. Where opioid routes where not provided then IV was assumed, where a value set was not provided then the Nielsen set was used @nielsenSynthesisOralMorphine2016. 
 
-The group mean of total opioid burden reported by the paper was extracted. Then using the mean doses and the conversion values provided, the group mean was calculated independently. Following this, all possible group means were calculates by applying each of the possible values provided in Table 1 of Neilsens Conversion set, as the range of plausible conversion values an author may use. This range is shown in @sec-appendix-neilsen-ranges.
+For each paper where group average doses of each opioid were described, these were extracted. If only median values were provided, an estimated mean was calculated using Wan's 2014 approximation ($\hat{d_i} = \frac{Q_1 + M + Q_2}{3}$ ) to preserve the linearity with in the arithmetic mean @wanEstimatingSampleMean2014. Where opioid routes where not provided then IV was assumed and where a value set was not provided then the Nielsen set was used @nielsenSynthesisOralMorphine2016. 
+
+The group mean of total opioid burden reported by the paper was extracted. Then using the mean doses and the conversion values provided, the group mean was calculated independently. Following this, all possible group means were calculates by applying each of the possible values provided in Table 1 of Neilsens Conversion set (summarised in @sec-appendix-neilsen-ranges), as the range of plausible conversion values an author may use @nielsenSynthesisOralMorphine2016.
 
 # Results
 
@@ -338,17 +315,17 @@ The group mean of total opioid burden reported by the paper was extracted. Then 
 
 ### Simple simulation {#sec-manuscript-results-simple}
 
-`r comma(nrow(simple_results))` different simulations where performed across the grid values of $\Delta p_{\text{oxycodone}}$ and $\epsilon$. The observed difference across the grid values demonstrates a normal distribution, centered around the true treatment effect of `r treatment_effect` (@fig-simple-density).
+`r comma(nrow(simple_results))` different simulations where performed across the grid values of $\Delta p_{\text{oxycodone}}$ and $\epsilon$. The observed difference across the grid values demonstrates a normal distribution, centred around the true treatment effect of `r treatment_effect` (@fig-simple-density).
 
 ```{r}
 #| label: fig-simple-density
-#| fig-cap: "**Distribution of observed group mean difference across the simple simulation** - Kernel density of the observed difference in group means (ΔOME) across all grid parameter combinations. The dashed red line indicates the true treatment effect of zero."
+#| fig-cap: "**Distribution of observed group mean difference across the simple simulation** -Density plot of the observed difference in group means (ΔOME) across all grid parameter combinations. The dashed red line indicates the true treatment effect of zero."
 
 ggplot(simple_results, aes(x=diff))+
   geom_density(fill="blue", alpha = 0.8)+
   theme_academic()+
   scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
-  scale_x_continuous(expand = expansion(mult = c(0, 0.05))) +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.05)), limits = c(-10, 10)) +
   geom_vline(xintercept = 0, colour = "red", linetype = "dashed")+
   labs(y = "Density",
        x = TeX(r'(Observed difference ($\Delta \mu_{{OME}})$)')
@@ -356,16 +333,15 @@ ggplot(simple_results, aes(x=diff))+
 
 ```
 
-When plotted against the grid values, it becomes clear that when the proportion of medication in the control and intervention groups are the same ($\Delta p_i = 0$) then the true effect size of 0 is recovered, regardless of any error in the conversion value ($\delta c_i$) used (@fig-simple-grid-1). Furthermore, where the conversion values used are correct to the ground truth, any difference in proportion is accounted for and the true effect is again recovered.
+When plotted against the grid values, it becomes clear that when the proportion of medication in the control and intervention groups are matched ($\Delta p_i = 0$), then the true effect size of 0 is recovered, regardless of any error in the conversion value ($\delta c_i$) used (@fig-simple-grid-1). Furthermore, where the conversion values used are correct (with respect to the ground truth), any difference in proportion is accounted for and the true effect is again recovered.
 
 However, as the proportions between the control and treatment group deviate, resulting difference observed is biased by any error in the conversion values. Where the groups are completely unmatched ($\Delta p_i =$ 1 or -1) the resulting observed difference is the due entirely to the error in potency.
 
 ```{r}
 #| label: fig-simple-grid-1
-#| fig-cap: "**Observed OME group mean difference across opioid proportion difference and conversion value error** - Heatmap of the observed difference in group means (ΔOME) across grid values of Δp_i (difference in opioid proportion between groups) and ε (error in the oxycodone conversion value). Bias is zero when either parameter is zero and increases as both deviate from zero."
+#| fig-cap: '**Observed OME group mean difference across opioid proportion difference and conversion value error** - Heatmap of the observed difference in group means ($\Delta \mu_{\text{OME}}$) across grid values of $\Delta p_i$ (difference in opioid proportion between groups) and $\epsilon$ (error in the oxycodone conversion value). Bias is zero when either parameter is zero and increases as both deviate from zero.'
 #| fig-height: 6
 #| fig-width: 6
-
 
 plot_simple_grid <- ggplot(simple_results, aes(y = p, x = e, fill = diff)) +
   geom_tile() +
@@ -396,21 +372,15 @@ plot_simple_grid
 
 ```
 
-@fig-simple-grid-1 demonstrates that the observed difference can be described with a rotated hyperbolic parabola with the scaling constant $k$ (@eq-results-simple-1).
+@fig-simple-grid-1 demonstrates that the observed difference can be described with a rotated hyperbolic parabola with the scaling constant $k$.
 
 $$
 \Delta \mu_{\text{OME}} = k \cdot \Delta p_i \cdot \epsilon
 $$ {#eq-results-simple-1}
 
-@fig-appendix-simple-sim-mu demonstrates that the scaling constant ($k$) is the expected dose for the control group as demonstrated in @eq-results-simple-2-proof).
+@sec-appendix-sim-1 demonstrates that the scaling constant ($k$) is the expected dose for the control group as demonstrated in @eq-results-simple-2-proof). @sec-appendix-sim-2 demonstrates that as the true treatment effect acts to both translate and scale the observed treatment effect. 
 
-In the simulation described thus far, the treatment effect was set at 0 meaning $\mathbb{E}(\text{OME}^\text{control}) = \mathbb{E}(\text{OME}^\text{intervention})$. This demonstrated that despite have no true treatment effect, difference in the proportion and error in conversion size, can lead to the observation of a treatment effect. 
-
-This phenomenon can be explained by Simpsons paradox, whereby the observed treatment effect is conditioned on the proportion of the the medications within each group, thus creating the observation of a false treatment effect @pearlBookWhyNew2019. 
-
-@sec-appendix-sim-2 demonstrates that as the true treatment effect acts to both translate and scale the observed treatement effect. 
-
-### Exemplar simulation study
+### Hypothetical study simulation
 
 ```{r }
 df <- sim_patient(
@@ -427,7 +397,6 @@ df <- sim_patient(
 )
 
 ```
-
 
 `r nrow(df)` procedures were simulated using the parameters described in @sec-manuscript-exemplar-sim. 
 
@@ -458,14 +427,27 @@ df |>
   kableExtra::kable_styling(latex_options = "hold_position", full_width = FALSE)
 ```
 
-A simple demographics table for the study is shown in @tbl-sim-demo, this demonstrates the unequal distributions of opioids between groups. @fig-sim-ome-density Demonstrates the distribution of the total opioid burden (OME mg) of patients in the robotic and non-robotic patients. @fig-sim-ome-proportion shows that within the robotic and non-robotic groups the proportion of each opioid is not equal, and the effect of the oxycodone shortage has had a larger impact on the robotic group.
-
+A simple demographics table for the study is shown in @tbl-sim-demo, this demonstrates the unequal distributions of opioids between groups. @fig-sim-ome-1 demonstrates this distribution of the total opioid burden (OME mg) of patients in the robotic and non-robotic patients. @fig-sim-ome-2 shows that within the robotic and non-robotic groups the proportion of each opioid is not equal, and the effect of the oxycodone shortage has had a larger impact on the robotic group.
 
 ```{r}
-#| label: fig-sim-ome-proportion
-#| fig-cap: "**Opioid prescribing proportions by surgery type** - Proportion and count of each opioid prescribed within robotic and non-robotic surgery groups."
-#| fig-width: 3
-#| fig-height: 3
+#| label: fig-sim-ome
+#| layout-ncol: 2
+#| fig-cap: "**Opioid prescribing and OME distribution by surgery type**"
+#| fig-subcap: 
+#|   - "**OME distribution by surgery type** - Kernel density of calculated OME (OME mg) for robotic and non-robotic surgery groups."
+#|   - "**Opioid prescribing proportions by surgery type** - Proportion and count of each opioid prescribed within robotic and non-robotic surgery groups."
+#| fig-width: 6
+#| fig-height: 6
+
+ggplot(df, aes(x=ome, fill=robotic))+
+  geom_density(alpha=0.8)+
+  theme_academic()+
+  labs(x="OME (OME mg)",
+        y="Density",
+        fill="Robotic Surgery")+
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  theme(legend.position = "bottom")+
+  paletteer::scale_fill_paletteer_d("MetBrewer::Austria", direction = -1)
 
 df %>%
   count(robotic, opioid) %>%
@@ -483,25 +465,7 @@ df %>%
   scale_y_continuous(expand = expansion(mult = c(0, 0.05)),
                      labels = scales::percent_format()) +
   theme(legend.position = "bottom")+
-  paletteer::scale_fill_paletteer_d("MetBrewer::Austria", direction = )
-
-```
-
-```{r}
-#| label: fig-sim-ome-density
-#| fig-cap: "**OME distribution by surgery type** - Kernel density of calculated OME (OME mg) for robotic and non-robotic surgery groups."
-#| fig-width: 3
-#| fig-height: 3
-
-ggplot(df, aes(x=ome, fill=robotic))+
-  geom_density(alpha=0.8)+
-  theme_academic()+
-  labs(x="OME (OME mg)",
-        y="Density",
-        fill="Robotic Surgery")+
-  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
-  theme(legend.position = "bottom")+
-  paletteer::scale_fill_paletteer_d("MetBrewer::Austria", direction = -1)
+  paletteer::scale_fill_paletteer_d("MetBrewer::Austria")
 
 ```
 
@@ -510,11 +474,7 @@ ggplot(df, aes(x=ome, fill=robotic))+
 obs_robotic_ome <- df %>% filter(robotic == "Robotic") %>% summarise(mean(ome)) %>% pull() 
 obs_non_robotic_ome <- df %>% filter(robotic != "Robotic") %>% summarise(mean(ome)) %>% pull()
 obs_robot_effect_mg <- obs_robotic_ome - obs_non_robotic_ome
-```
 
-The mean opioid burden value for the robotic surgery group was `r round(obs_robotic_ome, 1)` OME mg and for the non-robotic surgery group was `r  round(obs_non_robotic_ome, 1)` OME mg. This gives an observed effect size of the robot as `r round(obs_robot_effect_mg,1)` OME mg. 
-
-```{r}
 result <- analyse_dataset(df)
 
 if (PRODUCTION_QUALITY) {
@@ -522,23 +482,22 @@ if (PRODUCTION_QUALITY) {
 } else {
   trials = 3
 }
+
 ```
 
-Using a two sided t-test to assess if there is a significant difference in mean OME between the robotic and standard surgery groups, the mean difference was `r round(result$mean_diff_ome,1)` OME mg (95% CI `r paste(round(result$conf_int_ome, 1), collapse = " to ")`) with a p-value of `r pvalue(result$p_value_ome)`.
-
-Given the study was adequetly powered (@sec-appendix-simulation-power), the research team were then able to conclude that robotic surgery is associated with a significant difference in total opioid burden. 
+The mean opioid burden value for the robotic surgery group was `r round(obs_robotic_ome, 1)` OME mg and for the non-robotic surgery group was `r  round(obs_non_robotic_ome, 1)` OME mg. This gives an observed effect size of the robot as `r round(obs_robot_effect_mg,1)` OME mg. Using a two sided t-test to assess if there is a significant difference in mean OME between the robotic and standard surgery groups, the mean difference was `r round(result$mean_diff_ome,1)` OME mg (95% CI `r paste(round(result$conf_int_ome, 1), collapse = " to ")`) with a p-value of `r pvalue(result$p_value_ome)`. Given the study was adequately powered (@sec-appendix-simulation-power), the research team were then able to conclude that robotic surgery is associated with a significant difference in total opioid burden. 
 
 ### Impact of conversion set and proportions
 
-The hypothetical study was repeated using a grid search of across different conversion values and different proportion of post-operative oxycodone prescribing. The prior was informed by ranges observed in the literature and the latter to influence the degree of different in opioid proportions between groups. For each set of grid values, `r trials` were performed and the mean observed difference taken. 
-
-Given a `r mu_tot` mg expected opioid requirement and a treatment effect of `r scales::percent(robot_effect_size-1)` mg we would expect the mean difference in OME of the robotic group to be `r (mu_tot * robot_effect_size)-mu_tot` mg OME.
+The hypothetical study was repeated using the grid values of different conversion values and different proportion of post-operative oxycodone prescribing. The prior was informed by ranges observed in the literature and the latter to influence the degree of different in opioid proportions between groups. For each set of grid values, `r trials` were performed and the mean observed difference and median Fishers Exact p-value extracted. Given a `r mu_tot` mg expected opioid requirement and a treatment effect of `r scales::percent(robot_effect_size-1)` mg we would expect the mean difference in OME of the robotic group to be `r (mu_tot * robot_effect_size)-mu_tot` mg OME.
 
 ```{r}
 #| label: fig-sim-grid-search-1
-#| fig-cap: "**Sensitivity of observed treatment effect to conversion value and opioid proportion** - Grid search results showing the observed treatment effect across oxycodone conversion values and post-operative morphine prescribing proportions. Purple cross denotes an average p value of Fishers Exact test <0.05. True treatment effect is -5 mg. The dashed line indicates the ground truth conversion value."
+#| fig-cap: "**Sensitivity of observed treatment effect to conversion value and opioid proportion** - Grid search results showing the observed treatment effect across oxycodone conversion values and post-operative morphine prescribing proportions. Purple cross denotes an median p value of Fishers Exact test <0.05. True treatment effect is -5 mg. The dashed line indicates the ground truth conversion value."
 #| fig-height: 4
-#| fig-width: 4
+#| fig-width: 8
+#| out-height: 3in
+#| out-width: 6in
 
 
 simulation1 <- run_simulation(trials=trials,
@@ -556,7 +515,7 @@ plot_grid_1
 
 The results of the `r comma(nrow(simulation1)*trials)`  simulations are shown in @fig-sim-grid-search-1.
 
-Where the proportion of post-operative morphine prescribing is high, the exogenous effect of an oxycodone shortage has little impact to diverge the proportions of opioids between groups , and the true treatment effect of `r (mu_tot * robot_effect_size)-mu_tot` mg OME is recovered. However, as the impact of the oxycodone shortage causes further divergence of the proportions between groups there is wider variation in the observed difference. Where the conversion value supplied is close to the grouth truth (indicated by the red line) then the error is low however a statistically significant result may not be reached. At the extream, there are values where the observed difference is `r round(max(simulation1$mean_diff_ome),2)`, inverting the direction of the treatment effect. 
+Where the proportion of post-operative morphine prescribing is high, the exogenous effect of an oxycodone shortage has little impact to diverge the proportions of opioids between groups , and the true treatment effect of `r (mu_tot * robot_effect_size)-mu_tot` mg OME is recovered. However, as the impact of the oxycodone shortage causes further divergence of the proportions between groups there is wider variation in the observed difference. Where the conversion value supplied is close to the ground truth (indicated by the red line) then the error is low however a statistically significant result may not be reached. At the extreme, there are values where the observed difference is +`r round(max(simulation1$mean_diff_ome),2)` mg, inverting the direction of the treatment effect. 
 
 ```{r}
 #| label: fig-compare
@@ -623,34 +582,31 @@ plot_grid_2 <- ggplot(simulation1, aes(x=conversion_value, y=morphine_proportion
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1),
     panel.grid = element_blank(),
-    legend.position = "bottom")
+    legend.position = "bottom")+
+  scale_y_continuous(position = "right", labels = scales::percent)+
+  geom_vline(xintercept = potency_oxycodone_truth, linetype = "dashed", color = "red")
   
 layout <- c(
   area(t = 1, l = 1, b = 10, r = 10),
-  area(t = 7, l = 11, b = 9, r = 20)
+  area(t = 6, l = 11, b = 10, r = 20)
 )
 
 plot_simple_grid + plot_grid_2 +
   plot_layout(design = layout)
-
 ```
 
-@fig-compare demonstrates that the experiment space for the example simulation values where $\Delta p_i < 0$ and for values of $ -0.5 < \epsilon < 1 $. Despite being a relativity narrow section of the possible gird space detailed in @sec-manuscript-results-simple with a modest effect size of `r robot_effect_mg` OME mg there are still values where the observed effect size is significantly different. 
+@fig-compare demonstrates that the experiment space for the example simulation values where $\Delta p_i < 0$ and for values of $-0.5 < \epsilon < 1 $. Despite being a relativity narrow section of the possible gird space detailed in @sec-manuscript-results-simple with a modest effect size of `r robot_effect_mg` OME mg there are still values where the observed effect size is significantly different. 
 
 
 ## Part 2 - Literature Review 
 
 ### Reporting of opioid burden metrics
 
-Of the 480 studies identified in the rapid literature search, `r nrow(lit_data)` fit the eligibility criteria and data was extracted. 
-
-The majority of studies were cohort studies and most commonly looked at anaesthetic type interventions (@fig-study-types)
+480 studies were identified in the rapid literature search, a sample of `r nrow(lit_data)` that fit the eligibility has data extracted. The majority of studies were cohort studies and most commonly looked at anaesthetic type interventions (@fig-study-types).
 
 ```{r}
 #| label: fig-study-types
 #| fig-cap: "**Study design and intervention types in included literature** - Bar charts summarising the study design and intervention type of studies included in the rapid literature review. Left panel shows count by study design; right panel shows count by intervention type."
-#| fig-width: 5
-#| fig-height: 3
 
 # Plot for Study.type proportions
 plot_lit_study_type <- ggplot(lit_data, aes(x = Study.type)) +
@@ -661,7 +617,8 @@ plot_lit_study_type <- ggplot(lit_data, aes(x = Study.type)) +
   theme_academic()+
   scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
   scale_fill_academic()+
-  theme(legend.position = "none")
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 
 # Plot for Intervention proportions
 plot_lit_intervnetion_type <- ggplot(lit_data, aes(x = Intervention)) +
@@ -672,15 +629,14 @@ plot_lit_intervnetion_type <- ggplot(lit_data, aes(x = Intervention)) +
   theme_academic()+
   scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
   scale_fill_academic()+
-  theme(legend.position = "none")
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
 
 plot_lit_study_type + plot_lit_intervnetion_type
 
 ```
 
-With regards to the opioid conversion sets used, `r lit_data %>% filter(Opioid.conversion.set == "Cited") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.conversion.set == "Cited") %>% nrow()/n_lit_data)`) cited another source, whilst `r lit_data %>% filter(Opioid.conversion.set == "Included in text") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.conversion.set == "Included in text") %>% nrow()/n_lit_data)`) included the conversion values within the paper. `r lit_data %>% filter(Opioid.conversion.set == "Not described") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.conversion.set == "Not described") %>% nrow()/n_lit_data)`) papers did not include any citation or description of the opioid conversion sets used. 
-
-Upon examining the results section, it was found that only `r lit_data %>% filter(Opioid.proportions.within.group == "Described") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.proportions.within.group == "Described") %>% nrow()/n_lit_data)`) papers described the proportions of different opioids between intervention groups(@fig-study-results). 
+With regards to the opioid conversion sets used, `r lit_data %>% filter(Opioid.conversion.set == "Cited") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.conversion.set == "Cited") %>% nrow()/n_lit_data)`) cited another source, whilst `r lit_data %>% filter(Opioid.conversion.set == "Included in text") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.conversion.set == "Included in text") %>% nrow()/n_lit_data)`) included the conversion values within the paper. `r lit_data %>% filter(Opioid.conversion.set == "Not described") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.conversion.set == "Not described") %>% nrow()/n_lit_data)`) papers did not include any citation or description of the opioid conversion sets used. Upon review of the the results sections, it was found that only `r lit_data %>% filter(Opioid.proportions.within.group == "Described") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.proportions.within.group == "Described") %>% nrow()/n_lit_data)`) papers described the proportions of different opioids between intervention groups (@fig-study-results). Of these `r nrow(lit_data %>% filter(Opioid.proportions.within.group == "Described"))` papers, `r nrow(excluded_papers)` provided count data only and not mean/median dose for each opioid within treatment groups. 
 
 ```{r}
 #| label: fig-study-results
@@ -709,28 +665,13 @@ ggplot(heatmap_data, aes(y = Opioid.proportions.within.group, x = Opioid.convers
   symmetric_fill_scale(max(heatmap_data$count))
 ```
 
-### Conversion values used across the litrature
-
-Of the `r lit_data %>% filter(Opioid.conversion.set == "Cited") %>% nrow()` papers where a conversion value set was cited, the `r nrow(conversion)` unique source value sets where reviewed. Generally across the literature, conversion values with the intention of research were in the minority (`r percent((nrow(conversion %>% filter(aim == "for research")))/(nrow(conversion)))`) and most had compiled the conversion value sets for use in clinical care. 
-
-:::{.callout-warning}
-
-Can expand this section but not sure if its worth it?
-
-:::
-
 ### Impact of varying conversion values on studies
 
-Of the `r nrow(lit_data %>% filter(Opioid.proportions.within.group == "Described"))` papers, `r nrow(excluded_papers)` provided count data only and not mean/median dose for each opioid within treatment groups. 
+@tbl-lit-summary details the `r length(unique(exemplars_summary$Ref))` studies where opioid proportions could be recovered. Of note, only Baran cited a opioid conversion set @baranOptimizingAnalgesiaMinimally2025, all other authors did not describe which value sets were used. Two studies were randomised controlled trials (RCT), whilst the remainder were retrospective cohort studies. With regards to the interventions analysed, in this group, all were concerning analgesia either during or after the surgical procedure. 
 
 ```{r}
-lit_data %>% filter(Study.ID %in% papers$authors)
+#| label: @tbl-lit-summary
 
-```
-
-
-```{r}
-#| label: tbl-lit-summary-outcomes
 exemplars_summary <- exemplars_summary %>%
   left_join(papers_summary, by="authors") %>%
   left_join(papers %>% select(authors, authors), join_by(authors), multiple = "first") %>%
@@ -743,47 +684,91 @@ exemplars_summary <- exemplars_summary %>%
   
 
 exemplars_summary_table <- exemplars_summary %>%
-  select(authors, population, control_group, intervention_group, note,
+  mutate(Ref = as.integer(Ref),
+         authors = case_when(Ref==303 ~ "Gold 2025",
+                             .default = authors)) %>%
+  left_join(lit_data, join_by("Ref" == "Covidence..") ) %>%
+  select(authors, note, Title, Study.type,population, control_group, intervention_group, Opioid.conversion.set) %>%
+  unique() 
+
+note_rows <- which(!is.na(exemplars_summary_table$note) & exemplars_summary_table$note != "")
+notes     <- exemplars_summary_table$note[note_rows]
+
+for (i in seq_along(note_rows)) {
+  exemplars_summary_table$authors[note_rows[i]] <- paste0(
+    exemplars_summary_table$authors[note_rows[i]],
+    footnote_marker_number(i, format = fmt)
+  )
+}
+
+
+fmt <- if (knitr::is_latex_output()) "latex" else "html"
+
+exemplars_summary_table %>%
+  filter(authors != "Gold 2025")%>%
+  select(-note) %>%
+  kable(col.names = c(
+    "Authors","Title", "Study design", "Population", "Control group", "Intervention group","Opioid conversion set included"
+  ),
+  format    = fmt,
+  escape = FALSE) %>%
+   kable_styling(bootstrap_options = "striped",
+                              latex_options = "striped") %>%
+  footnote(number = notes,
+           footnote_as_chunk = FALSE,
+           threeparttable=TRUE
+           ) 
+
+```
+
+
+@tbl-lit-summary-outcomes provides three sets of results for the studies detailed. The first is the study reported outcomes, this is the mean total opioid burden for the control and intervention groups. From this an observed difference is calculate with a percentage change from the control. The second column set is the de-novo calculating, by using the mean dose of each opioid within each group and conversion set provided (or Neilsens if not) to attempt to calculate the control and intervention group means. From these de-novo estimates a second difference of the treatment group was calculated. 
+
+Finally, regardless of the conversion sets used, the de-novo calculation was repeated across the possible grid values of the Neilsen conversion set. The minimum and maximum possible differences were then extracted. 
+
+```{r}
+#| label: tbl-lit-summary-outcomes
+
+exemplars_summary_table <- exemplars_summary %>%
+  select(authors,
          reported_control_group_mean, reported_intervnetion_group_mean, reported_diff,
          control_total_ome, intervention_total_ome, calculated_diff,
          min_diff, max_diff)
 
+
 options(knitr.kable.NA = '')
 
-kable(exemplars_summary_table,
-      col.names = c("Authors", "Population", "Control group", "Intervention group", "Note", "Control group" , "Intervention group", "Difference", "Control group" , "Intervention group", "Difference", "Lower bound", "Upper bound"),
-      align = "llllcccccc",
-      digits = 1
-      ) %>%
-  add_header_above(c("Study details" = 5, "Study reported outcome" = 3, "De Novo caculated outcome" = 3, "Range of estimates" = 2 ))
-  
+table <- kable(
+  exemplars_summary_table,
+  format    = fmt,
+  escape    = FALSE,
+  col.names = c(
+    "Authors", 
+    "Control group", "Intervention group", "Difference",
+    "Control group", "Intervention group", "Difference",
+    "Lower bound", "Upper bound"
+  ),
+  align  = "llllcccccccc",
+  digits = 1
+) |>
+  add_header_above(c(
+    " "              = 1,
+    "Study reported outcome"     = 3,
+    "De Novo calculated outcome" = 3,
+    "Range of estimates"         = 2
+  )) |>
+  kable_styling(bootstrap_options = "striped",
+                              latex_options = "striped") %>%
+  column_spec(4, bold=T)%>%
+  column_spec(7, bold=T)
 
+table
 ```
 
-```{r}
-#| label: fig-lit-outcome-dist
-#| eval: false
-
-# 2. Plot with facets
-ggplot(plot_data, aes(x = delta_ome)) +
-  # Use geom_density for a smooth distribution
-  geom_density(fill = "steelblue", alpha = 0.6, color = "black") +
-  # Use facet_wrap with free scales so each study's range is visible
-  facet_wrap(~ authors, scales = "free", ncol = 3) + 
-  theme_minimal(base_size = 12) +
-  labs(
-    title = "Sensitivity Analysis: OME Relative Difference by Study",
-    subtitle = "Variation based on independent uncertainty in conversion factors (c_i)",
-    x = "Relative Difference (delta_ome)",
-    y = "Density"
-  ) +
-  theme(
-    strip.background = element_rect(fill = "gray95"),
-    panel.spacing = unit(1, "lines")
-  )
+This table highlights the difficulty in re-calculating the total opioid burdens that the authors have produced. This is likely due to a number of assumptions as details in the methods such as estimating mean values from medians and assuming medication routes. Only one study, Fedorka 2025, showed no sensitivity to the conversion value set used @fedorkaLiposomalBupivacaineBupivacaine2025. This is because, in the RCT only oxycodone was used in the post-operative period, as so whilst the group estimates may vary, the treatment effect percentage is fixed at 10%.  
 
 
-```
+@fig-lit-outcomes demonstrates the reported difference in opioid burden (red cross) compared to the de-novo calculated difference (green cross). When the the grid search of the possible combinations of the values used by Neilsen was performed, the minimum and maximum values are demonstrated by the orange whiskers with the distribution within each given in @fig-lit-outcome-dist.
 
 ```{r}
 #| label: fig-lit-outcomes
@@ -802,28 +787,25 @@ ggplot(exemplars_summary, aes(y=authors))+
 
 ```
 
-The final simulation looks at a study performed by xx et al. This study looked at the effect of xxx on yyyy and found a observed effect size of xxx. 
+### Conversion values used across the literature
 
-They did not report the difference of proportion of medications between their treatment groups. We will apply conversion values that have been used across the literature to calculate. One issue is that we do not know the true conversion values of the medications. 
+Of the `r lit_data %>% filter(Opioid.conversion.set == "Cited") %>% nrow()` papers where a conversion value set was cited, the `r nrow(conversion)` unique source value sets where reviewed. Generally across the literature, conversion values with the intention of research were in the minority (`r percent((nrow(conversion %>% filter(aim == "for research")))/(nrow(conversion)))`) and most had compiled the conversion value sets for use in clinical care. 
 
 :::{.callout-warning}
-
-Haven't got around to do one, one issue is the lack of reporting of proportions. We also need a study that only has two opioids or otherwise it gets more difficult to simulate end plot/communicate. 
-Another issue is that generally the litrature all uses the same values for the common drugs. 
-
+Can expand this section but not sure if its worth it?
 :::
 
-# Conclusion
 
-We have demonstrated that the use of total opioid burden metrics such as OME or MME are sensitivity to the proportions of different opioids and the conversion sets used. We have demonstrated that the difference measured between the observed $\mu_{\text{OME}}^{(A)}$ and $\mu_{\text{OME}}^{(B)}$ is a product of not only the association of the two groups (be it statistical or causal), but also the difference in proportions of medications within each group.
+# Discussion
 
-This saddle geometry illustrates a critical issues when comparing means of group OME values: if a conversion factor for the medication $i$ is over-estimated ($\epsilon_i > 0$) and prevalence is simultaneously higher in the intervention group ($\Delta p_i > 0$), the error in the treatment effect compounds quadratically. Conversely, opposing directional errors will collapse and at the extreme values may invert the direction of the observed treatment effect.
+By defining and re-arranging the equations for total opioid burden and group average opioid burden, we have shown that any difference in proportion or error in the conversion value introduces an error in the observed difference measured. This relatonships can be mapped to hyperbolic parabola that is shaped by the underlying treatment effect and the size of the group means. The saddle geometery raises an important issue in comparing group means; if a conversion factor for the medication $i$ is over-estimated ($\epsilon_i > 0$) and prevalence is simultaneously higher in the intervention group ($\Delta p_i > 0$), the error in the treatment effect compounds quadratically. Conversely, opposing directional errors will collapse and at the extreme values may invert the direction of the observed treatment effect.
 
-In addition, the opioid equivalence metric is also sensitivity to any error in the true conversion value of the underlying population and the conversion value used for calculations. As expressed across the literature, it is difficult to ascertain all of the inter-patient difference and inter-opioid interactions that would provide the true conversion value. None the less, any difference in the true population level conversion value and the values used will also lead to systematic under or over estimation of the true value. 
+This phenomenon could be explained by Simpsons paradox, whereby the observed treatment effect is conditioned on the proportion of the the medications within each group, thus creating the observation of a false or biased treatment effect @pearlBookWhyNew2019. 
 
-Where the opioid equivalence metric is being used as outcome metric in a comparison between groups, any difference in proportion of differing opioids or the conversion values will lead to a systematic under or over estimation of the true different. If either one of these is exactly correct then the error will cancel out but if both are not matched it can lead to an up to 3 fold error in the estimate of difference. 
+Across the literature, the methods and results describing the total opioid burden metrics is generally poor. It was found that only `r scales::percent(lit_data %>% filter(Opioid.proportions.within.group == "Described")  %>% filter(Opioid.conversion.set != "Not described") %>% nrow()/n_lit_data)` of papers reported both the conversion value sets used and the proportions of opioids between groups. Re-creating the opioid burden metrics from the limited papers where this was possible, showed signficiant differences between the author reported results and the de novo calculation. 
 
-Across the literature, the methods and results describing the total opioid burden metrics is generally poor. It was found that only `r scales::percent(lit_data %>% filter(Opioid.proportions.within.group == "Described")  %>% filter(Opioid.conversion.set != "Not described") %>% nrow()/n_lit_data)` of papers reported both the conversion value sets used and the proportions of opioids between groups. Whilst it is not yet possible to establish the error in conversion values (without knowing the true average potency), reporting differences in group proportions is key to understand how biased an estimated treatment effect might be. 
+It was noted that a number of papers sourced their perceiving information from the Pennsylvania Prescription Drug monitoring program (PPDMP), of which none of these papers cited the conversion values used @adalbertPrescriptionDrugMonitoring2023. Upon investigation further, the technical notes from the PPDMP describe MME values are calculated using conversion factors, but they are not stated or detailed further @zotero-item-700. Whilst datasets that contain pre-calculated MME values offer an attractive data source, it should be made clear how derived metrics are calculated. With the increase of EHR and digital datasets, this need for clear documentation and transparency is becoming increasingly important to ensure the metrics used are true and accurate reflections of the underling data \[Could cite JMIR paper here.\]. 
+
 
 ## Limitations
 
@@ -831,10 +813,15 @@ In the simulation studies we have only considered situations where medication ch
 
 This work is particular relevant to retrospective observational work where large datasets with varied treatment lend themselves well to the tool of opioid conversion values. However, even in a RCT where the protocol for analgesia may be fixed and patients randomised between groups, confounding may occur if analgesia protocols contain differing opioids allowing the possibility of diverging proportions between treatment groups. However, the degree of error introduced is likely if a high quality randomisation method is used. 
 
-## Discussion
+In our simulations we have used a simulated "ground truth" value for oxycodone as this cannot be measured. The broad range of conversion values produced in the literature has been primarily generated for clinical care. By co-opting these general rule-of-thumb measures authors are not able to quantify or communicate any level of uncertainty.
 
-It was noted that a number of papers sourced their perceiving information from the Pennsylvania Prescription Drug monitoring program (PPDMP), of which none of these papers cited the conversion values used @adalbertPrescriptionDrugMonitoring2023. Upon investigation further, the technical notes from the PPDMP describe MME values are calculated using conversion factors, but they are not stated or detailed further @zotero-item-700. Whilst datasets that contain pre-calculated MME values offer an attractive data source, it should be made clear how derived metrics are calculated. With the increase of EHR and digital datasets, this need for clear documentation and transparency is becoming increasingly important to ensure the metrics used are true and accurate reflections of the underling data \[Could cite JMIR paper here.\]. 
+The literature search was intended to provide a snapshot of current academic practice and hence was not exhaustive by only using a sample of the papers in 2025 with an intentionally specific search criteria. Thus this rapid lit review may not be fully representative of opioid burdens metrics used across the academic domain.  
+ 
+# Conclusion
 
+We have demonstrated that the use of total opioid burden metrics such as OME or MME are sensitivity to the proportions of different opioids and the conversion sets used. We have demonstrated that the difference measured between the observed $\mu_{\text{OME}}^{(A)}$ and $\mu_{\text{OME}}^{(B)}$ is a product of not only the association of the two groups (be it statistical or causal), but also the difference in proportions of medications within each group.
+
+In addition, the opioid equivalence metric is also sensitivity to any error in the true conversion value of the underlying population and the conversion value used for calculations. As expressed across the literature, it is difficult to ascertain all of the inter-patient difference and inter-opioid interactions that would provide the true conversion value. None the less, any difference in the true population level conversion value and the values used will also lead to systematic under or over estimation of the true value. 
 
 ## Further work
 

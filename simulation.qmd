@@ -284,8 +284,7 @@ max_val <- max(results_grid$mean_diff_ome, na.rm = TRUE)
 
 `symetic_fill_scale` is a colour gradient scale that allows control of the scale to ensure consistancy between plots 
 
-```{r}
-
+```{r symetic_fill_scale}
 
 symmetric_fill_scale <- function(limit, type="fill") {
   
@@ -303,5 +302,22 @@ symmetric_fill_scale <- function(limit, type="fill") {
   )
   }
 }
+
+```
+
+
+```{r neilsen range}
+#| echo: false
+
+# This data is kept in here to be used in both the manuscript and the appendix. 
+
+neilsen_ranges <- list(
+  "morphine" = c(2),
+  "fentanyl" = c(100,150, 200, 300),
+  "oxycodone" = c(3),
+  "tramadol" = c(0.1, 0.2, 0.25),
+  "hydromorphone" = c(15,20),
+  "hydrocodone" = c(1, 1.33)
+)
 
 ```

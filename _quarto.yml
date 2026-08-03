@@ -5,7 +5,7 @@ brand: ucl_brand.yml
 book:
   title: The problem with the OME metric
   search: false
-  downloads: pdf
+  downloads: [pdf,docx]
   chapters:
     - index.qmd
     - manuscript.qmd
@@ -13,6 +13,9 @@ book:
   appendices:
     - appendix.qmd
     - simulation.qmd
+comments:
+  hypothesis:
+    theme: clean
 bibliography: /Users/dylanwhitaker/Library/CloudStorage/OneDrive-UniversityCollegeLondon/refs.bib
 csl: elsevier-vancouver.csl
 format:
@@ -24,20 +27,22 @@ format:
     fig-dpi: 150
   pdf:
     documentclass: scrreprt
+    geometry:
+      - top=30mm
+      - left=20mm
+      - heightrounded
     toc: true
     fig-align: center
     fig-width: 5
     fig-height: 3
     fig-dpi: 300
-    include-in-header:
-      text: |
-        \usepackage{pdflandscape}
   docx:
     toc: true
     fig-align: center
     fig-width: 5
     fig-height: 3
     fig-dpi: 300
+prefer-html: true
 crossref:
   lof-title: List of Figures
 execute:

@@ -26,11 +26,11 @@ set.seed(402)
 #| message: false
 
 library(scales)
-library(kableExtra)
 library(dplyr)
 library(ggplot2)
 library(patchwork)
 library(latex2exp)
+library(gt)
 
 theme_academic <- function() {
   theme_minimal(base_size = 12) +
@@ -61,11 +61,11 @@ Background drafted, some more citations on the various commentery on OME/metrics
 
 ## Origin of opioid equivalence and eqipotency
 
-Opioid medications are an important pillar of analgesia in medicine, used across a range of specialities and patients. There are a wide range of opioids, some naturally derived with others synthetic, each with their own potency. Whilst a wide range of factors may influence the potency of a specific opioid in a specific patient, there has long been a need to calculate the eqi-analgesic dose, or the dose of a medication that would provide an equal amount of analgesia compared to a reference. 
+Opioid medications are an important pillar of analgesia in medicine, used across a range of specialities and patients. There are a wide range of opioids, some naturally derived and others synthetic, each with their own potency. While a wide range of factors may influence the potency of a specific opioid in a specific patient, there has long been a need to calculate the eqi-analgesic dose, or the dose of a medication that would provide an equal amount of analgesia compared to a reference. 
 
 The need for agreed conversion values has lead to a number of publications over the last 20 years aiming to formalise the differing potencies. Much of this literature comes from the domain of palliative care in the context of opioid rotation and looked at multiple single opioid small studies to establish conversion values. McPherson described a range of limitations in the use of these equialangesic tables including the source of the data, lack of patient specific variables and bi-directionality of equivalence values. @mcphersonWhyEquianalgesicTables2020. Despite this, a set of approximate conversion values, taken with clinical experience offer a helpful set of starting points when prescribing different opioids 
 
-The equi-analgesic conversion set have offered a new opportunity in research, the ability to quantify the total opioid burden for a group of patients.  With the increase in electronic health records, opportunities to now use total opioid use as either a feature or an outcome has become increasingly prevalent. In the last 5 years there have been 4,031 papers using the terms *"Milligram morphine equivalent"* (MME) or *"Oral morphine equivalent"* (OME) (@sec-appendix-pubmed-1). 
+The equi-analgesic conversion set has offered a new opportunity in research, the ability to quantify the total opioid burden for a group of patients.  With the increase in electronic health records, opportunities to now use total opioid use as either a feature or an outcome has become increasingly prevalent. In the last 5 years there have been 4,031 papers using the terms *"Milligram morphine equivalent"* (MME) or *"Oral morphine equivalent"* (OME) (@sec-appendix-pubmed-1). 
 
 In 2016, Neilsen *et. al.* published on the first formal OME conversion tables for the intention of research @nielsenSynthesisOralMorphine2016. The authors aimed to source a range of national guidelines and recommended a single value for each opioid and route with a upper and lower quartile. This "common conversion set" paved the way for the idea that all opioid research should be using a single unifed conversion set. It was clear in the literature that using a range of different conversion sets would not produce equitable or comparable results\[**Add citations**\]. In an attempt to unify value sets, in 2022 the Center for disease control (CDC) produced their own value set an obligated any NIH researches working in opioid research to use their opioid conversions @dowellCDCClinicalPractice2022. 
 
@@ -117,7 +117,7 @@ We will aim to:
 
 ## Part 1 - Simulations
 
-Two simulated studies were performed to demonstrate the sensitivity of the opioid burden metric to differences in the proportions of medications between groups and the conversion values used. In both simulations the outcome was the measured difference in the group mean total opioid burden.
+Two simulated studies were performed to demonstrate the sensitivity of the opioid burden metric to differences in the proportions of medications between groups and the conversion values used. In both simulations, the outcome was the measured difference in the group mean total opioid burden.
 
 The **first** (@sec-manuscript-simple-sim) uses a simplified simulation with no treatment effect between groups to understand the variation in results across the full range of parameters. The **second** simulation (@sec-manuscript-exemplar-sim) uses a hypothetical experimental setup with realistic values to establish the extent of the variation in results under realistic conditions. 
 
@@ -403,6 +403,7 @@ df <- sim_patient(
 ```{r}
 #| label: tbl-sim-demo
 #| tbl-cap: Demographic table of simulated study population
+#| eval: true
 
 library(gtsummary)
 
@@ -423,8 +424,8 @@ df |>
   ) |>
   add_overall() |>
   add_p() |>
-  as_kable_extra(booktabs = TRUE, format="html")|>
-  kableExtra::kable_styling(latex_options = "hold_position", full_width = FALSE)
+  as_gt() |>
+  gt::tab_options(table.width = gt::pct(100))
 ```
 
 A simple demographics table for the study is shown in @tbl-sim-demo, this demonstrates the unequal distributions of opioids between groups. @fig-sim-ome-1 demonstrates this distribution of the total opioid burden (OME mg) of patients in the robotic and non-robotic patients. @fig-sim-ome-2 shows that within the robotic and non-robotic groups the proportion of each opioid is not equal, and the effect of the oxycodone shortage has had a larger impact on the robotic group.
@@ -595,7 +596,7 @@ plot_simple_grid + plot_grid_2 +
   plot_layout(design = layout)
 ```
 
-@fig-compare demonstrates that the experiment space for the example simulation values where $\Delta p_i < 0$ and for values of $-0.5 < \epsilon < 1 $. Despite being a relativity narrow section of the possible gird space detailed in @sec-manuscript-results-simple with a modest effect size of `r robot_effect_mg` OME mg there are still values where the observed effect size is significantly different. 
+@fig-compare demonstrates that the experiment space for the example simulation values where $\Delta p_i < 0$ and for values of $-0.5 < \epsilon < 1$. Despite being a relativity narrow section of the possible gird space detailed in @sec-manuscript-results-simple with a modest effect size of `r robot_effect_mg` OME mg there are still values where the observed effect size is significantly different. 
 
 
 ## Part 2 - Literature Review 
@@ -670,7 +671,8 @@ ggplot(heatmap_data, aes(y = Opioid.proportions.within.group, x = Opioid.convers
 @tbl-lit-summary details the `r length(unique(exemplars_summary$Ref))` studies where opioid proportions could be recovered. Of note, only Baran cited a opioid conversion set @baranOptimizingAnalgesiaMinimally2025, all other authors did not describe which value sets were used. Two studies were randomised controlled trials (RCT), whilst the remainder were retrospective cohort studies. With regards to the interventions analysed, in this group, all were concerning analgesia either during or after the surgical procedure. 
 
 ```{r}
-#| label: @tbl-lit-summary
+#| label: tbl-lit-summary
+#| eval: true
 
 exemplars_summary <- exemplars_summary %>%
   left_join(papers_summary, by="authors") %>%
@@ -682,7 +684,6 @@ exemplars_summary <- exemplars_summary %>%
          max_diff = paste0(round(max_Delta, 1), "mg (", percent(max_delta, accuracy = 0.1), ")")
          ) 
   
-
 exemplars_summary_table <- exemplars_summary %>%
   mutate(Ref = as.integer(Ref),
          authors = case_when(Ref==303 ~ "Gold 2025",
@@ -691,33 +692,38 @@ exemplars_summary_table <- exemplars_summary %>%
   select(authors, note, Title, Study.type,population, control_group, intervention_group, Opioid.conversion.set) %>%
   unique() 
 
-note_rows <- which(!is.na(exemplars_summary_table$note) & exemplars_summary_table$note != "")
-notes     <- exemplars_summary_table$note[note_rows]
+gt_table_data <- exemplars_summary_table %>%
+  filter(authors != "Gold 2025") %>%
+  select(-note)
 
-for (i in seq_along(note_rows)) {
-  exemplars_summary_table$authors[note_rows[i]] <- paste0(
-    exemplars_summary_table$authors[note_rows[i]],
-    footnote_marker_number(i, format = fmt)
+# Identify rows with notes for footnotes
+note_indices <- which(!is.na(exemplars_summary_table$note) & exemplars_summary_table$note != "")
+notes_to_add <- exemplars_summary_table$note[note_indices]
+
+tbl <- gt_table_data %>%
+  gt() %>%
+  cols_label(
+    authors = "Authors",
+    Title = "Title",
+    Study.type = "Study design",
+    population = "Population",
+    control_group = "Control group",
+    intervention_group = "Intervention group",
+    Opioid.conversion.set = "Opioid conversion set included"
   )
+
+# Programmatically add footnotes
+for (i in seq_along(note_indices)) {
+  tbl <- tbl %>%
+    tab_footnote(
+      footnote = notes_to_add[i],
+      locations = cells_body(columns = authors, rows = note_indices[i])
+    )
 }
 
-
-fmt <- if (knitr::is_latex_output()) "latex" else "html"
-
-exemplars_summary_table %>%
-  filter(authors != "Gold 2025")%>%
-  select(-note) %>%
-  kable(col.names = c(
-    "Authors","Title", "Study design", "Population", "Control group", "Intervention group","Opioid conversion set included"
-  ),
-  format    = fmt,
-  escape = FALSE) %>%
-   kable_styling(bootstrap_options = "striped",
-                              latex_options = "striped") %>%
-  footnote(number = notes,
-           footnote_as_chunk = FALSE,
-           threeparttable=TRUE
-           ) 
+tbl %>%
+  opt_footnote_marks(marks = "numbers") %>%
+  tab_options(table.font.size = "small")
 
 ```
 
@@ -728,6 +734,7 @@ Finally, regardless of the conversion sets used, the de-novo calculation was rep
 
 ```{r}
 #| label: tbl-lit-summary-outcomes
+#| eval: true
 
 exemplars_summary_table <- exemplars_summary %>%
   select(authors,
@@ -735,34 +742,39 @@ exemplars_summary_table <- exemplars_summary %>%
          control_total_ome, intervention_total_ome, calculated_diff,
          min_diff, max_diff)
 
-
-options(knitr.kable.NA = '')
-
-table <- kable(
-  exemplars_summary_table,
-  format    = fmt,
-  escape    = FALSE,
-  col.names = c(
-    "Authors", 
-    "Control group", "Intervention group", "Difference",
-    "Control group", "Intervention group", "Difference",
-    "Lower bound", "Upper bound"
-  ),
-  align  = "llllcccccccc",
-  digits = 1
-) |>
-  add_header_above(c(
-    " "              = 1,
-    "Study reported outcome"     = 3,
-    "De Novo calculated outcome" = 3,
-    "Range of estimates"         = 2
-  )) |>
-  kable_styling(bootstrap_options = "striped",
-                              latex_options = "striped") %>%
-  column_spec(4, bold=T)%>%
-  column_spec(7, bold=T)
-
-table
+exemplars_summary_table %>%
+  gt() %>%
+  tab_spanner(
+    label = "Study reported outcome",
+    columns = c(reported_control_group_mean, reported_intervnetion_group_mean, reported_diff)
+  ) %>%
+  tab_spanner(
+    label = "De Novo calculated outcome",
+    columns = c(control_total_ome, intervention_total_ome, calculated_diff)
+  ) %>%
+  tab_spanner(
+    label = "Range of estimates",
+    columns = c(min_diff, max_diff)
+  ) %>%
+  cols_label(
+    authors = "Authors",
+    reported_control_group_mean = "Control group",
+    reported_intervnetion_group_mean = "Intervention group",
+    reported_diff = "Difference",
+    control_total_ome = "Control group",
+    intervention_total_ome = "Intervention group",
+    calculated_diff = "Difference",
+    min_diff = "Lower bound",
+    max_diff = "Upper bound"
+  ) %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_body(columns = c(reported_diff, calculated_diff))
+  ) %>%
+  fmt_number(
+    columns = where(is.numeric),
+    decimals = 1
+  )
 ```
 
 This table highlights the difficulty in re-calculating the total opioid burdens that the authors have produced. This is likely due to a number of assumptions as details in the methods such as estimating mean values from medians and assuming medication routes. Only one study, Fedorka 2025, showed no sensitivity to the conversion value set used @fedorkaLiposomalBupivacaineBupivacaine2025. This is because, in the RCT only oxycodone was used in the post-operative period, as so whilst the group estimates may vary, the treatment effect percentage is fixed at 10%.  
@@ -856,12 +868,22 @@ Generative artificial intelligence tools where used to aid the production of cod
 #| message: false
 #| warning: false
 #| output: asis
-options(googlesheets4_quiet = TRUE)
+#| eval: false
+
 tbl_authors <- googlesheets4::read_sheet("123JiCxSHvA7Wiaz6tU25B7Wq27Ty_cV7n6UUqlhyvrY",sheet = 2)
 aut <- plume::Plume$new(tbl_authors, dotted_initials = F)
 aut$get_contributions(roles_first = T)
 ```
 
+Conceptualization: DW, MW and SH
+Data curation: DW
+Formal analysis: DW
+Funding acquisition: MW and SH
+Methodology: DW
+Supervision: MW and SH
+Visualization: DW
+Writing - original draft: DW
+Writing - review & editing: DW, MW and SH
 
 ::: {.content-visible when-format="pdf"}
 \listoffigures

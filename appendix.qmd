@@ -354,6 +354,7 @@ ggplot(plot_data, aes(x = delta_ome)) +
 
 ### Hypothetical study simulation {#sec-appendix-sim-design}
 
+
 ```{r}
 
 t_0 = as.Date("2020-01-01")
@@ -550,6 +551,7 @@ plot_simple_grid_t
 ### Power calculation {#sec-appendix-simulation-power}
 
 In the first part of the experiment a large effect size is used.
+
 
 For a study period of `r round(study_length_years,1)` years and a annual case volume of `r case_volume` the total number of expected study participants is `r total_study_population`, of which we would expect `r round(total_robotic,1)` to be robotic cases and `r round(total_non_robotic,1)`  given a `r round(robot_length_years,1)` year period where `r scales::percent(proportion_robotic)` of cases are performed robotically.
 

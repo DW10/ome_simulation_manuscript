@@ -9,3 +9,4 @@ _book/*
 manuscript_files/*
 .posit/assistant
 pre_render.R
+

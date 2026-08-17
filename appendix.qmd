@@ -146,8 +146,8 @@ The simple simulation find that the observed difference is a hyperbolic parabola
 
 $$
 \begin{aligned}
-\Delta \mu_{\text{OME}} &= k \cdot \Delta p_i \cdot \delta c_i \\
-k &= \frac{\Delta \mu_{\text{OME}}}{\Delta p_i \cdot \delta c_i }
+\Delta \mu_{\text{OME}} &= k \cdot \Delta p_i \cdot  \epsilon \\
+k &= \frac{\Delta \mu_{\text{OME}}}{\Delta p_i \cdot \epsilon }
 \end{aligned}
 $$ {#eq-results-simple-2-proof}
 
@@ -318,7 +318,10 @@ knitr::kable(neilsen_ranges_table)
 
 ```{r}
 #| label: fig-lit-outcome-dist
-#| eval: false
+#| fig-cap: "Density plot of the possible treatment effects calculated de-novo across the grid values for opioid conversion values."
+#| eval: true
+
+library(ggplot2)
 
 # 2. Plot with facets
 ggplot(plot_data, aes(x = delta_ome)) +
@@ -337,7 +340,6 @@ ggplot(plot_data, aes(x = delta_ome)) +
     strip.background = element_rect(fill = "gray95"),
     panel.spacing = unit(1, "lines")
   )
-
 
 ```
 
@@ -367,7 +369,7 @@ if (PRODUCTION_QUALITY) {
   space = 0.05
 } else {
   n = 1000
-  space = 0.5
+  space = 0.1
 }
 
 simple_results_mu <- data.frame(p = numeric(), e = numeric(), diff = numeric(), mu=numeric())
@@ -434,7 +436,7 @@ if (PRODUCTION_QUALITY) {
   space = 0.05
 } else {
   n = 1000
-  space = 0.5
+  space = 0.1
 }
 
 simple_results_t <- data.frame(p = numeric(), e = numeric(), diff = numeric(), t=numeric())
@@ -574,7 +576,7 @@ ggplot(power_df, aes(x = d, y = power)) +
   scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2),
                      labels = scales::percent_format()) +
   labs(x = "Cohen's *d* (standardised effect size)",
-       y = "Power (1 − β)") +
+       y = "Power") +
   theme_classic() +
   theme(axis.title.x = ggtext::element_markdown())
 ```

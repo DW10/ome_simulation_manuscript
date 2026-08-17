@@ -3,9 +3,12 @@ project:
   pre-render: pre_render.R
 brand: ucl_brand.yml
 book:
-  title: The problem with the OME metric
+  title: 'The inherent bias in studies of reporting outcomes using total opioid burden
+    metrics: a simulation study'
   search: false
-  downloads: [pdf,docx]
+  downloads:
+    - pdf
+    - docx
   chapters:
     - index.qmd
     - manuscript.qmd
@@ -16,6 +19,7 @@ book:
 comments:
   hypothesis:
     theme: clean
+    openSidebar: false
 bibliography: /Users/dylanwhitaker/Library/CloudStorage/OneDrive-UniversityCollegeLondon/refs.bib
 csl: elsevier-vancouver.csl
 format:
@@ -36,12 +40,14 @@ format:
     fig-width: 5
     fig-height: 3
     fig-dpi: 300
+    output-file: ome_simulation
   docx:
     toc: true
     fig-align: center
     fig-width: 5
     fig-height: 3
     fig-dpi: 300
+    output-file: ome_simulation
 prefer-html: true
 crossref:
   lof-title: List of Figures

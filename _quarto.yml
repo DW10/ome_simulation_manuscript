@@ -40,7 +40,7 @@ format:
     fig-width: 5
     fig-height: 3
     fig-dpi: 300
-    output-file: ome_simulation
+    output-file: ome_simulation.pdf
   docx:
     toc: true
     fig-align: center

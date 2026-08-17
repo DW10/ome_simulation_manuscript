@@ -1,5 +1,4 @@
 ---
-title: "Manuscript"
 output: html_document
 editor_options: 
   chunk_output_type: console
@@ -177,7 +176,7 @@ A hypothetical realistic study was designed as outlined in @sec-appendix-sim-des
 
 The difference in proportion ($\Delta p_i$) between groups is simulated using a hypothetical medication shortage that due to temporal differences in the groups, effects the treatment group to a greater extent. The ground truth potency of oxycodone is set to `r potency_oxycodone_truth`. The post-operative opioid requirement was sampled from a normal distribution ($\mathbb{E} =$ `r mu_tot` with $\sigma =$ `r sd_tot`) for the non-robotic group with the average treatment effect of the intervention is set to `r robot_effect_mg` OME mg as informed by a power analysis in @sec-appendix-simulation-power. OME was calculated as per described previously.
 
-The simulation was performed once with parameters specified in @nte-sim-design and then across the grid values for the rate of post-operative morphine prescribed between `r percent(p_morph_high)` and `r percent(p_morph_low)` with conversion values of oxycodone:morphine between `r conversion_value_low`:1 and `r conversion_value_high`:1. The result for each study was the measured difference between the group means of the control and intervention groups ($\Delta \mu_{\text{OME}}$), the observed difference in proportion ($\Delta p_i$) and the error in the conversion value ($\epsilon$).  
+The simulation was performed once with parameters specified in @sec-appendix-sim-design and then again across the grid values for the rate of post-operative morphine prescribed between `r percent(p_morph_high)` and `r percent(p_morph_low)` with conversion values of oxycodone:morphine between `r conversion_value_low`:1 and `r conversion_value_high`:1. The result for each study was the measured difference between the group means of the control and intervention groups ($\Delta \mu_{\text{OME}}$), the observed difference in proportion ($\Delta p_i$) and the error in the conversion value ($\epsilon$).  
 
 All simulations were performed in `r version$version.string` and all code and materials are available on [Github](https://github.com/DW10/ome_simulation_manuscript).
 
@@ -770,7 +769,7 @@ exemplars_summary_table %>%
 This table highlights the difficulty in re-calculating the total opioid burdens that the authors have produced. This is likely due to a number of assumptions as details in the methods such as estimating mean values from medians and assuming medication routes. Only one study, Fedorka 2025, showed no sensitivity to the conversion value set used @fedorkaLiposomalBupivacaineBupivacaine2025. This is because, in the RCT only oxycodone was used in the post-operative period, as so whilst the group estimates may vary, the treatment effect percentage is fixed at 10%.  
 
 
-@fig-lit-outcomes demonstrates the reported difference in opioid burden (red cross) compared to the de-novo calculated difference (green cross). When the the grid search of the possible combinations of the values used by Neilsen was performed, the minimum and maximum values are demonstrated by the orange whiskers with the distribution within each given in @fig-lit-outcome-dist.
+@fig-lit-outcomes demonstrates the reported difference in opioid burden (red cross) compared to the de-novo calculated difference (green cross). When the the grid search of the possible combinations of the values used by Neilsen was performed, the minimum and maximum values are demonstrated by the orange whiskers.
 
 ```{r}
 #| label: fig-lit-outcomes

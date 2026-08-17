@@ -354,6 +354,40 @@ ggplot(plot_data, aes(x = delta_ome)) +
 
 ### Hypothetical study simulation {#sec-appendix-sim-design}
 
+```{r}
+
+t_0 = as.Date("2020-01-01")
+t_end = as.Date("2025-12-31")
+t_robot = as.Date("2023-01-01")
+study_length_years <- as.numeric(difftime(t_end, t_0,  unit="weeks"))/52.25
+robot_length_years <- as.numeric(difftime(t_end, t_robot,  unit="weeks"))/52.25
+
+case_volume <- 100
+total_study_population <- case_volume * study_length_years
+proportion_robotic <- 0.8
+total_robotic <- robot_length_years * case_volume * proportion_robotic
+total_non_robotic = total_study_population - total_robotic
+
+proportion_morphine = 0.7
+oxycodone_shortage = c(as.Date("2024-01-01"), as.Date("2024-12-31"))
+
+mu_tot = 50
+sd_tot = 10
+potency_oxycodone_truth = 1.85
+potency_oxycodone_ome = 2
+
+robot_effect_size = 0.8
+
+mu_robotic = mu_tot * robot_effect_size
+mean_diff = mu_robotic - mu_tot
+mean_diff_sd = mean_diff/sd_tot
+
+```
+
+:::{.callout-warning}
+Ensure variables match main mauscript values
+:::
+
 A research team wish to understand if the use of a robot for a surgical procedure, reduces the post-operative pain.
 
 The average case volume is `r case_volume` procedures per year, these were all performed using non-robotic surgery until `r format(t_robot, "%e %b %y")` when a robot was acquired, and since `r scales::percent(proportion_robotic)` of cases are performed with the robot. All EHR data was collected between `r format(t_0, "%e %b %y")` and `r format(t_end, "%e %b %y")`.
@@ -516,36 +550,6 @@ plot_simple_grid_t
 ### Power calculation {#sec-appendix-simulation-power}
 
 In the first part of the experiment a large effect size is used.
-
-```{r}
-
-t_0 = as.Date("2020-01-01")
-t_end = as.Date("2025-12-31")
-t_robot = as.Date("2023-01-01")
-study_length_years <- as.numeric(difftime(t_end, t_0,  unit="weeks"))/52.25
-robot_length_years <- as.numeric(difftime(t_end, t_robot,  unit="weeks"))/52.25
-
-case_volume <- 100
-total_study_population <- case_volume * study_length_years
-proportion_robotic <- 0.8
-total_robotic <- robot_length_years * case_volume * proportion_robotic
-total_non_robotic = total_study_population - total_robotic
-
-proportion_morphine = 0.7
-oxycodone_shortage = c(as.Date("2024-01-01"), as.Date("2024-12-31"))
-
-mu_tot = 50
-sd_tot = 10
-potency_oxycodone_truth = 1.85
-potency_oxycodone_ome = 2
-
-robot_effect_size = 0.8
-
-mu_robotic = mu_tot * robot_effect_size
-mean_diff = mu_robotic - mu_tot
-mean_diff_sd = mean_diff/sd_tot
-
-```
 
 For a study period of `r round(study_length_years,1)` years and a annual case volume of `r case_volume` the total number of expected study participants is `r total_study_population`, of which we would expect `r round(total_robotic,1)` to be robotic cases and `r round(total_non_robotic,1)`  given a `r round(robot_length_years,1)` year period where `r scales::percent(proportion_robotic)` of cases are performed robotically.
 

@@ -2,12 +2,10 @@
 .Rhistory
 .RData
 .Ruserdata
-
 /.quarto/
-
 data/*
 *.csv
-
 _book/*
 manuscript_files/*
 .posit/assistant
+pre_render.R

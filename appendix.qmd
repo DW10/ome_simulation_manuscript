@@ -79,6 +79,10 @@ $$
 
 ### Sensitivity of the arithmetic mean to differing proportions of $\bar{d_i}$ {#sec-ome-difference-proof}
 
+:::{.callout-warning}
+This section should be deleted.
+:::
+
 #### True treatment effect
 
 Equation @eq-mu-ome-final outlines the calculation of a sample mean OME within a finite group. At the population level, using a simplified linear, confounder-free treatment effect, the expected OME of the treated population $\mathbb{E}[\text{OME} \mid T = 1]$ is modelled as a function of the baseline expectation $\mathbb{E}[\text{OME} \mid T = 0]$ and a standardized treatment effect ($t$) scaled by the baseline population standard deviation $\sigma_p$ (assuming homoscedasticity)
@@ -136,10 +140,11 @@ $$ {#eq-final-decomposition}
 The first term reflects genuine dose-intensity change among treated patients: this is the component the estimator in @eq-t-estimator intends to recover as $t \cdot \sigma_p$. The second term arises purely from differing prescribing proportions $p_i^{(G)}$ between groups and is not attributable to treatment. This means that the the difference in group means $\Delta\mu_{\text{OME}}$ will only be equal to $t \cdot \sigma_p$ in the special case where the prescribing portions between groups are equal $p_i^{(T=1)} = p_i^{(T=0)}$, otherwise it only approximates the treatment effect. 
 
 
+
 ### Simulation study
 
-:::{.callout-danger}
-TO REVIEW
+:::{.callout-warning}
+This section should be deleted.
 :::
 
 The simple simulation find that the observed difference is a hyperbolic parabola of $\Delta p_i$ and $\delta c_i$ with a scaling constant $k$.
@@ -245,7 +250,7 @@ $$ {#eq-k-potency}
 
 ## Literature search
 
-## PUBMED search terms {#sec-appendix-pubmed-1}
+### PUBMED search terms {#sec-appendix-pubmed-1}
 
 On 14th of July 2026, a search was performed on the PUBMED online search tool using the following search term to identify the volume of literature using opioid equivalence metrics in research. The search term was "(Milligram morphine equivalent) OR (Oral morphine equivalent)" with a 10 year filter was used and yielded the following full search string. There was 4,031 results. 
 
@@ -314,12 +319,13 @@ neilsen_ranges_table <- data.frame(
 knitr::kable(neilsen_ranges_table)
 ```
 
-@fig-lit-outcome-dist is a density plot for each study, of the possible observed diffreneces by acros the grid search. 
 
 ```{r}
 #| label: fig-lit-outcome-dist
 #| fig-cap: "Density plot of the possible treatment effects calculated de-novo across the grid values for opioid conversion values."
-#| eval: true
+#| eval: false
+
+### EVAL IS FALSE ###
 
 library(ggplot2)
 
@@ -346,6 +352,18 @@ ggplot(plot_data, aes(x = delta_ome)) +
 
 ## Simulation study
 
+### Hypothetical study simulation {#sec-appendix-sim-design}
+
+A research team wish to understand if the use of a robot for a surgical procedure, reduces the post-operative pain.
+
+The average case volume is `r case_volume` procedures per year, these were all performed using non-robotic surgery until `r format(t_robot, "%e %b %y")` when a robot was acquired, and since `r scales::percent(proportion_robotic)` of cases are performed with the robot. All EHR data was collected between `r format(t_0, "%e %b %y")` and `r format(t_end, "%e %b %y")`.
+
+All patients are treated with a Patient Controlled Analgesia (PCA) after their operation and on average the anaesthetist will prescribe a morphine PCA to `r scales::percent(proportion_morphine)` of patients and an oxycodone PCA to the remainder. No other opioid medication was administered. 
+
+They design a retrospective cohort study for patients treated with a robotic procedure and those without. The primary outcome is the total opioid requirement, as measured in OME mg, in the first 24 hours post-operatively as a surrogate for the total pain caused by the surgical procedure.
+
+During the study there was a national shortage of oxycodone from `r oxycodone_shortage[1]` to `r oxycodone_shortage[2]` and at which time all patients were prescribed a morphine PCA. Whilst the authors described this in their methods section, they did feel it would impact their results as the differing opioids were already accounted for in their OME metric. 
+
 ### Effect of $\mu_{\text{OME}}^{\text{(control)}}$ on simple simulation {#sec-appendix-sim-1}
 
 To investigate the scaling term of $\mu_{\text{OME}}^{\text{(control)}}$ on the observed treatment effect, 6 further simulations were performed, each as described in @sec-manuscript-simple-sim but with a different $\mu_{\text{OME}}^{\text{(control)}}$ between 0 OME mg and 10 OME mg. The treatment effect was fixed at 0. 
@@ -353,6 +371,8 @@ To investigate the scaling term of $\mu_{\text{OME}}^{\text{(control)}}$ on the 
 ```{r}
 #| echo: false
 #| message: false
+#| fig-width: 6
+#| fig-height: 6
 
 library(ggplot2)
 library(dplyr)
@@ -527,7 +547,7 @@ mean_diff_sd = mean_diff/sd_tot
 
 ```
 
-For a study period of `r study_length_years` years and a annual case volume of `r case_volume` the total number of expected study participants is `r total_study_population`, of which we would expect `r total_robotic` to be robotic cases and `r total_non_robotic`  given a `r robot_length_years`year period where `r scales::percent(proportion_robotic)` of cases are performed robotically.
+For a study period of `r round(study_length_years,1)` years and a annual case volume of `r case_volume` the total number of expected study participants is `r total_study_population`, of which we would expect `r round(total_robotic,1)` to be robotic cases and `r round(total_non_robotic,1)`  given a `r round(robot_length_years,1)` year period where `r scales::percent(proportion_robotic)` of cases are performed robotically.
 
 Assuming a `r mu_tot` mg (SD: `r sd_tot` mg) mean opioid requirement for the non-robotic population, we can calculate the expected mean OME requirement for robotic and non-robotic cases given a `r robot_effect_size` effect size. The expected mean OME requirement for robotic cases is `r mu_robotic` mg giving a mean difference of `r  mean_diff` mg or `r mean_diff_sd` standard deviations.
 
@@ -540,7 +560,7 @@ power_exp_1 <- pwr.t2n.test(n1 = total_non_robotic,
              alternative = "two.sided")
 
 ```
-Given the inital experimental set up it is clear that the study is very highly powered with the power value to be calculated at `r scales::percent(power_exp_1$power)`.
+Given the initial experimental set up it is clear that the study is very highly powered with the power value to be calculated at `r scales::percent(power_exp_1$power)`.
 
 @fig-power-curve demonstrated the power curve for the comparison of OME between robotic and non-robotic surgical groups. The dashed lines indicate the minimum detectable effect size at 80% power.
 

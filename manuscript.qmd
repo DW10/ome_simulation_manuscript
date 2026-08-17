@@ -55,46 +55,35 @@ scale_fill_academic <- function() {
 
 # Background 
 
-:::{.callout-warning}
-Background drafted, some more citations on the various commentery on OME/metrics/issues from the literature to come. 
-:::
+Opioid medications are an important pillar of analgesia in medicine, used across a range of specialities and patients. There are a wide range of opioids, some naturally derived and others synthetic, each with their own potency. While a wide range of factors may influence the potency of a specific opioid in a specific patient, there has long been a need to calculate the eqi-analgesic dose, or the dose of a medication that would provide an equal amount of analgesia compared to a reference. Capturing opioid use is an important aspect of peri-operative pain research @joshiCriticalApproachResearch2025. 
 
-## Origin of opioid equivalence and eqipotency
+The need for agreed conversion values has lead to a number of publications over the last 20 years aiming to formalise the differing potencies @mcphersonDemystifyingOpioidConversion2010 \[**Add more examples**\]. Much of this literature comes from the domain of palliative care in the context of opioid rotation and looked at multiple single opioid small studies to establish conversion values. McPherson described a range of limitations in the use of these equialangesic tables including the source of the data, lack of patient specific variables and bi-directionality of equivalence values @mcphersonWhyEquianalgesicTables2020. Despite this, a set of approximate conversion values offer a helpful set of starting points when prescribing different opioids, abet with a large degree of inter-prescriber variation @rennickVariabilityOpioidEquivalence2016. 
 
-Opioid medications are an important pillar of analgesia in medicine, used across a range of specialities and patients. There are a wide range of opioids, some naturally derived and others synthetic, each with their own potency. While a wide range of factors may influence the potency of a specific opioid in a specific patient, there has long been a need to calculate the eqi-analgesic dose, or the dose of a medication that would provide an equal amount of analgesia compared to a reference. 
+The equi-analgesic conversion set has offered a new opportunity in research, the ability to quantify the total opioid burden for a group of patients.  With the increase in electronic health records, opportunities to now use total opioid use as either a feature or an outcome has become increasingly prevalent. In the last 5 years there have been 4,031 papers using the terms *"milligram morphine equivalent"* (MME) or *"oral morphine equivalent"* (OME) (@sec-appendix-pubmed-1). 
 
-The need for agreed conversion values has lead to a number of publications over the last 20 years aiming to formalise the differing potencies. Much of this literature comes from the domain of palliative care in the context of opioid rotation and looked at multiple single opioid small studies to establish conversion values. McPherson described a range of limitations in the use of these equialangesic tables including the source of the data, lack of patient specific variables and bi-directionality of equivalence values. @mcphersonWhyEquianalgesicTables2020. Despite this, a set of approximate conversion values, taken with clinical experience offer a helpful set of starting points when prescribing different opioids 
+In 2016, Neilsen *et. al.* published on the first formal OME conversion tables for the intention of research as opposed to clinical care @nielsenSynthesisOralMorphine2016. The authors aimed to source a range of national guidelines and recommended a single value for each opioid and route with a upper and lower quartile. This "common conversion set" paved the way for the idea that all opioid research should be using a single unifed conversion set. It was clear in the literature that using a range of different conversion sets would not produce equitable or comparable results\[**Add citations**\]. In an attempt to unify value sets, in 2022 the Center for disease control (CDC) produced their own value set, that obligated any National Institute for Health (NIH) researches working in opioid research to use their opioid conversions @dowellCDCClinicalPractice2022. Furthermore, variability between trials can be introduced using differing calculation methodologies, promoting the development of a NIH MME calculator @adamsStandardizingResearchMethods2025.
 
-The equi-analgesic conversion set has offered a new opportunity in research, the ability to quantify the total opioid burden for a group of patients.  With the increase in electronic health records, opportunities to now use total opioid use as either a feature or an outcome has become increasingly prevalent. In the last 5 years there have been 4,031 papers using the terms *"Milligram morphine equivalent"* (MME) or *"Oral morphine equivalent"* (OME) (@sec-appendix-pubmed-1). 
+Two important aspects that have not been discussed in the literature is the bias introduced by the proportion of each opioid and how this interacts with the error of the conversion values used. 
 
-In 2016, Neilsen *et. al.* published on the first formal OME conversion tables for the intention of research @nielsenSynthesisOralMorphine2016. The authors aimed to source a range of national guidelines and recommended a single value for each opioid and route with a upper and lower quartile. This "common conversion set" paved the way for the idea that all opioid research should be using a single unifed conversion set. It was clear in the literature that using a range of different conversion sets would not produce equitable or comparable results\[**Add citations**\]. In an attempt to unify value sets, in 2022 the Center for disease control (CDC) produced their own value set an obligated any NIH researches working in opioid research to use their opioid conversions @dowellCDCClinicalPractice2022. 
-
-A range of papers have highlighted some of the limitations and issues with opioid conversions sets in research. Namely the lack of accounting for inter-patient variability and the differential application of conversion sets. \[**Add citations**\]
-
-Two aspects that have not been covered are the dependence on the proportion of each opioid and the error within the conversion values used. 
-\[Add citations about who said/didn't say what\]
+## Total opiopid burden metrics
 
 :::{.callout-warning}
-We have not explained WHY OME/total opioid burden is a useful or interesting metric. This is an implicit assumption left to the reader, is this ok? 
+Should this section be moved?
 :::
 
-## Calculating opioid equivalence
-
-In clinical practice the term **potency** is used to describe the relative strength of one opioid compared to another. The **eqi-potency** of a medication is commonly understood to be the dose required to achieve equal effect, and in the case of opioids, the equianalgesic effect.\[**Add citations**\] Thus @eq-potency describes the relationship between the conversion value $c$ and the potency $\rho$ of a given medication $i$ via a given route $r$.
+In clinical practice the term **potency** is used to describe the relative strength of one opioid compared to another. The **eqi-potency** of a medication is commonly understood to be the dose required to achieve equal effect, and in the case of opioids, the equi-analgesic effect @bhatnagarOpioidEquivalency2026. Thus @eq-potency describes the relationship between the conversion value $c$ and the potency $\rho$ of a given medication $i$ via a given route $r$. An example to demonstrate how opioid conversion is performed in clinical practice is provided in @sec-conversion-example.
 
 $$c_{i,r} = \frac{1}{\rho_{i,r}}
 $$ {#eq-potency} 
 
-A worked example to demonstrate how opioid conversion is performed in clinical practice is provided in @sec-conversion-example.
-
-The technique of comparing opioid equivalent doses has lead to the development of a new metric, the **total opioid burden**. By converting each opioid medication into it's equi-analgesic dose of the reference medication, then calculating the sum, the resulting value is an estimate of the total opioid analgesic effect administered. The total opioid burden metric is often presented as the weighted sum of opioids administered and provided in units of  of **oral morphine equivalent milligrams (OME mg)** or **milligram morphine equivalent (MME)**. 
+The technique of comparing opioid equivalent doses has lead to the development of a new metric, the **total opioid burden**. By converting each opioid medication into its equi-analgesic dose of the reference medication, then calculating the sum, where the resulting value is an estimate of the total opioid analgesic effect administered. The total opioid burden metric is often presented as the weighted sum of opioids administered and provided in units of **oral morphine equivalent milligrams (OME mg)** or **milligram morphine equivalent (MME)**. 
 
 We can define the total opioid burden $\text{OME}_j$ as the sum of the dose $d$ for medication $i$ in the set of medications $\mathbf{M}$ multiplied by the conversion value $c$ for a given route $r$ for patient $j$ (@eq-ome). $\text{OME}_j$ is often  expressed as a total of all opioids administered or within a specific time frame (*e.g.* 24 hours post-operative).
 
 $$\text{OME}_j = \sum_{i\in\mathbf{M}} d_i c_{i,r}
 $${#eq-ome}
 
-From this, the arithmetic mean of OME values $\mu_{\text{OME}}^{(G)}$ for a given group $G$ is often calculated and used as an outcome in studies aiming to estimate the average opioid burden. As the $\mu_{\text{OME}}^{(G)}$ is a **mean of weighted sums** it can instead be expressed as a **weighted sum of means** whereby the mean dose of a given medication within the group $\bar{d_i}$ is weighted by the conversion values $c_{i,r}$ (@eq-mu-ome-final with rearrangement provided in @sec-equation-proof).
+From this, the arithmetic mean of OME values $\mu_{\text{OME}}^{(G)}$ for a given group $G$ is often calculated and used as an outcome in studies aiming to estimate the average opioid burden. As the $\mu_{\text{OME}}^{(G)}$ is a **mean of weighted sums** it can instead be expressed as a **weighted sum of means** whereby the mean dose of a given medication within the group $\bar{d_i}$ is weighted by the conversion values $c_{i,r}$ (@eq-mu-ome-final, rearrangement provided in @sec-equation-proof).
 
 $$\begin{aligned}
 \mu_{\text{OME}}^{(G)} &= \frac{1}{|G|} \sum_{j=G} \text{OME}_j\\
@@ -111,7 +100,7 @@ We will aim to:
 
 1. Simulate and describe the dependence of differing opioid proportions and errors in conversion values on the the OME values calculated. 
 
-2. Investigate the methods of calculating total opioid burden in the peri-operative and surgical literature.
+2. Investigate the methodology and reporting of total opioid burden in the peri-operative and surgical literature.
 
 # Methods
 
@@ -158,7 +147,6 @@ for(p in seq(p_min, p_max, by = 0.05)){
 
 The simulation was then performed for the range of grid values for ($\Delta p_i \in$ `r p_min`, `r p_max` and $\epsilon \in$ `r e_min`, `r e_max` with all other parameters fixed. The result for each study was the measured difference between the group means of the control and intervention groups ($\Delta \mu_{\text{OME}} = \mu_{\text{OME}}^{\text{(control)}} - \mu_{\text{OME}}^{\text{(intervention)}}$).
 
-
 ### Hypothetical study simulation {#sec-manuscript-exemplar-sim}
 
 ```{r}
@@ -185,25 +173,17 @@ conversion_value_low = 1
 conversion_value_high = 3
 ```
 
-A hypothetical study was designed as outlined in @nte-sim-design and then simulated. 
-
-::: {#nte-sim-design .callout-note title="Simulated trial design" collapse=true appearance="simple"}
-A research team wish to understand if the use of a robot for a surgical procedure, reduces the post-operative pain.
-
-The average case volume is `r case_volume` procedures per year, these were all performed using non-robotic surgery until `r format(t_robot, "%e %b %y")` when a robot was acquired, and since `r scales::percent(proportion_robotic)` of cases are performed with the robot. All EHR data was collected between `r format(t_0, "%e %b %y")` and `r format(t_end, "%e %b %y")`.
-
-All patients are treated with a Patient Controlled Analgesia (PCA) after their operation and on average the anaesthetist will prescribe a morphine PCA to `r scales::percent(proportion_morphine)` of patients and an oxycodone PCA to the remainder. No other opioid medication was administered. 
-
-They design a retrospective cohort study for patients treated with a robotic procedure and those without. The primary outcome is the total opioid requirement, as measured in OME mg, in the first 24 hours post-operatively as a surrogate for the total pain caused by the surgical procedure.
-
-During the study there was a national shortage of oxycodone from `r oxycodone_shortage[1]` to `r oxycodone_shortage[2]` and at which time all patients were prescribed a morphine PCA. Whilst the authors described this in their methods section, they did feel it would impact their results as the differing opioids were already accounted for in their OME metric. 
-:::
+A hypothetical realistic study was designed as outlined in @sec-appendix-sim-design and then simulated. 
 
 The difference in proportion ($\Delta p_i$) between groups is simulated using a hypothetical medication shortage that due to temporal differences in the groups, effects the treatment group to a greater extent. The ground truth potency of oxycodone is set to `r potency_oxycodone_truth`. The post-operative opioid requirement was sampled from a normal distribution ($\mathbb{E} =$ `r mu_tot` with $\sigma =$ `r sd_tot`) for the non-robotic group with the average treatment effect of the intervention is set to `r robot_effect_mg` OME mg as informed by a power analysis in @sec-appendix-simulation-power. OME was calculated as per described previously.
 
 The simulation was performed once with parameters specified in @nte-sim-design and then across the grid values for the rate of post-operative morphine prescribed between `r percent(p_morph_high)` and `r percent(p_morph_low)` with conversion values of oxycodone:morphine between `r conversion_value_low`:1 and `r conversion_value_high`:1. The result for each study was the measured difference between the group means of the control and intervention groups ($\Delta \mu_{\text{OME}}$), the observed difference in proportion ($\Delta p_i$) and the error in the conversion value ($\epsilon$).  
 
-All simulations were performed in `r version$version.string` and all code is available in @sec-sim. 
+All simulations were performed in `r version$version.string` and all code and materials are available on [Github](https://github.com/DW10/ome_simulation_manuscript).
+
+:::{.callout-warning}
+Reminder: Make github public before submission
+:::
 
 ## Part 2 - Literature Review
 
@@ -868,7 +848,9 @@ DW is supported by the Engineering and Physical Sciences Research Council (EP/Y0
 
 ## Acknowledgements
 
-The authors wish to thank the following the for their support. Dr Thomas Frost for early direction and support. University College London Hospitals National Health Service Foundation Trust Critical Care Special Interest Project Scheme.
+The authors wish to thank the following for their support. Dr Thomas Frost for early direction and support. University College London Hospitals National Health Service Foundation Trust Critical Care Special Interest Project Scheme.
+
+## Generative AI statement
 
 Generative artificial intelligence tools where used to aid the production of code, figures and tables. These tools included Gemini 3.1 models (Pro, Flash and Flash-Lite), Claude sonnet 4.6 (via Posit AI) and Github Copilot (via Posit Code Assistant). All ideas and methods are of the authors own, all text and code was reviewed and edited following generation.
 

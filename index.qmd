@@ -5,20 +5,15 @@ editor_options:
 ---
 
 ```{r set quality}
-PRODUCTION_QUALITY <- FALSE
-
-```
-::: {.callout-note}
-```{r print quality statement}
-
 #| output: asis
-if (PRODUCTION_QUALITY) {
-  cat("High quality render - Ready for review")
-} else {
-  cat("Low quality render.  Edit index.qmd to set `PRODUCTION_QUALITY <- TRUE` before review.")
+
+PRODUCTION_QUALITY <- FALSE
+if (!PRODUCTION_QUALITY) {
+  cat("::: {.callout-note}\n")
+  cat("Draft quality render\n")
+  cat(":::\n")
 }
 ```
-:::
 
 # Abstract {.unnumbered}
 

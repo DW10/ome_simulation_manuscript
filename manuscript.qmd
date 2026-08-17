@@ -672,7 +672,7 @@ ggplot(heatmap_data, aes(y = Opioid.proportions.within.group, x = Opioid.convers
 
 ```{r}
 #| label: tbl-lit-summary
-#| eval: true
+#| tbl-cap: "Summary table of litrature articles that presented breakdown by opioid groups."
 
 exemplars_summary <- exemplars_summary %>%
   left_join(papers_summary, by="authors") %>%
@@ -723,7 +723,12 @@ for (i in seq_along(note_indices)) {
 
 tbl %>%
   opt_footnote_marks(marks = "numbers") %>%
-  tab_options(table.font.size = "small")
+  tab_options(table.font.size = "small",
+              container.width = pct(100)) %>%
+  cols_width(
+    Title ~ pct(40),
+    population ~ pct(20)
+  )
 
 ```
 
@@ -734,7 +739,8 @@ Finally, regardless of the conversion sets used, the de-novo calculation was rep
 
 ```{r}
 #| label: tbl-lit-summary-outcomes
-#| eval: true
+#| tbl-cap: "Table of reported outcomes and de-novo calalculated outcomes."
+
 
 exemplars_summary_table <- exemplars_summary %>%
   select(authors,
@@ -774,6 +780,10 @@ exemplars_summary_table %>%
   fmt_number(
     columns = where(is.numeric),
     decimals = 1
+  ) %>%
+  tab_options(
+  table.font.size = "small",
+  container.width = pct(100)
   )
 ```
 
@@ -784,6 +794,7 @@ This table highlights the difficulty in re-calculating the total opioid burdens 
 
 ```{r}
 #| label: fig-lit-outcomes
+#| fig-cap: "Point and whisker plot of the reported and de-novo calcualted difference in the intervention group for opioid outcomes. Red cross shows the reported percentage intervention group outcome, green cross's the de novo point estiamte using hte values reported by neilsen and the oragne error bar the range using the grid values across the ranges reproted by Neilsen. All effects given as the percentage change in the intervention group compared to the control."
 
 ggplot(exemplars_summary, aes(y=authors))+
   geom_errorbar(aes(xmin=min_delta, xmax=max_delta), color = "orange")+

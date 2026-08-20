@@ -3,6 +3,8 @@ output: html_document
 editor_options: 
   chunk_output_type: console
 ---
+
+# Background 
 ```{r source_files}
 #| echo: FALSE
 #| message: FALSE
@@ -52,7 +54,7 @@ scale_fill_academic <- function() {
 
 ```
 
-# Background 
+
 
 Opioid medications are an important pillar of analgesia in medicine, used across a range of specialities and patients. There are a wide range of opioids, some naturally derived and others synthetic, each with their own potency. While a wide range of factors may influence the potency of a specific opioid in a specific patient, there has long been a need to calculate the eqi-analgesic dose, or the dose of a medication that would provide an equal amount of analgesia compared to a reference. Capturing opioid use is an important aspect of peri-operative pain research @joshiCriticalApproachResearch2025. 
 

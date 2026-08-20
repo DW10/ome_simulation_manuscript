@@ -320,4 +320,13 @@ neilsen_ranges <- list(
   "hydrocodone" = c(1, 1.33)
 )
 
+neilsen_ranges <- list(
+  "morphine" = c(2),
+  "fentanyl" = c(80,100,136),
+  "oxycodone" = c(1.5,3),
+  "tramadol" = c(0.13, 0.2),
+  "hydromorphone" = c(5),
+  "hydrocodone" = c(1)
+)
+
 ```

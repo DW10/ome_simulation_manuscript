@@ -267,6 +267,13 @@ The search term was executed on the PUBMED online search tool on 7th July 2026.
 (((((("opioid equivalent" OR "oral morphine equivalence" OR "oral morphine equivalent" OR "oral morphine equivalents" OR "OME" OR "morphine milligram equivalents" OR "morphine milligram equivalence" OR "MME" OR "morphine equivalent daily dose" OR "MEDD") AND ("perioperative" OR "peri-operative" OR "postoperative" OR "post-operative" OR "surgical" OR "surgery" OR "post-surgical" OR "postsurgical"))) AND ("2025/01/01"[Date - Publication] : "2025/12/31"[Date - Publication]))) AND ("clinical trial"[Filter] OR "clinical trial" OR "controlled clinical trial" OR "randomized controlled trial" OR "interventional" OR "intervention study" OR "clinical trials as topic"[MeSH Terms] OR "cohort studies"[MeSH Terms] OR "cohort" OR "prospective" OR "retrospective" OR "case-control" OR "comparative study" OR "evaluation study"))
 :::
 
+### Litrature search includion criteria {#sec-appendix-inclusion}
+
+:::{.callout-warning}
+Add from Covidence
+:::
+
+
 ### Covidence extraction form {#sec-appendix-cov-extraction}
 
 Data was extracted from selected papers using the following proforma by a single author. Authors could leave notes to highlight specific features for later analysis required.

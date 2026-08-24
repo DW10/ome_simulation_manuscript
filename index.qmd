@@ -15,6 +15,33 @@ if (!PRODUCTION_QUALITY) {
 }
 ```
 
+:::{.callout-warning title="Note to reviwer"}
+
+Below is the outline of the "story" of the paper. 
+
+Intro:
+1) TOBM (Total opioid burden metrics) are widely used (4,000 papers in 5 years and included in core outcome sets)
+2) TOBM are not well defined, there is a number of conversion sets, calculators, and base units (OME vs MME)
+3) TOBM arose from clinical practice but has since been used in research, describe history of conversions sets and calculators
+4) There are potential issues with the metrics that have not been described before (dependance on proportion and error). Show how weighted sum of means = sum of weighted means.
+
+Methods and results:
+1) Show that there are dependences on proportion and error (red blue heatmap)
+2) Show that these dependance are in clinical meaningful experiment space with a hypothetical simulation (red blue heatmap with subsection)
+3) Show that the literature doesn't describe the metric methodology well (bar charts and heat map)
+4) Show the across a range of reasonable assumptions, the results of a study can vary significantly (point and whisker plot)
+
+Conclusion:
+1) We have shown that TOBM is a metric that has inherent bias
+2) This bias can change the results of a study by a significant amount depending on the situation
+3) The features need to detect the bias (breakdown of mean dose and conversion values used) are not well reported by the literature
+4) In the future we should:
+	1) Report the methodology of TOBM better
+	2) Aim to address the bias with improved conversion value estimates and statistical approaches to adjust for unbalanced groups.
+	
+:::
+
+
 # Abstract {.unnumbered}
 
 *Abstract to be written*

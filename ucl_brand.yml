@@ -34,11 +34,11 @@ color:
   danger: chart-dark-red
 
 typography:
-  fonts:
-    - family: "UCL Sans"
-    - family: "DM Sans"
-      source: google
-    - family: "Aptos"
+#  fonts:
+#    - family: "UCL Sans"
+#    - family: "DM Sans"
+#      source: google
+#    - family: "Aptos"
   base: "UCL Sans"
   headings: 
     family: "UCL Sans"

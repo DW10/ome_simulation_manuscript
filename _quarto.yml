@@ -20,7 +20,6 @@ comments:
   hypothesis:
     theme: clean
     openSidebar: false
-bibliography: /Users/dylanwhitaker/Library/CloudStorage/OneDrive-UniversityCollegeLondon/refs.bib
 csl: elsevier-vancouver.csl
 format:
   html:

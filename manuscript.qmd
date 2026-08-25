@@ -58,38 +58,25 @@ scale_fill_academic <- function() {
 
 # Introduction
 
-::: {.callout-warning title="Reader notes"}
-Intro:
-
-1) TOBM (Total opioid burden metrics) are widely used (4,000 papers in 5 years and included in core outcome sets)
-
-2) TOBM arose from clinical practice but has since been used in research, describe history of conversions sets and calculators
-
-3) TOBM are not well defined, there is a number of conversion sets, calculators, and base units (OME vs MME)
-
-4) There are potential issues with the metrics that have not been described before (dependance on proportion and error). Show how weighted sum of means = sum of weighted means.
-:::
-
-
 Opioid medications are an important pillar of analgesia in medicine, used across a range of specialities and patient groups. There are a wide range of opioids, some naturally derived, others synthetic, each with their own strength or ability to provide analgesia, commonly known as the potency  @bhatnagarOpioidEquivalency2026. Whilst a wide range of factors may influence the potency of a specific opioid in a specific patient, the equianalgesic dose of an opioid, is the dose that would  provide an equal amount of analgesia compared to the reference. @eq-potency describes the relationship between the conversion value $c$ and the potency $\rho$ of a given medication $i$ via a given route $r$. An example to demonstrate how opioid conversion is performed in clinical practice is provided in @sec-conversion-example.
 
 $$c_{i,r} = \frac{1}{\rho_{i,r}}
 $$ {#eq-potency} 
 
-Sets of equianalgesic conversion values ($c$) has offered a new opportunity in research, the ability to quantify and compare the **total opioid burden** ($\text{TOB}$) for each patient and across groups. $\text{TOB}_j$ is commonly understood to be the sum of the dose $d$ for medication $i$ in the set of medications $\mathbf{M}$ multiplied by the conversion value $c$ for a given route $r$ for patient $j$ (@eq-ome).
+Tables of equianalgesic conversion values ($c$) has offered a new opportunity in research, the ability to quantify the **total opioid burden** ($\text{TOB}$) for patients on multiple opioid medications and compare across groups of patients. $\text{TOB}_j$ is commonly understood to be the sum of the dose $d$ for medication $i$ in the set of medications $\mathbf{M}$ multiplied by the conversion value $c$ for a given route $r$ for patient $j$ (@eq-ome).
 
 $$\text{TOB}_j = \sum_{i\in\mathbf{M}} d_i c_{i,r}
 $${#eq-ome}
 
 $\text{TOB}_j$ is often expressed as a total of all opioids administered within a specific time frame (*e.g.* a hospital encounter, 24 hours postoperative or six months postoperative) and is commonly provided in units of **oral morphine equivalent milligrams** (OME mg) or **milligram morphine equivalent** (MME)
 
-In the last 5 years there have been 4,031 papers using the terms *"milligram morphine equivalent"* (MME) or *"oral morphine equivalent"* (OME) (@sec-appendix-pubmed-1). With increasingly digital health research, clinical trials and front line care, the opportunities aggregate medication administration data and to use total opioid burden metrics as either a feature or an outcome has become increasingly prevalent. Within the perioperative domain, total opioid use has become an important outcome metric and is included in a range of core outcome sets @joshiCriticalApproachResearch2025 \[Add evans Core outcome set\]. 
+In the last 5 years 4,031 papers have used the terms *"milligram morphine equivalent"* (MME) or *"oral morphine equivalent"* (OME) (@sec-appendix-pubmed-1). With increasingly digital health research, clinical trials and front line care, the opportunities aggregate medication administration data and to use total opioid burden metrics as either a feature or an outcome has become increasingly prevalent. Within the perioperative domain, total opioid use has become an important outcome metric and is included in a range of core outcome sets @joshiCriticalApproachResearch2025 @mylesUpdatedSystematicReview2025a. 
 
-#### History of value sets and their known limitations
+## History of value sets and their known limitations
 
-One of the first widely adopted opioid conversion value sets was produced by McPherson in 2010 @mcphersonDemystifyingOpioidConversion2010. However, like much of the early value sets, it was intended for use in clinical care and as such the value provided where to allow calculation of safe but reasonable doses in opioid reasonable. McPherson later described a range of limitations in the use of these equianalgesic tables including the small single opioid studies as source of the data, lack of patient specific variables and bi-directionality of equivalence values @mcphersonWhyEquianalgesicTables2020.
+One of the first widely adopted opioid conversion value sets was produced by McPherson in 2010 @mcphersonDemystifyingOpioidConversion2010. However, like much of the early value sets, it was intended for use in clinical care and as such the value provided where to allow calculation of safe but reasonable doses in opioid reasonable. McPherson later described a range of limitations in the use of these equianalgesic tables including the small sample size, single opioid studies as source of the data, lack of patient specific variables and bi-directionality of equivalence values @mcphersonWhyEquianalgesicTables2020.
 
-In 2016, Neilsen *et. al.* published on the first conversion tables with the intention of research @nielsenSynthesisOralMorphine2016. The authors aimed to source a range of national guidelines and recommended a single value for each opioid and route with a upper and lower quartiles. This "common conversion set" paved the way for the idea that all opioid research should be using a single unified conversion set. In an attempt ensure equitable or comparable results, the Center for Disease Control (CDC) produced their own value set in 2022 @dowellCDCClinicalPractice2022. Research teams who were funded by the National Institute for Health (NIH) where then mandated to use the CDC conversion sets for any TOB metrics calculated though the NIH Helping to End Addition Long-term (HEAL) initiative @CommonDataElements2026. Within the United Kingdom, the British National Formulary (BNF) provide an opioid conversion value set and recommend that the values are *"only ever an approximate guide"* @PrescribingPalliativeCare. Despite various attempts, there remains a significant amount of variation in the use of value sets both in clinical care and in research @rennickVariabilityOpioidEquivalence2016@yessaillianSystematicReviewMorphine2024. 
+In 2016, Neilsen published the first conversion tables with the intention of research @nielsenSynthesisOralMorphine2016. The authors reviewed a range of national guidelines and recommended a single value for each opioid and route with a upper and lower quartiles. This "common conversion set" paved the way for the idea that all opioid research should be conducted with a single unified conversion set. In an attempt ensure equitable and comparable results, the Center for Disease Control (CDC) produced their own value set in 2022 @dowellCDCClinicalPractice2022. Research teams who were funded by the National Institute for Health (NIH) where mandated to use the CDC conversion sets for any TOB metrics calculated though the NIH Helping to End Addition Long-term (HEAL) initiative @CommonDataElements2026. Within the United Kingdom, the British National Formulary (BNF) provide an opioid conversion value set and recommend that the values are *"only ever an approximate guide"* @PrescribingPalliativeCare. Despite various attempts, there remains a significant amount of variation in the use of value sets both in clinical care and in research @rennickVariabilityOpioidEquivalence2016@yessaillianSystematicReviewMorphine2024. 
 
 Beyond the specific conversion values used, there is also variability in how TOB metrics are calculated. To address the differing methodologies used, in 2025 the CDC released NIH MME calculator, with a set of clearly define metrics (give examples of 2 metrics) to ensure standardised methodologies @adamsStandardizingResearchMethods2025. Internationally, a range of other similar calculators exist, often with unclear or no documentation in how the metrics are calculated @costantinoVariabilityOnlineOpioid2022. Additionally, there is generally a European/American split in the base units used of OME or MME respectively. In OME, the base unit of reference is explicitly declared to be oral morphine, however in MME it is often unclear if the base unit is oral or intravenous morphine @SNOMEDCTEstimated @EVSExploreC153260. 
 
@@ -101,30 +88,22 @@ $$\begin{aligned}
 \end{aligned}
 $${#eq-mu-ome-final}
 
-An important aspect that have not been discussed in the literature is the inhert bias introduced by pooling weighted means such as in group mean TOB values. This bias in introduced when comparing unmatched groups, the degree and direction of the bias is influenced by the error of the conversion values used compared to the ground truth potency. 
+An important aspect that have not been discussed in the literature is the inherent bias introduced by pooling weighted mean such as in group mean TOB values. This bias in introduced when comparing unmatched groups with different proportions of opioid drug combinations within the overall summary metric. Whilst the ground truth values of potency are unknowns, the accuracy of the estimated values used is very important as the degree and direction of the bias is directly influenced by this error.
 
-In a range of study designs including randomised control trials and retrospective  cohort studies, the difference in group means is commonly reported as the treatment association (or effect in causal studies) and often a primary or secondary study outcome. In this paper we will present how this bias can influence study outcomes and review the use of TOM metrics in the literature. 
+In a range of study designs including randomised control trials and retrospective  cohort studies, the difference in the group means is commonly reported as the treatment association (or effect in causal studies) and often a primary or secondary study outcome. In this paper we will present how this bias can influence study outcomes and review the use of TOM metrics in the literature. 
 
 ### Aims
 
 1. Simulate and describe the dependence of differing opioid proportions and errors in conversion values on the TOB values calculated. 
 
-2. Investigate the methodology and reporting of total opioid burden in the peri-operative and surgical literature.
+2. Describe the methodology and reporting of total opioid burden in the peri-operative and surgical literature.
 
 
 # Methods
 
 ## Part 1 - Simulations
 
-Two simulated studies were performed to demonstrate the sensitivity of the opioid burden metric to differences in the proportions of medications between groups and the conversion values used. In both simulations, the outcome measured is the difference in group mean TOB, there was no treatment effect so this is expected to be 0.
-
-The **first** (@sec-manuscript-simple-sim) uses a simplified simulation with between groups to understand the variation in results across the full range of parameters. 
-
-The **second** simulation (@sec-manuscript-exemplar-sim) uses a hypothetical study setup across a range of realistic values to establish the extent of the variation in results under commonly seen situations.
-
-### Simple simulation {#sec-manuscript-simple-sim}
-
-```{r sim simple}
+```{r sim simple parameters}
 
 p_min <- -1
 p_max <- 1
@@ -134,7 +113,19 @@ n = 10000
 mu_opioid_requirment_control = 10
 sigma = 0.1
 treatment_effect = 0
-potency_oxycodone = 1.85
+
+```
+
+Two simulated studies were performed to demonstrate the sensitivity of the opioid burden metric to differences in the proportions of medications between groups and the conversion values used. In both simulations, the outcome measured is the difference in group mean TOB, there was no treatment effect so this is expected to be 0. Additionally, the ground truth value for oxycodone to morphine is set to `r potency_oxycodone`, to give a similar but not exact value to the commonly accepted potency of 2, compared to oral morphine. 
+
+The **first** (@sec-manuscript-simple-sim) uses a simplified simulation with between groups to understand the variation in results across the full range of parameters. 
+
+The **second** simulation (@sec-manuscript-exemplar-sim) uses a hypothetical study setup across a range of realistic values to establish the extent of the variation in results under commonly seen situations.
+
+### Simple simulation {#sec-manuscript-simple-sim}
+
+```{r sim simple}
+
 
 simple_results <- data.frame(p = numeric(), e = numeric(), diff = numeric())
 for(p in seq(p_min, p_max, by = 0.05)){
@@ -146,6 +137,7 @@ for(p in seq(p_min, p_max, by = 0.05)){
       sigma = sigma,
       mu_opioid_requirment_control = mu_opioid_requirment_control,
       potency_oxycodone = potency_oxycodone,
+      potency_morphine = potency_morphine,
       error_in_c_oxycodone = e,
       treatment_effect = treatment_effect
     )
@@ -155,7 +147,7 @@ for(p in seq(p_min, p_max, by = 0.05)){
 }
 ```
 
-`r comma(n)` samples were divided equally between a control and intervention group. An opioid of either morphine or oxycodone was then sampled from a distribution set by $\Delta p_i$ whereby $\Delta p_i = p_i^{\text{(control)}} - p_i^{\text{(intervention)}}$ to set the proportion $p$ of each opioid to be reciprocal in each group. An opioid requirement was sampled from a normal distribution ($\mathbb{E} =$ `r mu_opioid_requirment_control` with $\sigma =$ `r sigma`) for both groups enforcing a treatment effect of `r percent(treatment_effect)`. For samples where the opioid assigned was morphine, the total opioid dose was set equal to the opioid requirement. For samples where the opioid was oxycodone, the total opioid dose was set to opioid requirement multiplied by the ground truth potency equal to `r potency_oxycodone`. For all samples, the opioid consumed was then converted into a TOB, using a conversion value of 1 for morphine and `r potency_oxycodone` +/- an error, $\epsilon$, for oxycodone. The measured difference between the group means of the control and intervention groups ($\Delta \mu_{\text{TOB}} = \mu_{\text{TOB}}^{\text{(control)}} - \mu_{\text{TOB}}^{\text{(intervention)}}$) was then calculated.
+`r comma(n)` samples were divided equally between a control and intervention group. An opioid of either morphine or oxycodone was then sampled from a distribution set by $\Delta p_i$ whereby $\Delta p_i = p_i^{\text{(control)}} - p_i^{\text{(intervention)}}$ to set the proportion $p$ of each opioid to be reciprocal in each group. An opioid requirement was sampled from a normal distribution ($\mathbb{E} =$ `r mu_opioid_requirment_control` with $\sigma =$ `r sigma`) for both groups enforcing a treatment effect of `r percent(treatment_effect)`. For samples where the opioid assigned was morphine, the total opioid dose was set equal to the opioid requirement. For samples where the opioid was oxycodone, the total opioid dose was set to opioid requirement multiplied by the ground truth potency equal to `r potency_oxycodone`. For all samples, the opioid consumed was then converted into a TOB, using a conversion value of `r potency_morphine` for morphine and `r potency_oxycodone` +/- an error, $\epsilon$, for oxycodone. The measured difference between the group mean of the control and intervention groups ($\Delta \mu_{\text{TOB}} = \mu_{\text{TOB}}^{\text{(control)}} - \mu_{\text{TOB}}^{\text{(intervention)}}$) was then calculated.
 
 The simulation was then performed once for the range of grid values for ($\Delta p_i \in$ `r p_min`, `r p_max` and $\epsilon \in$ `r percent(e_min)`, `r percent(e_max)` with all other parameters fixed. 
 
@@ -172,7 +164,7 @@ oxycodone_shortage = c(as.Date("2024-01-01"), as.Date("2024-12-31"))
 
 mu_tot = 50
 sd_tot = 10
-potency_oxycodone_truth = 1.85
+# potency_oxycodone set in chunk above
 potency_oxycodone_ome = 2
 
 annual_n = 30
@@ -185,11 +177,20 @@ conversion_value_low = 1
 conversion_value_high = 3
 ```
 
-A hypothetical study was designed to emulate a retrospective cohort study to compare a surgical intervention on the postoperative opioid requirement. The study set-up is outlined in @sec-appendix-sim-design.
+A hypothetical study was designed to emulate a retrospective cohort study to compare a surgical intervention on the postoperative opioid requirement. The study set-up is outlined in @nte-sim-design.
 
-The difference in proportion ($\Delta p_i$) between groups is simulated using a medication shortage that, due to temporal differences between the groups, impacts the treatment group to a greater extent. The ground truth potency of oxycodone is set to `r potency_oxycodone_truth`. The post-operative opioid requirement was sampled from a normal distribution ($\mathbb{E} =$ `r mu_tot` mg with $\sigma =$ `r sd_tot` mg) for the non-robotic group with the average treatment effect of the intervention is set to `r robot_effect_mg` TOB mg. TOB was calculated as per described previously.
+::: {#nte-sim-design .callout-note title="Hypothetical study design"}
 
-The simulation was performed once with parameters specified in @sec-appendix-sim-design and repeated across each of the grid values for the rate of post-operative morphine prescribed between `r percent(p_morph_high)` and `r percent(p_morph_low)` with conversion values of oxycodone:morphine between `r conversion_value_low`:1 and `r conversion_value_high`:1. The result for each study was the measured difference between the group means of the control and intervention groups ($\Delta \mu_{\text{TOB}}$), the observed difference in proportion ($\Delta p_i$) and the error in the conversion value ($\epsilon$).  
+A research team wish to understand if the use of a robot for a surgical procedure, reduces the post-operative pain. They design a retrospective cohort study for patients treated with a robotic procedure and those without. The primary outcome is the total opioid requirement, as measured in OME mg, in the first 24 hours post-operatively as a surrogate for the total pain caused by the surgical procedure.
+
+The average case volume is `r case_volume` procedures per year, these were all performed using non-robotic surgery until `r format(t_robot, "%e %b %y")` when a robot was acquired, and since `r scales::percent(proportion_robotic)` of cases are performed with the robot. All EHR data was collected between `r format(t_0, "%e %b %y")` and `r format(t_end, "%e %b %y")`. All patients are treated with a Patient Controlled Analgesia (PCA) after their operation and on average the anaesthetist will prescribe a morphine PCA to `r scales::percent(proportion_morphine)` of patients and an oxycodone PCA to the remainder. No other opioid medication was administered. 
+
+During the study there was a national shortage of oxycodone from `r oxycodone_shortage[1]` to `r oxycodone_shortage[2]` and at which time all patients were prescribed a morphine PCA. Whilst the authors described this in their methods section, they did feel it would impact their results as the differing opioids were already accounted for in their OME metric. 
+:::
+
+The difference in proportion ($\Delta p_i$) between groups is simulated using a medication shortage that, due to temporal differences between the groups, impacts the treatment group to a greater extent. The ground truth potency of oxycodone is set to `r potency_oxycodone`. The post-operative opioid requirement was sampled from a normal distribution ($\mathbb{E} =$ `r mu_tot` mg with $\sigma =$ `r sd_tot` mg) for the non-robotic group with the average treatment effect of the intervention is set to `r robot_effect_mg` TOB mg. TOB was calculated as per described previously.
+
+The simulation was performed once with parameters specified in @nte-sim-design and repeated across each of the grid values for the rate of post-operative morphine prescribed between `r percent(p_morph_high)` and `r percent(p_morph_low)` with conversion values of oxycodone:morphine between `r conversion_value_low`:1 and `r conversion_value_high`:1. The result for each study was the measured difference between the group mean of the control and intervention groups ($\Delta \mu_{\text{TOB}}$), the observed difference in proportion ($\Delta p_i$) and the error in the conversion value ($\epsilon$).  
 
 All simulations were performed in `r version$version.string` and all code and materials are available on [Github](https://github.com/DW10/ome_simulation_manuscript).
 
@@ -298,7 +299,7 @@ papers_grid_summary <- plot_data %>%
 
 ```
 
-For each paper where group average doses of each opioid were described, these were extracted. If only median values were provided, an estimated mean was calculated using Wan's 2014 approximation ($\hat{d_i} = \frac{Q_1 + M + Q_2}{3}$ ) to preserve the linearity with in the arithmetic mean @wanEstimatingSampleMean2014. Where opioid routes where not provided then IV was assumed and where a value set was not provided then the Nielsen set was used @nielsenSynthesisOralMorphine2016. 
+For each paper where group average doses of each opioid were described, these were extracted. If only median values were provided, an estimated mean was calculated using Wan's 2014 approximation ($\hat{d_i} = \frac{Q_1 + M + Q_2}{3}$ ) to preserve the linearity with in the arithmetic mean @wanEstimatingSampleMean2014. Where opioid routes where not provided then IV was assumed and where conversion values were not provided, the Nielsen set was used @nielsenSynthesisOralMorphine2016. 
 
 The group mean of total opioid burden reported by the paper was extracted. Then using the mean doses and the conversion values provided, the group mean was calculated independently. Following this, all possible group means were calculated by applying each of the possible values provided in Table 1 of Neilsens Conversion set (summarised in @sec-appendix-neilsen-ranges), as the range of plausible conversion values an author may use @nielsenSynthesisOralMorphine2016.
 
@@ -370,14 +371,14 @@ $$
 \Delta \mu_{\text{OME}} = k \cdot \Delta p_i \cdot \epsilon
 $$ {#eq-results-simple-1}
 
-@sec-appendix-sim-1 demonstrates that the scaling constant ($k$) is the expected dose for the control group as demonstrated in @eq-results-simple-2-proof). @sec-appendix-sim-2 demonstrates that the true treatment effect acts to both translate and scale the observed treatment effect. 
+@sec-appendix-sim-1 demonstrates that the scaling constant ($k$) is the expected dose for the control group. @sec-appendix-sim-2 demonstrates that the true treatment effect acts to both translate and scale the observed treatment effect. 
 
 ### Hypothetical study simulation
 
 ```{r }
 df <- sim_patient(
   mu_tot = mu_tot,
-  potency_oxycodone_truth = potency_oxycodone_truth,
+  potency_oxycodone_truth = potency_oxycodone,
   potency_oxycodone_ome = potency_oxycodone_ome,
   proportion_morphine = proportion_morphine,
   oxycodone_shortage = oxycodone_shortage,
@@ -474,7 +475,7 @@ obs_robot_effect_mg <- obs_robotic_ome - obs_non_robotic_ome
 result <- analyse_dataset(df)
 
 if (PRODUCTION_QUALITY) {
-  trials = 50
+  trials = 10
 } else {
   trials = 3
 }
@@ -485,7 +486,7 @@ The mean opioid burden value for the robotic surgery group was `r round(obs_robo
 
 ### Impact of conversion set and proportions
 
-The hypothetical study was repeated using the grid values of different conversion values and different proportion of post-operative oxycodone prescribing. The prior was informed by ranges observed in the literature and the latter to influence the degree of different in opioid proportions between groups. For each set of grid values, `r trials` were performed and the mean observed difference calculated. Given a `r mu_tot` mg expected opioid requirement and a treatment effect of `r scales::percent(robot_effect_size-1)` mg it is expected the observed difference of the robotic group to be `r (mu_tot * robot_effect_size)-mu_tot` mg.
+The hypothetical study was repeated using the grid values of different conversion values and different proportion of postoperative oxycodone prescribing. The prior was informed by ranges observed in the literature and the latter to influence the degree of different in opioid proportions between groups. For each set of grid values, `r if(trials==3){"three"}else{trials}` were performed and the mean observed difference calculated. Given a `r mu_tot` mg expected opioid requirement and a treatment effect of `r scales::percent(robot_effect_size-1)` it is expected the observed difference of the robotic group to be `r (mu_tot * robot_effect_size)-mu_tot` mg.
 
 ```{r}
 #| label: fig-sim-grid-search-1
@@ -502,18 +503,16 @@ simulation1 <- run_simulation(trials=trials,
                )
 
 plot_grid_1 <- plot_grid(simulation1,
-          potency_oxycodone_truth = potency_oxycodone_truth,
+          potency_oxycodone_truth = potency_oxycodone,
           robot_effect_mg = 0)
 
 plot_grid_1
 
 ```
 
-The results of the `r comma(nrow(simulation1)*trials)` simulations are shown in @fig-sim-grid-search-1.
+@fig-sim-grid-search-1 is a heat map of the mean observed difference of each of the grid values of the postoperative prescribing of morphine rates and the conversion value of oxycodone used. 
 
-@fig-sim-grid-search-1 is a heatmap of the mean observed difference of each of the grid values of the postoperative perscribing of morphine rates and the conversion value of oxycodone used. 
-
-Where the proportion of post-operative morphine prescribing is close to 100%, the exogenous effect of an oxycodone shortage has little diverging impact on the proportions of opioids between groups, thus the true treatment effect of `r (mu_tot * robot_effect_size)-mu_tot` mg OME is recovered. However, were the rate of postoperative morphine percribing is lower,the oxycodone shortage causes further divergence of the proportions between groups, resulting inwider variation in the observed difference. Where the conversion value supplied is close to the ground truth (as indicated by the red line) then the error is low. At the extreme, the maximum and minimum values are `r round(max(simulation1$mean_diff_ome),2)` mg and `r round(min(simulation1$mean_diff_ome),2)`mg respectively.
+Where the proportion of post-operative morphine prescribing is close to 100%, the exogenous effect of an oxycodone shortage has little diverging impact on the proportions of opioids between groups, thus the true treatment effect of `r (mu_tot * robot_effect_size)-mu_tot` mg OME is recovered. However, were the rate of postoperative morphine prescribing is lower,the oxycodone shortage causes further divergence of the proportions between groups, resulting in wider variation in the observed difference. Where the conversion value supplied is close to the ground truth (as indicated by the red line) then the error is low. At the extreme, the maximum and minimum values are `r round(max(simulation1$mean_diff_ome),2)` mg and `r round(min(simulation1$mean_diff_ome),2)`mg respectively.
 
 :::{.callout-warning title="reader notes"}
 
@@ -522,7 +521,7 @@ In the first draft, there was a treatment effect of the robot simulated (as arou
 I changed it to have 0 treatment effect to keep both simulations similar and thus easier to understand but does it lack the "so what" moment?
 :::
 
-@fig-compare demonstrates that the experiment space for the hypothetical study simulation values where $\Delta p_i < 0$ and for values of $-0.5 < \epsilon < 1$. Despite being a relativity narrow section of the possible grid space detailed in @sec-manuscript-results-simple with a modest effect size of `r robot_effect_mg` OME mg there are still values where the observed effect size is significantly different. 
+@fig-compare demonstrates the experiment space for the hypothetical study simulation values where $\Delta p_i < 0$ and for values of $-0.5 < \epsilon < 1$. Despite being a relativity narrow section of the possible grid space detailed in @sec-manuscript-results-simple with a modest effect size of `r robot_effect_mg` OME mg there are still values where the observed effect size is significantly different. 
 
 ```{r}
 #| label: fig-compare
@@ -549,7 +548,8 @@ for(p in seq(p_min, p_max, by = 0.05)){
       delta_p_i = p,
       sigma = sigma,
       mu_opioid_requirment_control = mu_tot,
-      potency_oxycodone = 2,
+      potency_oxycodone = potency_oxycodone,
+      potency_morphine = potency_morphine,
       error_in_c_oxycodone = e,
       treatment_effect = robot_effect_size -1
     )
@@ -599,7 +599,7 @@ plot_grid_2 <- ggplot(simulation1, aes(x=conversion_value, y=morphine_proportion
   scale_y_continuous(position = "right", labels = scales::percent,
                      expand = expansion(mult = c(0, 0)))+
   scale_x_continuous(expand = expansion(mult = c(0, 0)))+
-  geom_vline(xintercept = potency_oxycodone_truth, linetype = "dashed", color = "red")
+  geom_vline(xintercept = potency_oxycodone, linetype = "dashed", color = "red")
   
 layout <- c(
   area(t = 1, l = 1, b = 10, r = 10),
@@ -617,7 +617,7 @@ plot_simple_grid + plot_grid_2 +
 
 ### Reporting of opioid burden metrics
 
-480 studies were identified in the rapid literature search, a sample of `r nrow(lit_data)` that fit the eligibility had data extracted. The majority of studies were cohort studies and most common intervention was anaesthetic type interventions (@fig-study-types).
+480 studies were identified in the rapid literature search, a sample of `r nrow(lit_data)` that fit the eligibility had data extracted. The majority of studies were cohort studies and most common intervention was anaesthetic interventions (@fig-study-types).
 
 ```{r}
 #| label: fig-study-types
@@ -651,7 +651,7 @@ plot_lit_study_type + plot_lit_intervnetion_type
 
 ```
 
-With regards to the opioid conversion sets used, `r lit_data %>% filter(Opioid.conversion.set == "Cited") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.conversion.set == "Cited") %>% nrow()/n_lit_data)`) cited another source, whilst `r lit_data %>% filter(Opioid.conversion.set == "Included in text") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.conversion.set == "Included in text") %>% nrow()/n_lit_data)`) included the conversion values within the paper. `r lit_data %>% filter(Opioid.conversion.set == "Not described") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.conversion.set == "Not described") %>% nrow()/n_lit_data)`) papers did not include any citation or description of the opioid conversion sets used. Upon review of the the results sections, it was found that only `r lit_data %>% filter(Opioid.proportions.within.group == "Described") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.proportions.within.group == "Described") %>% nrow()/n_lit_data)`) papers described the proportions of different opioids between intervention groups (@fig-study-results). Of these `r nrow(lit_data %>% filter(Opioid.proportions.within.group == "Described"))` papers, `r nrow(excluded_papers)` provided count data only and not mean/median dose for each opioid within treatment groups. 
+With regards to the opioid conversion sets used, `r lit_data %>% filter(Opioid.conversion.set == "Cited") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.conversion.set == "Cited") %>% nrow()/n_lit_data)`) cited another source, whilst `r lit_data %>% filter(Opioid.conversion.set == "Included in text") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.conversion.set == "Included in text") %>% nrow()/n_lit_data)`) included the conversion values within the paper. `r lit_data %>% filter(Opioid.conversion.set == "Not described") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.conversion.set == "Not described") %>% nrow()/n_lit_data)`) papers did not include any citation or description of the opioid conversion sets used. `r lit_data %>% filter(Opioid.proportions.within.group == "Described") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.proportions.within.group == "Described") %>% nrow()/n_lit_data)`) papers described the proportions of different opioids between intervention groups (@fig-study-results). Of these `r nrow(lit_data %>% filter(Opioid.proportions.within.group == "Described"))` papers, `r nrow(excluded_papers)` provided count data only and not mean/median dose for each opioid within treatment groups. 
 
 ```{r}
 #| label: fig-study-results
@@ -747,7 +747,7 @@ tbl %>%
 ```
 
 
-@tbl-lit-summary-outcomes provides three sets of results for the studies detailed. The first is the study reported outcomes, this is the mean total opioid burden for the control and intervention groups. From this an observed difference is calculate with a percentage change from the control. The second column set is the de-novo calculation, by using the mean dose of each opioid within each group and conversion set provided (or Neilsens if not) to attempt to calculate the control and intervention group means. From these de-novo estimates a second difference of the treatment group was calculated. 
+@tbl-lit-summary-outcomes provides three sets of results for the studies detailed. The first is the study reported outcomes, this is the mean total opioid burden for the control and intervention groups. From this an observed difference is calculated with a percentage change from the control. The second column set is the de-novo calculation, by using the mean dose of each opioid within each group and conversion set provided (or Neilsens if not) to attempt to calculate the control and intervention group means. From these de-novo estimates a second difference of the treatment group was calculated. 
 
 Finally, regardless of the conversion sets used, the de-novo calculation was repeated across the possible grid values of the Neilsen conversion set. The minimum and maximum possible differences were then extracted. 
 
@@ -819,46 +819,18 @@ ggplot(exemplars_summary, aes(y=authors))+
   labs(x="Change in opioid use in intervention group",
        y="")+
   scale_x_continuous(labels = percent,
-                     breaks = seq(-0.6, 0.3, by = 0.1))
+                     breaks = seq(-0.6, 0.3, by = 0.1))+
+  scale_y_discrete(limits=rev)
 
 ```
-
-### Conversion values used across the literature
-
-Of the `r lit_data %>% filter(Opioid.conversion.set == "Cited") %>% nrow()` papers where a conversion value set was cited, the `r nrow(conversion)` unique source value sets where reviewed. Generally across the literature, conversion values with the intention of research were in the minority (`r percent((nrow(conversion %>% filter(aim == "for research")))/(nrow(conversion)))`) and most had compiled the conversion value sets for use in clinical care. 
-
-:::{.callout-warning}
-Can expand this section but not sure if its worth it?
-:::
-
-
 
  
 # Conclusion
 
-:::{.callout-warning title='Reader notes'}
 
-Conclusion:
+By defining and re-arranging the equations for total opioid burden and group average opioid burden, we have shown that a difference in proportion of opioid or error in the conversion value introduces a bias in the observed difference measured. The bias follows a saddle shaped geometry, if groups are balanced by opioid dose or there is no error in the conversion values, then there is no bias. However, where groups are unbalanced and there is an error, the bias compounds quadratically. This bias can be strong enough to invert the direction of a treatment association and mask a treatment effect. In the hypothetical study simulation, a medication shortage was used to induce the group imbalance, however this could be also seen under a range of other situations such as progressive changes in prescribing patterns or prescriber preference @xieTrendsPrescriptionOpioid2025. Even within the RCT, group imbalance and thus confounding may occur if opioid prescribing is not defined within the protocol. 
 
-1) We have shown that TOBM is a metric that has inherent bias
-
-2) This bias can change the results of a study by a significant amount depending on the situation
-
-3) The features need to detect the bias (breakdown of mean dose and conversion values used) are not well reported by the literature
-
-4) In the future we should:
-
-	1) Report the methodology of TOBM better
-	
-	2) Aim to address the bias with improved conversion value estimates and statistical approaches to adjust for unbalanced groups.
-
-:::
-
-By defining and re-arranging the equations for total opioid burden and group average opioid burden, we have shown that a difference in proportion of opioid or error in the conversion value introduces a bias in the observed difference measured. The bias follows a saddle shaped geometry, if groups are balanced by opioid dose or there is no error in the conversion values, then there is no bias. However, where groups are unbalanced and there is an error, the bias compounds quadraticly. This bias can be strong enough to invert the direction of a treatment association and mask a treatment effect.
-
-This phenomenon may be explained by Simpsons paradox, whereby the observed treatment effect is conditioned on the proportion of the the medications within each group, thus creating the observation of a biased treatment effect @pearlBookWhyNew2019. 
-
-To detect and quantify the degree of bias would require knowledge of both the difference in the opioid use between groups and the error in the conversion values used. As it is not possible to ascertain the ground truth for the population level conversion value, reporting the conversion values used is a key surrogate. Across the literature, the methods and results describing the total opioid burden metrics is generally poor. It was found that only `r scales::percent(lit_data %>% filter(Opioid.proportions.within.group == "Described")  %>% filter(Opioid.conversion.set != "Not described") %>% nrow()/n_lit_data)` of papers reported both the conversion value sets used and the proportions of opioids between groups. Calculating the opioid burden metrics from the limited papers where this was possible, showed significant differences between the author reported results and the de novo calculation. 
+This phenomenon may be explained by Simpsons paradox, whereby the observed treatment effect is conditioned on the proportion of the the medications within each group, thus creating the observation of a biased treatment effect @pearlBookWhyNew2019. To detect and quantify the degree of bias would require knowledge of both the difference in the opioid use between groups and the error in the conversion values used. As it is not possible to ascertain the ground truth for the population level conversion value, reporting the conversion values used is a key surrogate. Across the literature, the methods and results describing the total opioid burden metrics is generally poor. It was found that only `r scales::percent(lit_data %>% filter(Opioid.proportions.within.group == "Described")  %>% filter(Opioid.conversion.set != "Not described") %>% nrow()/n_lit_data)` of papers reported both the conversion value sets used and the proportions of opioids between groups. Calculating the opioid burden metrics from the limited papers where this was possible, showed significant differences between the author reported results and the de novo calculation. 
 
 ## Limitations
 
@@ -870,7 +842,7 @@ The literature search was intended to provide a snapshot of current academic pra
 
 This work is particular relevant to retrospective observational work where large datasets with varied treatment lend themselves well to the tool of opioid conversion values. However, even in a RCT where the protocol for analgesia may be fixed and patients randomised between groups, confounding may occur if analgesia protocols contain differing opioids allowing the possibility of diverging proportions between treatment groups. However, the degree of error introduced is likely if a high quality randomisation method is used. 
 
-It was noted that a number of papers sourced their perceiving information from the Pennsylvania Prescription Drug monitoring program (PPDMP), of which none of these papers cited the conversion values used @adalbertPrescriptionDrugMonitoring2023. Upon investigation further, the technical notes from the PPDMP describe MME values are calculated using conversion factors, but they are not stated or detailed further @zotero-item-700. Whilst datasets that contain pre-calculated MME values offer an attractive data source, it should be made clear how derived metrics are calculated. With the increase of EHR and digital datasets, this need for clear documentation and transparency is becoming increasingly important to ensure the metrics used are true and accurate reflections of the underling data \[Could cite JMIR paper here.\]. 
+It was noted that a number of papers sourced their perscribing information from the Pennsylvania Prescription Drug monitoring program (PPDMP), of which none of these papers cited the conversion values used @adalbertPrescriptionDrugMonitoring2023. Upon investigation further, the technical notes from the PPDMP describe MME values are calculated using conversion factors, but they are not stated or detailed further @zotero-item-700. Whilst datasets that contain pre-calculated MME values offer an attractive data source, it should be made clear how derived metrics are calculated. With the increase of EHR and digital datasets, this need for clear documentation and transparency is becoming increasingly important to ensure the metrics used are true and accurate reflections of the underling data \[Could cite JMIR paper here.\]. 
 
 In retrospective work it is not possible to control the proportions of different opioids within groups. Further work is needed to understand if it is possible to quantify and correct for the any bias introduced in the TOB metrics. Furthermore, new methods are needed to attempt to estimate the true potency values of different opioids. A data driven methodology to attempt to derive the conversion values (and the degree of uncertainty), may offer a promising solution given the relatively small evidence base that all current conversion values are based upon. 
 

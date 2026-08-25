@@ -76,178 +76,6 @@ $$
 \mu_{\text{OME}}^{(G)}  = \sum_{i\in\mathbf{M}} \bar{d_{i}} c_{i,r} 
 $$
 
-
-### Sensitivity of the arithmetic mean to differing proportions of $\bar{d_i}$ {#sec-ome-difference-proof}
-
-:::{.callout-warning}
-This section should be deleted.
-:::
-
-#### True treatment effect
-
-Equation @eq-mu-ome-final outlines the calculation of a sample mean OME within a finite group. At the population level, using a simplified linear, confounder-free treatment effect, the expected OME of the treated population $\mathbb{E}[\text{OME} \mid T = 1]$ is modelled as a function of the baseline expectation $\mathbb{E}[\text{OME} \mid T = 0]$ and a standardized treatment effect ($t$) scaled by the baseline population standard deviation $\sigma_p$ (assuming homoscedasticity)
-
-$$
-\mathbb{E}[\text{OME} \mid T = 1] = \mathbb{E}[\text{OME} \mid T = 0] + t \cdot \sigma_{p}
-$$
-
-To estimate $t$ we will often measure the difference in the the observed mean of each group ($\mu_{\text{OME}}^{(T = 1)} - \mu_{\text{OME}}^{(T = 0)}$) divided by the variance $\sigma$.
-
-$$
-\begin{aligned}
-\mu_{\text{OME}}^{(T = 1)} &= \mu_{\text{OME}}^{(T = 0)} + t \cdot \sigma_{p} \\[1em]
- t &= \frac{\mu_{\text{OME}}^{(T = 1)} - \mu_{\text{OME}}^{(T = 0)} }{\sigma_p} = \frac{\Delta \mu_{\text{OME}}}{\sigma_p} \\
-\end{aligned}
-$$ {#eq-t-estimator}
-
-#### Conditional Component Definition
-
-For any medication $i \in \mathbf{M}$ within a study cohort $G \in \{T=1, T=0\}$, the unconditional mean dose $\mu_{d_i}^{(G)}$  (as used in @eq-mu-ome-final ) can be decomposed as the product of the prescribing proportion $p_i$ and the conditional mean dose $\hat{d}_i$ amoung treated patients. 
-
-$$
-\bar{d}_i^{(G)} = p_i^{(G)} \cdot \hat{d}_i^{(G)}
-$$ {#eq-conditional-mean}
-
-where:
-
-* $p_i^{(G)} = P(d_i > 0 \mid G)$ represents the proportion of patients in group $G$ receiving medication $i$.
-
-* $\hat{d}_i^{(G)} = E[d_i \mid d_i > 0, G]$ represents the conditional mean dose among actively treated patients.
-
-#### Group Difference Expansion
-
-Substituting @eq-conditional-mean into @eq-mu-ome-final for groups $T=1$ and $T=0$:
-
-$$
-\Delta\mu_{\text{OME}} = \mu_{\text{OME}}^{(T=1)} - \mu_{\text{OME}}^{(T=0)} = \sum_{i\in\mathbf{M}} \left( p_i^{(T=1)}\hat{d}_i^{(T=1)} - p_i^{(T=0)}\hat{d}_i^{(T=0)} \right) c_{i,r}
-$$ {#eq-expanded-difference}
-
-#### Counterfactual Counter-Balancing
-
-By adding and subtracting the cross-term $p_i^{(T=0)}\hat{d}_i^{(T=0)}$
-
-$$
-\Delta \mu_{\text{OME}} = \sum_{i\in\mathbf{M}} \left( p_i^{(T=1)}\hat{d}_i^{(T=1)} - p_i^{(T=1)}\hat{d}_i^{(T=0)} + p_i^{(T=1)}\hat{d}_i^{(T=0)} - p_i^{(T=0)}\hat{d}_i^{(T=0)} \right) c_{i,r}
-$$ {#eq-algebraic-bridge}
-
-#### Final Structural Decomposition
-
-Factoring out the shared terms isolates the two independent drivers of macroscopic OME divergence:
-
-$$
-\Delta\mu_{\text{OME}} = \sum_{i\in\mathbf{M}} \underbrace{p_i^{(T=1)}\left(\hat{d}_i^{(T=1)} - \hat{d}_i^{(T=0)}\right)c_{i,r}}_{\text{treatment effect}} + \sum_{i\in\mathbf{M}} \underbrace{\hat{d}_i^{(T=0)}\left(p_i^{(T=1)} - p_i^{(T=0)}\right)c_{i,r}}_{\text{proportion effect}}
-$$ {#eq-final-decomposition}
-The first term reflects genuine dose-intensity change among treated patients: this is the component the estimator in @eq-t-estimator intends to recover as $t \cdot \sigma_p$. The second term arises purely from differing prescribing proportions $p_i^{(G)}$ between groups and is not attributable to treatment. This means that the the difference in group means $\Delta\mu_{\text{OME}}$ will only be equal to $t \cdot \sigma_p$ in the special case where the prescribing portions between groups are equal $p_i^{(T=1)} = p_i^{(T=0)}$, otherwise it only approximates the treatment effect. 
-
-
-
-### Simulation study
-
-:::{.callout-warning}
-This section should be deleted.
-:::
-
-The simple simulation find that the observed difference is a hyperbolic parabola of $\Delta p_i$ and $\delta c_i$ with a scaling constant $k$.
-
-$$
-\begin{aligned}
-\Delta \mu_{\text{OME}} &= k \cdot \Delta p_i \cdot  \epsilon \\
-k &= \frac{\Delta \mu_{\text{OME}}}{\Delta p_i \cdot \epsilon }
-\end{aligned}
-$$ {#eq-results-simple-2-proof}
-
-**Step 1: Expand $\Delta\mu_{\text{OME}}$ using @eq-expanded-difference.**
-
-Substituting the group-difference expansion, where $\Delta p_i = p_i^{(T=1)} - p_i^{(T=0)}$:
-
-$$
-k = \frac{\displaystyle\sum_{i\in\mathbf{M}} \left( p_i^{(T=1)}\hat{d}_i^{(T=1)} - p_i^{(T=0)}\hat{d}_i^{(T=0)} \right) c_{i,r}}{\Delta p_i \cdot \delta c_i}
-$$
-
-**Step 2: Apply the null treatment effect assumption.**
-
-In the simple simulation there is no true treatment effect, so conditional mean doses are equal across groups: $\hat{d}_i^{(T=1)} = \hat{d}_i^{(T=0)} = \hat{d}_i$. The treatment effect term in @eq-final-decomposition vanishes and only the proportion effect remains:
-
-$$
-\Delta\mu_{\text{OME}} = \sum_{i\in\mathbf{M}} \hat{d}_i \cdot \Delta p_i \cdot c_{i,r}
-$$
-
-**Step 3: Decompose the conversion factor into its true value and its error.**
-
-Let $c_{i,r} = c_{i,r}^{\text{true}} + \delta c_i$, where $\delta c_i$ is the bias in the conversion value for medication $i$. For morphine ($i = M$), the reference drug: $c_M^{\text{true}} = 1$ and $\delta c_M = 0$ by definition (morphine is the OME reference and carries no conversion error). For oxycodone ($i = O$):
-
-$$
-c_{O,r} = c_{O,r}^{\text{true}} + \delta c_O
-$$
-
-**Step 4: Expand for the two-drug system $\mathbf{M} = \{M, O\}$.**
-
-$$
-\begin{aligned}
-\Delta\mu_{\text{OME}} &= \hat{d}_M \cdot \Delta p_M \cdot c_M^{\text{true}} + \hat{d}_O \cdot \Delta p_O \cdot \left(c_{O,r}^{\text{true}} + \delta c_O\right) \\
-&= \hat{d}_M \cdot \Delta p_M + \hat{d}_O \cdot \Delta p_O \cdot c_{O,r}^{\text{true}} + \hat{d}_O \cdot \Delta p_O \cdot \delta c_O
-\end{aligned}
-$$
-
-**Step 5: Apply the proportional constraint.**
-
-Since every patient receives exactly one medication, prescribing proportions within each group sum to unity. Therefore a change in oxycodone proportion is exactly offset by an equal and opposite change in morphine proportion: $\Delta p_M = -\Delta p_O$. Substituting:
-
-$$
-\begin{aligned}
-\Delta\mu_{\text{OME}} &= -\hat{d}_M \cdot \Delta p_O + \hat{d}_O \cdot \Delta p_O \cdot c_{O,r}^{\text{true}} + \hat{d}_O \cdot \Delta p_O \cdot \delta c_O \\
-&= \Delta p_O \underbrace{\left(\hat{d}_O \cdot c_{O,r}^{\text{true}} - \hat{d}_M \right)}_{\text{cancel under equal analgesic requirement}} + \hat{d}_O \cdot \Delta p_O \cdot \delta c_O
-\end{aligned}
-$$
-
-**Step 6: Apply the equal analgesic requirement assumption.**
-
-In the simple simulation, patients have the same underlying pain requirement regardless of which opioid is prescribed. Expressed in morphine equivalents, the conditional mean dose of morphine equals the conditional mean dose of oxycodone scaled by the true conversion factor:
-
-$$
-\hat{d}_M = \hat{d}_O \cdot c_{O,r}^{\text{true}}
-$$
-
-The bracketed term therefore cancels:
-
-$$
-\hat{d}_O \cdot c_{O,r}^{\text{true}} - \hat{d}_M = \hat{d}_O \cdot c_{O,r}^{\text{true}} - \hat{d}_O \cdot c_{O,r}^{\text{true}} = 0
-$$
-
-**Step 7: Collect the remaining term.**
-
-$$
-\Delta\mu_{\text{OME}} = \hat{d}_O \cdot \Delta p_O \cdot \delta c_O
-$$
-
-This confirms the empirically observed hyperbolic paraboloid form, where the spurious signal arises exclusively from the interaction of the proportion shift $\Delta p_i$ and the conversion bias $\delta c_i$.
-
-**Step 8: Solve for $k$.**
-
-$$
-\begin{aligned}
-k &= \frac{\hat{d}_O \cdot \Delta p_O \cdot \delta c_O}{\Delta p_O \cdot \delta c_O} \\[0.5em]
-k &= \hat{d}_i
-\end{aligned}
-$$ {#eq-k-final}
-
-The scaling constant is therefore the **conditional mean dose** of medication $i$ among the patients who receive it. Using @eq-conditional-mean, this can be expressed in terms of the unconditional mean dose $\bar{d}_i$ and prescribing proportion $p_i^{(G)}$:
-
-$$
-k = \hat{d}_i = \frac{\bar{d}_i^{(G)}}{p_i^{(G)}} = E\!\left[d_i \mid d_i > 0,\, G\right]
-$$ {#eq-k-expanded}
-
-And since $\hat{d}_M = \hat{d}_O \cdot c_{O,r}^{\text{true}}$ (Step 6), we can also express $k$ in terms of the underlying analgesic requirement $\hat{d}_M$ and the true potency of oxycodone via @eq-potency:
-
-$$
-k = \frac{\hat{d}_M}{c_{O,r}^{\text{true}}} = \hat{d}_M \cdot \rho_{O,r}^{\text{true}}
-$$ {#eq-k-potency}
-
-### Clinical Significance
-
-* **Associational difference:** Quantifies the true statistical association by isolating shifts in the active treatment magnitude while holding the selection rate constant ($p_i^{(A)}$).
-* **Medication proportion Effect:** Quantifies the structural selection bias. A shift in the prevalence of medication usage ($p_i^{(A)} \neq p_i^{(B)}$) alters $\mu_{\text{OME}}$ linearly via $c_{i,r}$, even if the active proportions of medications are perfectly homogeneous ($\bar{d}_i^{(A)} = \bar{d}_i^{(B)}$).
-
 ## Literature search
 
 ### PUBMED search terms {#sec-appendix-pubmed-1}
@@ -267,13 +95,22 @@ The search term was executed on the PUBMED online search tool on 7th July 2026.
 (((((("opioid equivalent" OR "oral morphine equivalence" OR "oral morphine equivalent" OR "oral morphine equivalents" OR "OME" OR "morphine milligram equivalents" OR "morphine milligram equivalence" OR "MME" OR "morphine equivalent daily dose" OR "MEDD") AND ("perioperative" OR "peri-operative" OR "postoperative" OR "post-operative" OR "surgical" OR "surgery" OR "post-surgical" OR "postsurgical"))) AND ("2025/01/01"[Date - Publication] : "2025/12/31"[Date - Publication]))) AND ("clinical trial"[Filter] OR "clinical trial" OR "controlled clinical trial" OR "randomized controlled trial" OR "interventional" OR "intervention study" OR "clinical trials as topic"[MeSH Terms] OR "cohort studies"[MeSH Terms] OR "cohort" OR "prospective" OR "retrospective" OR "case-control" OR "comparative study" OR "evaluation study"))
 :::
 
-### Litrature search includion criteria {#sec-appendix-inclusion}
+### Literature search inclusion criteria {#sec-appendix-inclusion}
 
-:::{.callout-warning}
-Add from Covidence
-:::
+The literature was screen with an eligibility criteria following the PCC framework. 
 
+```{r}
+#| label: tbl-screening
+#| tbl-cap: "Litrature extraction proforma"
+#| output: TRUE
 
+tbl_screening <- data.frame("Criteria" = c("Population", "Concept","Context", "Other"),
+                            "Include" =c("All patient groups undergoing a surgical procedure", "Studies using a total opioid burden metric as a primary or secondary outcome (Such as oral morphine equivalence (OME), milligram morphine equivalence (MME) or opioid equivalence)", "Patients undergoing surgical procedures", "Any studies comparing a control against and intervention or two interventions."),
+                            "Exclude" = c("Patients not undergoing surgical procedures. Non-human studies", "Outcomes not including opioid totals", "Palliative care studies or Pharmacology studies", "Studies with no difference between intervention groups" ))
+
+knitr::kable(tbl_screening)
+
+```
 ### Covidence extraction form {#sec-appendix-cov-extraction}
 
 Data was extracted from selected papers using the following proforma by a single author. Authors could leave notes to highlight specific features for later analysis required.
@@ -359,52 +196,6 @@ ggplot(plot_data, aes(x = delta_ome)) +
 
 ## Simulation study
 
-### Hypothetical study simulation {#sec-appendix-sim-design}
-
-
-```{r}
-
-t_0 = as.Date("2020-01-01")
-t_end = as.Date("2025-12-31")
-t_robot = as.Date("2023-01-01")
-study_length_years <- as.numeric(difftime(t_end, t_0,  unit="weeks"))/52.25
-robot_length_years <- as.numeric(difftime(t_end, t_robot,  unit="weeks"))/52.25
-
-case_volume <- 100
-total_study_population <- case_volume * study_length_years
-proportion_robotic <- 0.8
-total_robotic <- robot_length_years * case_volume * proportion_robotic
-total_non_robotic = total_study_population - total_robotic
-
-proportion_morphine = 0.7
-oxycodone_shortage = c(as.Date("2024-01-01"), as.Date("2024-12-31"))
-
-mu_tot = 50
-sd_tot = 10
-potency_oxycodone_truth = 1.85
-potency_oxycodone_ome = 2
-
-robot_effect_size = 0.8
-
-mu_robotic = mu_tot * robot_effect_size
-mean_diff = mu_robotic - mu_tot
-mean_diff_sd = mean_diff/sd_tot
-
-```
-
-:::{.callout-warning}
-Ensure variables match main mauscript values
-:::
-
-A research team wish to understand if the use of a robot for a surgical procedure, reduces the post-operative pain.
-
-The average case volume is `r case_volume` procedures per year, these were all performed using non-robotic surgery until `r format(t_robot, "%e %b %y")` when a robot was acquired, and since `r scales::percent(proportion_robotic)` of cases are performed with the robot. All EHR data was collected between `r format(t_0, "%e %b %y")` and `r format(t_end, "%e %b %y")`.
-
-All patients are treated with a Patient Controlled Analgesia (PCA) after their operation and on average the anaesthetist will prescribe a morphine PCA to `r scales::percent(proportion_morphine)` of patients and an oxycodone PCA to the remainder. No other opioid medication was administered. 
-
-They design a retrospective cohort study for patients treated with a robotic procedure and those without. The primary outcome is the total opioid requirement, as measured in OME mg, in the first 24 hours post-operatively as a surrogate for the total pain caused by the surgical procedure.
-
-During the study there was a national shortage of oxycodone from `r oxycodone_shortage[1]` to `r oxycodone_shortage[2]` and at which time all patients were prescribed a morphine PCA. Whilst the authors described this in their methods section, they did feel it would impact their results as the differing opioids were already accounted for in their OME metric. 
 
 ### Effect of $\mu_{\text{OME}}^{\text{(control)}}$ on simple simulation {#sec-appendix-sim-1}
 
@@ -444,7 +235,8 @@ for(p in seq(p_min, p_max, by = space)){
       delta_p_i = p,
       sigma = sigma,
       mu_opioid_requirment_control = mu,
-      potency_oxycodone = 2,
+      potency_oxycodone = potency_oxycodone,
+      potency_morphine = potency_morphine,
       error_in_c_oxycodone = e,
       treatment_effect = 0
     )
@@ -511,7 +303,8 @@ for(p in seq(p_min, p_max, by = space)){
       delta_p_i = p,
       sigma = sigma,
       mu_opioid_requirment_control = 10,
-      potency_oxycodone = 2,
+      potency_oxycodone = potency_oxycodone,
+      potency_morphine = potency_morphine,
       error_in_c_oxycodone = e,
       treatment_effect = t
     )
@@ -554,69 +347,6 @@ symmetric_fill_scale(30)+
   
 plot_simple_grid_t
 ```
-
-### Power calculation {#sec-appendix-simulation-power}
-
-In the first part of the experiment a large effect size is used.
-
-
-For a study period of `r round(study_length_years,1)` years and a annual case volume of `r case_volume` the total number of expected study participants is `r total_study_population`, of which we would expect `r round(total_robotic,1)` to be robotic cases and `r round(total_non_robotic,1)`  given a `r round(robot_length_years,1)` year period where `r scales::percent(proportion_robotic)` of cases are performed robotically.
-
-Assuming a `r mu_tot` mg (SD: `r sd_tot` mg) mean opioid requirement for the non-robotic population, we can calculate the expected mean OME requirement for robotic and non-robotic cases given a `r robot_effect_size` effect size. The expected mean OME requirement for robotic cases is `r mu_robotic` mg giving a mean difference of `r  mean_diff` mg or `r mean_diff_sd` standard deviations.
-
-```{r}
-library(pwr)
-power_exp_1 <- pwr.t2n.test(n1 = total_non_robotic, 
-             n2 = total_robotic, 
-             d = mean_diff_sd, 
-             sig.level = 0.05, 
-             alternative = "two.sided")
-
-```
-Given the initial experimental set up it is clear that the study is very highly powered with the power value to be calculated at `r scales::percent(power_exp_1$power)`.
-
-@fig-power-curve demonstrated the power curve for the comparison of OME between robotic and non-robotic surgical groups. The dashed lines indicate the minimum detectable effect size at 80% power.
-
-```{r}
-#| label: fig-power-curve
-#| fig-cap: "Power curve for the comparison of OME between robotic and non-robotic surgical groups. The dashed lines indicate the minimum detectable effect size at 80% power."
-
-library(pwr)
-library(ggplot2)
-
-d_seq <- seq(0.05, 1.0, by = 0.005)
-
-power_seq <- sapply(d_seq, function(d) {
-  pwr.t2n.test(n1 = total_non_robotic, n2 = total_robotic,
-               d = d, sig.level = 0.05,
-               alternative = "two.sided")$power
-})
-
-mdd <- pwr.t2n.test(n1 = total_non_robotic, n2 = total_robotic,
-                    sig.level = 0.05, power = 0.8,
-                    alternative = "two.sided")$d
-mdd_mg = sd_tot * mdd
-
-power_df <- data.frame(d = d_seq, power = power_seq)
-
-ggplot(power_df, aes(x = d, y = power)) +
-  geom_line() +
-  geom_hline(yintercept = 0.8, linetype = "dashed", colour = "grey40") +
-  geom_vline(xintercept = mdd, linetype = "dashed", colour = "grey40") +
-  annotate("text", x = mdd + 0.03, y = 0.05,
-           label = paste0("MDD = ", round(mdd_mg, 2),"mg \n(SD =" , round(mdd, 3), ")"),
-           hjust = 0, size = 3.5) +
-  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2),
-                     labels = scales::percent_format()) +
-  labs(x = "Cohen's *d* (standardised effect size)",
-       y = "Power") +
-  theme_classic() +
-  theme(axis.title.x = ggtext::element_markdown())
-```
-
-With the observed sample sizes, the minimum detectable effect size at 80% power is 
-*d* = `r round(mdd, 3)`, which equates to a mean difference of `r round(mdd_mg, 2)` mg OME.
-
 
 ::: {.content-visible when-format="pdf"}
 \listoffigures

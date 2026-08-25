@@ -27,6 +27,7 @@ sim_simple <- function(n, # total number of patients
                        sigma = 0.1,
                        treatment_effect = 0,
                        potency_oxycodone,
+                       potency_morphine,
                        error_in_c_oxycodone = 0){
   
    group_control = data.frame(
@@ -42,8 +43,12 @@ sim_simple <- function(n, # total number of patients
    )
   
   result <- rbind(group_control,group_treatment) %>%
-    mutate(dose_recived = ifelse(drug == "morphine", opioid_req, opioid_req/potency_oxycodone),
-           ome = ifelse(drug == "morphine", dose_recived, dose_recived*(potency_oxycodone+(potency_oxycodone*error_in_c_oxycodone))
+    mutate(dose_recived = ifelse(drug == "morphine",
+                                 opioid_req/potency_morphine,
+                                 opioid_req/potency_oxycodone),
+           ome = ifelse(drug == "morphine",
+                        dose_recived*potency_morphine,
+                        dose_recived*(potency_oxycodone+(potency_oxycodone*error_in_c_oxycodone))
                         ))
   
   analysis <- result %>%
@@ -71,7 +76,7 @@ The function then estimates the mean analgesia requirement based on treatment an
 
 sim_patient <- function(
   mu_tot = 50,
-  potency_oxycodone_truth = 1.85,
+  potency_oxycodone_truth,
   potency_oxycodone_ome = 2,
   proportion_morphine = 0.7,
   oxycodone_shortage = c(as.Date("2024-01-01"), as.Date("2024-12-31")),
@@ -180,7 +185,7 @@ run_simulation <- function(trials = 5,
     
     df <- sim_patient(
       mu_tot = mu_tot,
-      potency_oxycodone_truth = potency_oxycodone_truth,
+      potency_oxycodone_truth = potency_oxycodone,
       potency_oxycodone_ome = i,
       proportion_morphine = j,
       oxycodone_shortage = oxycodone_shortage,
@@ -197,7 +202,7 @@ run_simulation <- function(trials = 5,
       pull(p) |>
       diff()
     
-    epsilon <- (i - potency_oxycodone_truth)/potency_oxycodone_truth
+    epsilon <- (i - potency_oxycodone)/potency_oxycodone
     
     
     result <- analyse_dataset(df)
@@ -270,7 +275,7 @@ max_val <- max(results_grid$mean_diff_ome, na.rm = TRUE)
        x = TeX(r'(Value used for $c_{oxycodone}$)'),
        y = "Proportion of morphine perscribed",
        fill = "Mean difference in OME") +
-   geom_vline(xintercept = potency_oxycodone_truth, linetype = "dashed", color = "red")+
+   geom_vline(xintercept = potency_oxycodone, linetype = "dashed", color = "red")+
     theme_minimal() +
     theme(
     axis.text.x = element_text(angle = 45, hjust = 1),

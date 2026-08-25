@@ -19,7 +19,7 @@ book:
 comments:
   hypothesis:
     theme: clean
-    openSidebar: false
+    openSidebar: true
 bibliography: /Users/dylanwhitaker/Documents/UCL OneDrive/refs.bib
 csl: elsevier-vancouver.csl
 format:

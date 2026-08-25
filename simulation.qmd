@@ -264,7 +264,7 @@ max_val <- max(results_grid$mean_diff_ome, na.rm = TRUE)
 
   ggplot(results_grid, aes(x=conversion_value, y=morphine_proportion, fill=mean_diff_ome)) +
   geom_tile() +
-  geom_point(data = subset(results_grid, significant == "*"), shape = 4, color = "purple") +
+ # geom_point(data = subset(results_grid, significant == "*"), shape = 4, color = "purple") +
   symmetric_fill_scale(20)+
   labs(title = ,
        x = TeX(r'(Value used for $c_{oxycodone}$)'),

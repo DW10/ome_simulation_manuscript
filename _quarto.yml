@@ -20,10 +20,12 @@ comments:
   hypothesis:
     theme: clean
     openSidebar: false
+bibliography: /Users/dylanwhitaker/Documents/UCL OneDrive/refs.bib
 csl: elsevier-vancouver.csl
 format:
   html:
     toc: true
+    toc-location: left
     fig-align: center
     fig-width: 6.5
     fig-height: 4
@@ -50,6 +52,7 @@ format:
 prefer-html: true
 crossref:
   lof-title: List of Figures
+  sec-prefix: 'Section '
 execute:
   echo: false
   warning: true

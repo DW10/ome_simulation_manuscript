@@ -9,6 +9,5 @@ _book/*
 manuscript_files/*
 .posit/assistant
 pre_render.R
-
-
 **/*.quarto_ipynb
+.DS_Store

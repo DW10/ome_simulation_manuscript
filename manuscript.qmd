@@ -21,7 +21,7 @@ source(temp_r_file, echo = FALSE)
 unlink(temp_r_file)
 rm(temp_r_file)
 
-set.seed(402)
+set.seed(20)
 ```
 
 ```{r set theme}
@@ -192,7 +192,7 @@ The difference in proportion ($\Delta p_i$) between groups is simulated using a 
 
 The simulation was performed once with parameters specified in @nte-sim-design and repeated across each of the grid values for the rate of post-operative morphine prescribed between `r percent(p_morph_high)` and `r percent(p_morph_low)` with conversion values of oxycodone:morphine between `r conversion_value_low`:1 and `r conversion_value_high`:1. The result for each study was the measured difference between the group mean of the control and intervention groups ($\Delta \mu_{\text{TOB}}$), the observed difference in proportion ($\Delta p_i$) and the error in the conversion value ($\epsilon$).  
 
-All simulations were performed in `r version$version.string` and all code and materials are available on [Github](https://github.com/DW10/ome_simulation_manuscript).
+All simulations were performed in `r version$version.string` and all code and materials are available on [Github](https://github.com/DW10/ome_simulation_manuscript) and in @sec-sim.
 
 ::: {.callout-warning}
 **Reminder**: Make github public before submission
@@ -266,10 +266,10 @@ plot_data <- papers %>%
     grid_list <- lapply(current_data$opioid, function(op) {
       # Match opioid name to ranges key (case-insensitive and stripping ' (assumed)')
       clean_op <- tolower(gsub(" \\(assumed\\)", "", op))
-      if (clean_op %in% names(neilsen_ranges)) {
-        neilsen_ranges[[clean_op]]
+      if (clean_op %in% names(conversion_value_ranges)) {
+        conversion_value_ranges[[clean_op]]
       } else {
-        # Fallback to the existing c_i value if the opioid isn't in neilsen_ranges
+        # Fallback to the existing c_i value if the opioid isn't in conversion_value_ranges
         unique(current_data$c_i[current_data$opioid == op])
       }
     })

@@ -5,10 +5,6 @@ editor_options:
 
 # Code for simulation study {#sec-sim}
 
-## Code repository
-
-The code will be hosted on a public github. 
-
 ## Simple simulation {#sec-sim-simple}
 
 The `sim_simple` function simulates a simple experiment with two equally groups, control and treatment, for total `n` samples. `delta_p_i` controls the difference in proportion of medications `i` between the two groups. For each patient a expected opioid requirement is sampled from a normal distribution with mean `mu_opioid_requirment_control` and standard deviation `sigma`. The treatment group has a mean opioid requirement that is increased by the factor of `treatment_effect`.
@@ -287,9 +283,10 @@ max_val <- max(results_grid$mean_diff_ome, na.rm = TRUE)
 
 ```
 
-`symetic_fill_scale` is a colour gradient scale that allows control of the scale to ensure consistancy between plots 
+`symmetric_fill_scale` is a colour gradient scale that allows control of the scale to ensure consistency between plots 
 
-```{r symetic_fill_scale}
+```{r symmetric_fill_scale}
+#| echo: true
 
 symmetric_fill_scale <- function(limit, type="fill") {
   
@@ -316,7 +313,20 @@ symmetric_fill_scale <- function(limit, type="fill") {
 
 # This data is kept in here to be used in both the manuscript and the appendix. 
 
-neilsen_ranges <- list(
+
+# Extracted set from the papers
+conversion_value_ranges <- list(
+  "morphine" = c(2),
+  "fentanyl" = c(80,100,136),
+  "oxycodone" = c(1.5,3),
+  "tramadol" = c(0.13, 0.2),
+  "hydromorphone" = c(5),
+  "hydrocodone" = c(1)
+)
+
+
+# Neilsen set
+conversion_value_ranges <- list(
   "morphine" = c(2),
   "fentanyl" = c(100,150, 200, 300),
   "oxycodone" = c(3),
@@ -325,13 +335,5 @@ neilsen_ranges <- list(
   "hydrocodone" = c(1, 1.33)
 )
 
-neilsen_ranges <- list(
-  "morphine" = c(2),
-  "fentanyl" = c(80,100,136),
-  "oxycodone" = c(1.5,3),
-  "tramadol" = c(0.13, 0.2),
-  "hydromorphone" = c(5),
-  "hydrocodone" = c(1)
-)
 
 ```

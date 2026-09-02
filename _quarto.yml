@@ -1,7 +1,6 @@
 project:
   type: book
-  pre-render: pre_render.R
-brand: ucl_brand.yml
+#  pre-render: pre_render.R
 book:
   title: 'The inherent bias in studies of reporting outcomes using total opioid burden
     metrics: a simulation study'
@@ -11,17 +10,18 @@ book:
     - docx
   chapters:
     - index.qmd
-    - manuscript.qmd
+    - communication.qmd
+    - author_contributions.qmd
     - references.qmd
   appendices:
-    - appendix.qmd
-    - simulation.qmd
+    - sm-simulations.qmd
+    - sm-lit-review.qmd
 comments:
   hypothesis:
     theme: clean
-    openSidebar: true
+    openSidebar: false
 bibliography: /Users/dylanwhitaker/Documents/UCL OneDrive/refs.bib
-csl: elsevier-vancouver.csl
+csl: bja.csl
 format:
   html:
     toc: true
@@ -42,6 +42,7 @@ format:
     fig-height: 3
     fig-dpi: 300
     output-file: ome_simulation.pdf
+    fig-pos: H
   docx:
     toc: true
     fig-align: center
@@ -50,9 +51,9 @@ format:
     fig-dpi: 300
     output-file: ome_simulation
 prefer-html: true
-crossref:
-  lof-title: List of Figures
-  sec-prefix: 'Section '
+language:
+  crossref-apx-prefix: 'Supplementary material '
+  section-title-appendices: Supplementary material
 execute:
   echo: false
   warning: true

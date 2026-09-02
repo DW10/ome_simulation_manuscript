@@ -1,0 +1,452 @@
+---
+format: html
+---
+
+# Literature rapid review {#sec-lit-review}
+
+```{r source_files}
+#| echo: FALSE
+#| message: FALSE
+#| output: FALSE
+
+source("functions.R", echo = FALSE)
+```
+
+
+## Methods
+
+```{r}
+#| echo: false
+
+# To get screening data:
+# Covidence -> Export -> References subsection -> Title and absract screening -> Export as .csv -> Drag to data foler -> Rename to lit_screen.csn
+lit_screen <- read.csv("data/lit_screen.csv")
+lit_select <- read.csv("data/lit_select.csv")
+lit_included <- read.csv("data/lit_included.csv")
+lit_excluded <- read.csv("data/lit_excluded.csv")
+lit_data <- read.csv("data/lit_data.csv") %>% filter(Reviewer.Name == "Dylan Whitaker")
+conversion <- read.csv("data/conversion_sets.csv")
+
+n_lit_data <- nrow(lit_data)
+
+```
+
+A rapid literature review of the use of opioid equivalence metrics in peri-operative and surgical studies published in 2025 was performed. A structured search of the PUBMED database was performed on 7th July 2026 using the following search string.
+
+::: {.callout-note appearance="simple" title = "PUBMED search term"}
+(((((("opioid equivalent" OR "oral morphine equivalence" OR "oral morphine equivalent" OR "oral morphine equivalents" OR "OME" OR "morphine milligram equivalents" OR "morphine milligram equivalence" OR "MME" OR "morphine equivalent daily dose" OR "MEDD") AND ("perioperative" OR "peri-operative" OR "postoperative" OR "post-operative" OR "surgical" OR "surgery" OR "post-surgical" OR "postsurgical"))) AND ("2025/01/01"[Date - Publication] : "2025/12/31"[Date - Publication]))) AND ("clinical trial"[Filter] OR "clinical trial" OR "controlled clinical trial" OR "randomized controlled trial" OR "interventional" OR "intervention study" OR "clinical trials as topic"[MeSH Terms] OR "cohort studies"[MeSH Terms] OR "cohort" OR "prospective" OR "retrospective" OR "case-control" OR "comparative study" OR "evaluation study"))
+:::
+
+Primary and full text screening was carried out using the inclusion criteria detailed in @tbl-screening by one author.
+
+```{r}
+#| label: tbl-screening
+#| tbl-cap: "Litrature extraction proforma"
+#| output: TRUE
+
+tbl_screening <- data.frame("Criteria" = c("Population", "Concept","Context", "Other"),
+                            "Include" =c("All patient groups undergoing a surgical procedure", "Studies using a total opioid burden metric as a primary or secondary outcome (Such as oral morphine equivalence (OME), milligram morphine equivalence (MME) or opioid equivalence)", "Patients undergoing surgical procedures", "Any studies comparing a control against and intervention or two interventions."),
+                            "Exclude" = c("Patients not undergoing surgical procedures. Non-human studies", "Outcomes not including opioid totals", "Palliative care studies or Pharmacology studies", "Studies with no difference between intervention groups" ))
+
+knitr::kable(tbl_screening) 
+
+```
+
+Papers where ordered randomly within the Covidence platform and data was extracted from a random subset by a single author @zotero-item-670. Data extraction was performed using a drop down selection proforma including study design, methodology and reporting of total opioid metrics as detailed in @tbl-extraction-form. 
+
+```{r}
+#| label: tbl-extraction-form
+#| tbl-cap: "Litrature extraction proforma"
+#| output: TRUE
+
+tbl_extraction_form <- data.frame("Variable" = c("Study type",
+                          "Opioid conversion set",
+                          "Intervention",
+                          "Opioid proportions reported between intervetnion groups",
+                          "Outcome",
+                          "Data avalibility"),
+           "Selection options" = c("Randomised controlled trial, Cohort study, Case controlled study, Other",
+                         "Cited, Included in paper, Not described",
+                         "Surgical intervention, Anaesthetic intervnetion, Other",
+                         "Described or Not described",
+                         "Difference in opioid requirement/treatment, No difference",
+                         "Publically avalible, Not publically avaliable, Database study"),
+           "Explanatory text" = c("What is the format of the study?",
+                                  "In the methods section, is how is the OME metric generated described and how are the conversion values referenced?",
+                                  "What type of intervention is given. For pre/post-operative interventions that include changes to medication select anaesthesia. For descriptive studies analysing differences select other.",
+                                  "Assess the results section, Is it possible to establish the proprotion, mean or total doses of each opioid between intervention groups. If authros explicilty state only one type of opioid used in the OME/MME metric select 'Described'.",
+                                  "In the primary outcome of OME/MME, is there a significant difference reported between intervention groups.",
+                                  "Is data avalible for readers to ascertain the proportions of opioids between groups? If OME/MME metric only avaliable then select 'Not avalible'."))
+
+knitr::kable(tbl_extraction_form,
+    col.names = c("Variable", "Options", "Explanatory text")
+)
+
+```
+
+```{r}
+papers <- read.csv("data/exemplars.csv") 
+
+excluded_papers <- papers %>% filter(is.na(opioid))
+
+papers <- papers %>% filter(!is.na(opioid)) %>%
+  mutate(control_mean_dose = case_when(is.na(control_mean_dose) ~ (control_q1+control_median_dose+control_q3)/3,
+                                       .default = control_mean_dose),
+         intervention_mean_dose = case_when(is.na(intervention_mean_dose) ~ (intervention_q1 + intervention_median_dose + intervention_q3)/3,
+                                       .default = intervention_mean_dose),
+         control_sd = (control_q3-control_q1)/1.35,
+         control_sd = case_when(is.na(control_sd) ~ (control_q3-control_q1)/1.35,
+                                .default = control_sd)
+         )%>%
+  mutate(Delta_p = intervention_mean_dose - control_mean_dose,
+         delta_p = Delta_p/control_mean_dose) 
+
+papers_summary <- papers %>% mutate(control_mean_ome = control_mean_dose*c_i,
+         intervention_mean_ome = intervention_mean_dose*c_i) %>%
+  group_by(authors) %>%
+  summarise(control_total_ome = sum(control_mean_ome),
+            intervention_total_ome = sum(intervention_mean_ome)) %>%
+  mutate(Delta_ome = intervention_total_ome - control_total_ome,
+         delta_ome = Delta_ome/control_total_ome)
+
+exemplars_summary <- readxl::read_excel("data/exemplar_summary.xlsx")
+
+exemplars_summary <- exemplars_summary %>%
+  mutate(reported_Delta_ome = reported_intervnetion_group_mean - reported_control_group_mean,
+         reported_delta_ome = reported_Delta_ome/reported_control_group_mean)
+
+```
+
+```{r neilsen range}
+#| echo: false
+
+# This data is kept in here to be used in both the manuscript and the appendix. 
+
+
+# Extracted set from the papers
+conversion_value_ranges <- list(
+  "morphine" = c(2),
+  "fentanyl" = c(80,100,136),
+  "oxycodone" = c(1.5,3),
+  "tramadol" = c(0.13, 0.2),
+  "hydromorphone" = c(5),
+  "hydrocodone" = c(1)
+)
+
+
+# Neilsen set
+conversion_value_ranges <- list(
+  "morphine" = c(2),
+  "fentanyl" = c(100,150, 200, 300),
+  "oxycodone" = c(3),
+  "tramadol" = c(0.1, 0.2, 0.25),
+  "hydromorphone" = c(15,20),
+  "hydrocodone" = c(1, 1.33)
+)
+
+
+```
+
+```{r}
+# 1. Run the independent grid search (if not already done)
+library(tidyr)
+plot_data <- papers %>%
+  group_by(authors) %>%
+  group_modify(~ {
+    current_data <- .x
+    n_drugs <- nrow(current_data)
+    
+    # Map each drug to its range from the ranges list
+    grid_list <- lapply(current_data$opioid, function(op) {
+      # Match opioid name to ranges key (case-insensitive and stripping ' (assumed)')
+      clean_op <- tolower(gsub(" \\(assumed\\)", "", op))
+      if (clean_op %in% names(conversion_value_ranges)) {
+        conversion_value_ranges[[clean_op]]
+      } else {
+        # Fallback to the existing c_i value if the opioid isn't in conversion_value_ranges
+        unique(current_data$c_i[current_data$opioid == op])
+      }
+    })
+    
+    names(grid_list) <- paste0("m_", 1:n_drugs)
+    
+    expand_grid(!!!grid_list) %>%
+      rowwise() %>%
+      mutate(
+        control_total_ome = sum(current_data$control_mean_dose * c_across(starts_with("m_"))),
+        intervention_total_ome = sum(current_data$intervention_mean_dose * c_across(starts_with("m_")))
+      ) %>%
+      ungroup()
+  }) %>%
+  mutate(
+    Delta_ome = intervention_total_ome - control_total_ome,
+    delta_ome = (Delta_ome) / control_total_ome
+  )
+
+papers_grid_summary <- plot_data %>%
+  group_by(authors) %>%
+  summarise(min_Delta = min(Delta_ome),
+            max_Delta = max(Delta_ome),
+            min_delta = min(delta_ome),
+            max_delta = max(delta_ome)) %>%
+  left_join(papers_summary%>%select(authors, delta_ome), join_by(authors))
+
+```
+
+For each paper where group average doses of each opioid were described, these were extracted. If only median values were provided, an estimated mean was calculated using Wan's 2014 approximation ($\hat{d_i} = \frac{Q_1 + M + Q_2}{3}$ ) to preserve the linearity with in the arithmetic mean @wanEstimatingSampleMean2014. Where opioid routes where not provided then IV was assumed and where conversion values were not provided, the Nielsen set was used @nielsenSynthesisOralMorphine2016. 
+
+The group mean of total opioid burden reported by the paper was extracted. Then using the mean doses and the conversion values provided, the group mean was calculated independently. Following this, all possible group means were calculated by applying each of the possible values provided in Table 1 of Neilsens Conversion set (summarised in @tbl-conversion-ranges), as the range of plausible conversion values an author may use @nielsenSynthesisOralMorphine2016.
+
+```{r}
+#| label: tbl-conversion-ranges
+
+conversion_value_ranges <- data.frame(
+  Medication = names(conversion_value_ranges),
+  `Conversion values` = sapply(conversion_value_ranges, paste, collapse = ", "),
+  check.names = FALSE,
+  row.names = NULL
+)
+
+knitr::kable(conversion_value_ranges)
+```
+
+## Results
+
+### Reporting of opioid burden metrics
+
+480 studies were identified in the rapid literature search, a sample of `r n_lit_data` that fit the eligibility had data extracted. The majority of studies were cohort studies and most common intervention was anaesthetic interventions (@fig-study-types).
+
+```{r}
+#| label: fig-study-types
+#| fig-cap: "**Study design and intervention types in included literature** - Bar charts summarising the study design and intervention type of studies included in the rapid literature review. Left panel shows count by study design; right panel shows count by intervention type."
+
+# Plot for Study.type proportions
+plot_lit_study_type <- ggplot(lit_data, aes(x = Study.type)) +
+  geom_bar(aes(fill = Study.type)) +
+  labs(x = "Study design",
+       y = "Count") +
+  theme_minimal() +
+  theme_academic()+
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  scale_fill_academic()+
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
+# Plot for Intervention proportions
+plot_lit_intervnetion_type <- ggplot(lit_data, aes(x = Intervention)) +
+  geom_bar(aes(fill = Intervention)) +
+  labs(x = "Intervention",
+       y = "Count") +
+  theme_minimal() +
+  theme_academic()+
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  scale_fill_academic()+
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
+plot_lit_study_type + plot_lit_intervnetion_type
+
+```
+
+With regards to the opioid conversion sets used, `r lit_data %>% filter(Opioid.conversion.set == "Cited") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.conversion.set == "Cited") %>% nrow()/n_lit_data)`) cited another source, whilst `r lit_data %>% filter(Opioid.conversion.set == "Included in text") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.conversion.set == "Included in text") %>% nrow()/n_lit_data)`) included the conversion values within the paper. `r lit_data %>% filter(Opioid.conversion.set == "Not described") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.conversion.set == "Not described") %>% nrow()/n_lit_data)`) papers did not include any citation or description of the opioid conversion sets used. `r lit_data %>% filter(Opioid.proportions.within.group == "Described") %>% nrow()` (`r scales::percent(lit_data %>% filter(Opioid.proportions.within.group == "Described") %>% nrow()/n_lit_data)`) papers described the proportions of different opioids between intervention groups (@fig-study-results). Of these `r nrow(lit_data %>% filter(Opioid.proportions.within.group == "Described"))` papers, `r nrow(excluded_papers)` provided count data only and not mean/median dose for each opioid within treatment groups. 
+
+```{r}
+#| label: fig-study-results
+#| fig-cap: "**Opioid conversion set reporting and within-group proportion documentation** - Heatmap showing the count of studies by opioid conversion set type and whether opioid proportions within groups were reported. Cell counts are displayed as text labels."
+
+# Prepare data for heatmap: sum of occurrences per combination
+heatmap_data <- lit_data |>
+  group_by(Opioid.conversion.set, Opioid.proportions.within.group) |>
+  summarise(count = n(), .groups = "drop")
+
+# Prepare data with a conditional color column for labels
+ggplot(heatmap_data, aes(y = Opioid.proportions.within.group, x = Opioid.conversion.set, fill = count)) +
+  geom_tile() +
+  geom_label(aes(label = paste0("n=",count),
+                 color = after_scale(ifelse(fill > 0.5, "black", "white"))),
+             fill = alpha("white", 0.7), size = 3.5) +
+  labs(y = "Proportion of opioids",
+       x = "Opioid conversion set",
+       fill = "Count") +
+  theme_minimal()+
+ theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    axis.text.y = element_text(angle = 45),
+    panel.grid = element_blank(),
+    legend.position = "none")+
+  symmetric_fill_scale(max(heatmap_data$count))
+```
+
+### Impact of varying conversion values on studies
+
+@tbl-lit-summary details the `r length(unique(exemplars_summary$Ref))` studies where opioid proportions could be recovered. Of note, only Baran cited a opioid conversion set @baranOptimizingAnalgesiaMinimally2025, all other authors did not describe which value sets were used. Two studies were randomised controlled trials (RCT), whilst the remainder were retrospective cohort studies. With regards to the interventions analysed, in this subset, all were concerning analgesia either during or after the surgical procedure and were classed as anesthesia interventions. 
+
+```{r}
+#| label: tbl-lit-summary
+#| tbl-cap: "Summary table of litrature articles that presented breakdown by opioid groups."
+
+exemplars_summary <- exemplars_summary %>%
+  left_join(papers_summary, by="authors") %>%
+  left_join(papers %>% select(authors, authors), join_by(authors), multiple = "first") %>%
+  left_join(papers_grid_summary %>% select(-delta_ome), by = "authors") %>%
+  mutate(reported_diff = paste0(round(reported_Delta_ome,1) , "mg (", percent(reported_delta_ome, accuracy = 0.1), ")"),
+         calculated_diff = paste0(round(Delta_ome, 1), "mg (", percent(delta_ome, accuracy = 0.1), ")"),
+         min_diff = paste0(round(min_Delta, 1), "mg (", percent(min_delta, accuracy = 0.1), ")"),
+         max_diff = paste0(round(max_Delta, 1), "mg (", percent(max_delta, accuracy = 0.1), ")")
+         ) 
+  
+exemplars_summary_table <- exemplars_summary %>%
+  mutate(Ref = as.integer(Ref),
+         authors = case_when(Ref==303 ~ "Gold 2025",
+                             .default = authors)) %>%
+  left_join(lit_data, join_by("Ref" == "Covidence..") ) %>%
+  select(authors, note, Title, Study.type,population, control_group, intervention_group, Opioid.conversion.set) %>%
+  unique() 
+
+gt_table_data <- exemplars_summary_table %>%
+  filter(authors != "Gold 2025") %>%
+  select(-note)
+
+# Identify rows with notes for footnotes
+note_indices <- which(!is.na(exemplars_summary_table$note) & exemplars_summary_table$note != "")
+notes_to_add <- exemplars_summary_table$note[note_indices]
+
+tbl <- gt_table_data %>%
+  gt() %>%
+  cols_label(
+    authors = "Authors",
+    Title = "Title",
+    Study.type = "Study design",
+    population = "Population",
+    control_group = "Control group",
+    intervention_group = "Intervention group",
+    Opioid.conversion.set = "Opioid conversion set included"
+  )
+
+# Programmatically add footnotes
+for (i in seq_along(note_indices)) {
+  tbl <- tbl %>%
+    tab_footnote(
+      footnote = notes_to_add[i],
+      locations = cells_body(columns = authors, rows = note_indices[i])
+    )
+}
+
+tbl %>%
+  opt_footnote_marks(marks = "numbers") %>%
+  tab_options(table.font.size = "small",
+              container.width = pct(100)) %>%
+  cols_width(
+    Title ~ pct(40),
+    population ~ pct(20)
+  ) %>%
+  tab_options(
+    latex.use_longtable = TRUE,
+    latex.tbl.pos = "tb"
+  )
+
+```
+
+
+@tbl-lit-summary-outcomes provides three sets of results for the studies detailed. The first is the study reported outcomes, this is the mean total opioid burden for the control and intervention groups. From this an observed difference is calculated with a percentage change from the control. The second column set is the de-novo calculation, by using the mean dose of each opioid within each group and conversion set provided (or Neilsens if not) to attempt to calculate the control and intervention group means. From these de-novo estimates a second difference of the treatment group was calculated. 
+
+Finally, regardless of the conversion sets used, the de-novo calculation was repeated across the possible grid values of the Neilsen conversion set. The minimum and maximum possible differences were then extracted. 
+
+```{r}
+#| label: tbl-lit-summary-outcomes
+#| tbl-cap: "Table of reported outcomes and de-novo calalculated outcomes."
+
+
+exemplars_summary_table <- exemplars_summary %>%
+  select(authors,
+         reported_control_group_mean, reported_intervnetion_group_mean, reported_diff,
+         control_total_ome, intervention_total_ome, calculated_diff,
+         min_diff, max_diff)
+
+exemplars_summary_table %>%
+  gt() %>%
+  tab_spanner(
+    label = "Study reported outcome",
+    columns = c(reported_control_group_mean, reported_intervnetion_group_mean, reported_diff)
+  ) %>%
+  tab_spanner(
+    label = "De Novo calculated outcome",
+    columns = c(control_total_ome, intervention_total_ome, calculated_diff)
+  ) %>%
+  tab_spanner(
+    label = "Range of estimates",
+    columns = c(min_diff, max_diff)
+  ) %>%
+  cols_label(
+    authors = "Authors",
+    reported_control_group_mean = "Control group",
+    reported_intervnetion_group_mean = "Intervention group",
+    reported_diff = "Difference",
+    control_total_ome = "Control group",
+    intervention_total_ome = "Intervention group",
+    calculated_diff = "Difference",
+    min_diff = "Lower bound",
+    max_diff = "Upper bound"
+  ) %>%
+  tab_style(
+    style = cell_text(weight = "bold"),
+    locations = cells_body(columns = c(reported_diff, calculated_diff))
+  ) %>%
+  fmt_number(
+    columns = where(is.numeric),
+    decimals = 1
+  ) %>%
+  tab_options(
+  table.font.size = "small",
+  container.width = pct(100)
+  ) %>%
+  tab_options(
+    latex.use_longtable = TRUE,
+    latex.tbl.pos = "h"
+  )
+```
+
+This table highlights the difficulty in re-calculating the total opioid burdens that the authors have produced. This is likely due to a number of assumptions as details in the methods such as estimating mean values from medians and assuming medication routes. Only one study, Fedorka 2025, showed no sensitivity to the conversion value set used @fedorkaLiposomalBupivacaineBupivacaine2025. This is because, in the RCT only oxycodone was used in the post-operative period, as so whilst the group estimates may vary, the treatment effect percentage is fixed at 10%.  
+
+@fig-lit-outcomes demonstrates the reported difference in opioid burden (red cross) compared to the de-novo calculated difference (green cross). When the the grid search of the possible combinations of the values used by Neilsen was performed, the minimum and maximum values are demonstrated by the orange whiskers.
+
+```{r}
+#| label: fig-lit-outcomes
+#| fig-cap: "Point and whisker plot of the reported and de-novo calcualted difference in the intervention group for opioid outcomes. Red cross shows the reported percentage intervention group outcome, green cross's the de novo point estiamte using hte values reported by neilsen and the oragne error bar the range using the grid values across the ranges reproted by Neilsen. All effects given as the percentage change in the intervention group compared to the control."
+
+plot_point_whisker <- ggplot(exemplars_summary, aes(y=authors))+
+  geom_errorbar(aes(xmin=min_delta, xmax=max_delta), color = "orange")+
+  geom_point(aes(x=delta_ome),colour = "orange", shape=18, size = 4)+
+  geom_point(aes(x=reported_delta_ome),colour = "blue", shape = 4, size=3)+
+  geom_vline(xintercept = 0, color = "black") +
+  theme_academic()+
+  theme(axis.line.y = element_blank())+
+  labs(x="Change in opioid use in intervention group",
+       y="")+
+  scale_x_continuous(labels = percent,
+                     breaks = seq(-0.6, 0.3, by = 0.1))+
+  scale_y_discrete(limits=rev)
+
+plot_point_whisker
+
+```
+
+```{r}
+
+## Exporting variables to be used in the main letter
+
+lit_not_described <- 1-lit_data %>% filter(Opioid.conversion.set == "Not described") %>% nrow()/n_lit_data
+
+lit_provide_doses <- lit_data %>% filter(Opioid.proportions.within.group == "Described") %>% nrow()/n_lit_data
+
+
+shared_objects <- list(
+  n_lit_data = nrow(lit_data),
+  lit_not_described = lit_not_described,
+  lit_provide_doses = lit_provide_doses,
+  plot_point_whisker = plot_point_whisker
+)
+saveRDS(shared_objects, file = "data/shared_objects.rds")
+
+```
+ 

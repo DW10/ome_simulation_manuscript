@@ -1,0 +1,70 @@
+---
+format: html
+---
+
+# Manuscript
+
+```{r source_files}
+#| echo: false
+#| message: false
+
+source("functions.R", echo = FALSE)
+
+shared_objects <- readRDS("data/shared_objects.rds")
+n_lit_data <- shared_objects$n_lit_data
+lit_not_described <- shared_objects$lit_not_described
+lit_provide_doses <- shared_objects$lit_provide_doses
+plot_point_whisker <- shared_objects$plot_point_whisker
+```
+
+## Introduction
+
+There are a wide range of different opioid used across the range of medical specialities and patient groups, each with their own potency to provide analgesia @bhatnagarOpioidEquivalency2026. Opioid conversion values have offered the ability to convert a specific opioid into the equivalent units of a reference opioid, usually morphine, to produce doses in oral morphine equivalent milligrams (OME mg) or milligram morphine equivalent (MME).  
+
+A number of conversion value tables have been published in an attempt to provide a best estimate of the conversion values between opioids [@mcphersonDemystifyingOpioidConversion2010; @nielsenSynthesisOralMorphine2016; @dowellCDCClinicalPractice2022]. Within clinical practice, these cited value sets are a good surrogate for the true conversion value when used in opioid rotation @mercadanteConversionRatiosOpioid2023. Despite this, application of the value sets remains variable in both clinical and research practice [@rennickVariabilityOpioidEquivalence2016; @yessaillianSystematicReviewMorphine2024].
+
+The total opioid burden (TOB) for patient $j$ is defined as the a weighted sum of the dose $d$ for medication $i$ in the set of medications $\mathbf{M}$ multiplied by the conversion value $c$ for a given route $r$ (@eq-ome).
+
+$$\text{TOB}_j = \sum_{i\in\mathbf{M}} d_i c_{i,r}
+$${#eq-ome}
+
+For many studies, the TOB for each patient within a group, is often averaged and compared to draw conclusions about difference in opioid requirement. There is an implicit claim that once converted, it no longer matters which opioids a patient receives. However, this is only true if the mixture of opioids in each group are the same or there is no error in the conversion values used. 
+
+We aim to quantify the degree of this bias and describe the methodologies of reporting of TOB metrics used in the perioperative literature. 
+
+## Methods
+
+Two simulation studies where performed as detailed in @sec-sims. The first simulation explores causative factors across the entire parameter space and varies the differing proportion of opioids between two observational groups and the error in the conversion value used. The second simulates a realistic hypothetical study, of the effect of robotic surgery on pain, to understand the extent of the bias under real experimental conditions. In both simulation a two opioid situation is used with the reference medication of morphine and the converted opioid as oxycodone. 
+
+To assess the current practices of TOB methodology and reporting in perioperative research a literature rapid review protocol was developed @sec-lit-review. To assess the protocol, a preliminary pilot was performed to screen and extract data from 20% of the the studies. From eligible studies that reported the group mean doses of each opioid, it was attempted to recalculate the TOB outcomes as a point estimate and then as a minimum and maximum using a range of different conversion values.  
+
+No ethics was required for this study. All simulations were performed in `r version$version.string` and code is available on [Github](https://github.com/DW10/ome_simulation_manuscript). The rapid review protocol is pre-registered on the [Open Science Framework](https://doi.org/10.17605/OSF.IO/EFJ8G)
+
+## Results
+
+The first simulation found that if either condition is met, there is no bias in the resulting observed difference in means. When fixing the error in the conversion value, a linear bias arises with respect to any difference in opioid proportions between groups. When the error is also varied, this bias compounds. Under the hypothetical experimental conditions of a observational trial, the bias is able to significantly alter the results, mask and even invert the treatment effect.  
+
+Across the perioperative literature, `r n_lit_data` studies had data extracted. Only `r scales::percent(lit_not_described)` of papers described the conversion values used and `r scales::percent(lit_provide_doses)` described the proportions of different opioids between intervention groups. 5 studies reported the minimum dataset to attempt to reproduce the TOB calculation. The paper reported outcomes and the de-novo calculation are demonstrated in @fig-1. 
+
+```{r}
+#| label: fig-1
+#| fig-cap: "Point and whisker plot  demonstrating the outcome of the intervention group on the total opioid burden metric. Blue cross denotes the reported outcome in percentage change in opioid burden. Orange dimond denoted the calculated point estimate. Orange error bar denotes the possible range of point estimates using the range of conversion values."
+
+plot_point_whisker
+```
+
+## Discussion
+
+This study is limited by only simulating a two opioid paradigm and by of comparing group means; it is unclear how this bias may effect multiple opioid or comparison of group medians. Furthermore, the literature review across the perioperative domain in 2025 may not be representative  of wider use of TOB metrics. 
+
+In observational research, it will be vanishingly rare that the first condition of balanced groups is met exactly. Whilst a randomised controlled trial may offer more hope, a collider bias may easily occur if the treatment itself has an effect on the choice of analgesia used as the post-operative analgesia is not protocolised @pearlBookWhyNew2019.
+
+The influence of the error in the conversion value is a significant problem.  McPherson describes a range of limitations in the use of these equianalgesic tables for clinical care including the single opioid studies as source of the data and the lack of patient specific variables @mcphersonWhyEquianalgesicTables2020. Distributions of possible conversion value should instead be produced, this also offer the opportunity to tailor to specific populations that have known pharmacokinetic differences @leeOpioidRequirementsResponses1997.
+
+We recommend the following:
+
+1. All studies using opioid equivalence metrics must publish the proportions of the differing opioids for each group and conversion value sets used. 
+
+2. More work is required to estimate the true population level opioid conversion value sets to reduce the error between the true potency and the value sets used. 
+
+

@@ -16,7 +16,7 @@ editor_options:
 temp_r_file <- tempfile(fileext = ".R")
 knitr::purl("simulation.qmd", output = temp_r_file, quiet = TRUE)
 source(temp_r_file, echo = FALSE)
-knitr::purl("index.qmd", output = temp_r_file, quiet = TRUE)
+knitr::purl("abstract_lay_symm", output = temp_r_file, quiet = TRUE)
 source(temp_r_file, echo = FALSE)
 unlink(temp_r_file)
 rm(temp_r_file)
@@ -853,41 +853,7 @@ In retrospective work it is not possible to control the proportions of different
 2. More work is required to estimate the true population level opioid conversion value sets to reduce the error between the true potency and the value sets used. 
 
 
-## Funding statement
 
-DW is supported by the Engineering and Physical Sciences Research Council (EP/Y034929/1). MW and SH are supported by the National Institute for Health Research (NIHR) Central London Patient Safety Research Collaboration (NIHR 204297). SH and DW are supported by the NIHR University College London Hospitals National Health Service Foundation Trust and University College London Biomedical Research Centre. The views expressed in this study are those of the authors and do not necessarily reflect those of the NIHR or the Department of Health and Social Care.
-
-## Acknowledgements
-
-The authors wish to thank the following for their support. Dr Thomas Frost for early direction and support. University College London Hospitals National Health Service Foundation Trust Critical Care Special Interest Project Scheme.
-
-## Generative AI statement
-
-Generative artificial intelligence tools where used to aid the production of code, figures and tables. These tools included Gemini 3.1 models (Pro, Flash and Flash-Lite), Claude sonnet 4.6 (via Posit AI) and Github Copilot (via Posit Code Assistant). All ideas and methods are of the authors own, all text and code was reviewed and edited following generation.
-
-## CRediT statement
-
-```{r}
-#| echo: false
-#| message: false
-#| warning: false
-#| output: asis
-#| eval: false
-
-tbl_authors <- googlesheets4::read_sheet("123JiCxSHvA7Wiaz6tU25B7Wq27Ty_cV7n6UUqlhyvrY",sheet = 2)
-aut <- plume::Plume$new(tbl_authors, dotted_initials = F)
-aut$get_contributions(roles_first = T)
-```
-
-Conceptualization: DW, MW and SH
-Data curation: DW
-Formal analysis: DW
-Funding acquisition: MW and SH
-Methodology: DW
-Supervision: MW and SH
-Visualization: DW
-Writing - original draft: DW
-Writing - review & editing: DW, MW and SH
 
 ::: {.content-visible when-format="pdf"}
 \listoffigures

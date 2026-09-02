@@ -1,98 +1,31 @@
----
-output: html_document
-editor_options: 
-  chunk_output_type: console
----
+# Cover Letter {.unnumbered}
 
-```{r set quality}
-#| output: asis
-
-PRODUCTION_QUALITY <- FALSE
-if (!PRODUCTION_QUALITY) {
-  cat("::: {.callout-note}\n")
-  cat("Draft quality render\n")
-  cat(":::\n")
+```{=html}
+<style>
+.flushright {
+   text-align: right;
 }
-
-#Set parameters for use across documents
-potency_oxycodone = 2.25
-potency_morphine = 2
+</style>
 ```
 
-:::{.callout-warning title="Note to reviwer"}
-
-Below is the outline of the "story" of the paper. 
-
-Intro:
-
-1) TOBM (Total opioid burden metrics) are widely used (4,000 papers in 5 years and included in core outcome sets)
-
-2) TOBM are not well defined, there is a number of conversion sets, calculators, and base units (OME vs MME)
-
-3) TOBM arose from clinical practice but has since been used in research, describe history of conversions sets and calculators
-
-4) There are potential issues with the metrics that have not been described before (dependance on proportion and error). Show how weighted sum of means = sum of weighted means.
-
-Methods and results:
-
-1) Show that there are dependences on proportion and error (red blue heatmap)
-
-2) Show that these dependance are in clinical meaningful experiment space with a hypothetical simulation (red blue heatmap with subsection)
-
-3) Show that the literature doesn't describe the metric methodology well (bar charts and heat map)
-
-4) Show the across a range of reasonable assumptions, the results of a study can vary significantly (point and whisker plot)
-
-Conclusion:
-
-1) We have shown that TOBM is a metric that has inherent bias
-
-2) This bias can change the results of a study by a significant amount depending on the situation
-
-3) The features need to detect the bias (breakdown of mean dose and conversion values used) are not well reported by the literature
-
-4) In the future we should:
-
-	- Report the methodology of TOBM better
-	
-	- Aim to address the bias with improved conversion value estimates and statistical approaches to adjust for unbalanced groups.
-	
+::: {.flushright data-latex=""}
+Professor Hugh Hemmings,\
+Weill Cornell Medical College,\
+New York,\
+NY,\
+USA\
 :::
 
-# Abstract {.unnumbered}
+Dear Professor Hemmings
 
-**Introduction:**
+We thank you for considering our **Research Communication** manuscript titled *"The inherent bias in studies of reporting outcomes using total opioid burden metrics: a simulation study"* to the British Journal of Anaesthesia. 
 
-Measure of total opioid burden (TOB) such as oral morphine equivalence (OME) or milligram morphine equivalence (MME) are an important outcome and have been used in over 4,000 papers in perioperative research the last 5 years. The conversion sets used were often created for clinical care and have a number of limitations when applied to research. Furthermore, their application within research is variable and not well defined. We propose that an inherent bias in TOB metrics when used to compare between groups where opioid proportions are unbalanced or there is an error in the conversion values used. 
+Our paper is a methodological critique of total opioid burden metrics such as oral morphine equivalent (OME) that finds an important and unpublished bias. This bias is dependent on the proportions of differing opioid and the error in the conversion values used, whilst it applies predominantly to observational research, there are key implications for randomised controlled trials. 
 
-**Methods:**
+The opioid conversion set by Nielsen et al has been cited in 678 time whilst CDC's value set has over 2,500 citations. Despite multiple attempts to unify the methodology the inherent bias in the methodology continues to be overlooked. We hope this paper will start the conversation about how and where total opioid burden metrics are used in perioperative research and start the process to improve the accuracy in the metrics already widely used across perioperative research. We aim to set the new standard for how opioid burden metrics are reported.
 
-Two simulation studies were performed to assess the extent of the bias in comparative studies. The first simulation is a comparative analysis between two groups with no treatment effect, performed across a range of grid values of different opioid proportion and different errors in the conversion values used. The second simulation uses a hypothetical study set up, analysing a robotic treatment compared to standard surgical treatment, also with no treatment effect. Group opioid imbalance is simulated using a medication shortage that effects the groups unequally. 
+We can confirm no parts of this work have been presented before and it is not under consideration at any other journal. 
 
-Following this, a rapid literature review was performed to describe the methodology and reporting of TOB metrics within surgical and perioperative studies in 2025. The data extracted included the study type and if the opioid conversion values and group opioid doses were reported. Where the minimum information was provided, it was attempted to calculate the TOB results de-novo. 
+Many thanks,
 
-**Results:**
-
-The simulation studies demonstrate an inherent bias when comparing group means. This bias is dependant on the degree of imbalance between groups and the error within the conversion values used. Within a realistic hypothetical study space, the bias is able to significantly alter results.
-
-Across the literature TOB metrics are poorly reported. Only 33% report a conversion value set used and 10% report the intergroup variation in mean opioid doses. For the 5 papers where the minimum data was provided the de-novo calculated outcomes often showed significant variance to the outcomes reported. 
-
-**Discussion:**
-
-TOB metrics offer an important and clinically relevant outcome for comparative studies in the surgical and perioperative research domain. Researchers should be aware of the inherent bias and must report the key methodologies and results to ensure this bias can be quantified. Further work is needed to provide more accurate conversion values to the biological ground truth and to investigate methods to reduce the bias. 
-
-# Lay summary
-
-In research looking at pain during and after surgery, a number that is often calculated is the **total opioid burden**. This is a sum of all of the different opioid medications, converted into the equivalent units of morphine for each patient. This number is often used as the primary outcome to compare two different treatments. 
-
-We think that if the groups are not balanced (meaning that the two groups of patients being compared did not received the same proportion of different opioids) then there is a bias in the outcome. This bias can be increased or decreased depending on the conversion values that were used. This bias can cause an error in the results or even change the direction of the results (a treatment that may be beneficial can appear harmful).
-
-To test this, we did two simulations that showed how much bias there is under different circumstances. We found that to understand the bias, it is important for researchers to publish the different doses of opioids in each group and also the conversion values they used to convert medication doses to morphine equivalents.
-
-We also looked at some of the research published in 2025 to see how many authors were publishing the key parts to understand how much bias there may be. We found that only a small percentage of current research papers are publishing these key aspects. From the papers that did publish their calculations and methods, it was difficult to re-create them ourselves due to missing information.
-
-We believe that all research using total opioid burdens in their studies must publish their the conversion sets used and describe the results broken down by each opioid. We also believe that more work should go into making more accurate conversion sets and seeing if there are ways to correct for this bias .  
-
-
-
-
+The authors

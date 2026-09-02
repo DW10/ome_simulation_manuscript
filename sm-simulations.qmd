@@ -1,0 +1,795 @@
+---
+format: html
+---
+# Simulations {#sec-sims}
+
+```{r source_files}
+#| echo: FALSE
+#| message: FALSE
+#| output: FALSE
+
+source("functions.R", echo = FALSE)
+```
+
+```{r sim_patient}
+#| echo: false
+#| collape: true
+
+sim_patient <- function(
+  mu_tot = 50,
+  potency_oxycodone_truth,
+  potency_oxycodone_ome = 2,
+  proportion_morphine = 0.7,
+  oxycodone_shortage = c(as.Date("2024-01-01"), as.Date("2024-12-31")),
+  t_0 = as.Date("2020-01-01"),
+  t_end = as.Date("2025-12-31"),
+  t_robot = as.Date("2023-01-01"),
+  annual_n = 30,
+  robot_effect_size = 0.8
+){
+  # Calculate total number of patients over the study period
+  total_days <- as.numeric(t_end - t_0)
+  total_years <- total_days / 365.25
+  total_n <- round(total_years * annual_n)
+
+  # Sample random dates
+  dates <- as.Date(runif(total_n, min = as.numeric(t_0), max = as.numeric(t_end)), origin = "1970-01-01")
+
+  # Sample if procedure is robotic (after 2023, 80% chance)
+  robotic <- ifelse(dates >= t_robot, rbinom(total_n, 1, 0.8) == 1, FALSE)
+
+  # Sample which opioid is used
+  # During 2024, 100% morphine. Otherwise, 40% oxycodone, 60% morphine.
+  is_shortage <- dates >= oxycodone_shortage[1] & dates <= oxycodone_shortage[2]
+  opioid <- ifelse(is_shortage, "M",
+    ifelse(rbinom(total_n, 1, proportion_morphine) == 1, "M", "O")
+  )
+
+  # Estimate mean analgesia requirement based on treatment
+  mu <- ifelse(robotic, mu_tot * robot_effect_size, mu_tot)
+
+  # Set mean dose depending on opioid type (using true potency)
+  mu_op <- ifelse(opioid == "M", mu, mu / potency_oxycodone_truth)
+
+  # Sample dose from normal distribution
+  dose <- rnorm(total_n, mean = mu_op, sd = 10)
+
+  # Round the doses to an integer of milligrams and prevent negative doses
+  dose <- pmax(0, round(dose))
+
+  # Create final dataframe
+  df <- data.frame(
+    date = dates,
+    robotic = robotic,
+    opioid = opioid,
+    dose = dose
+  )
+
+  # Sort by date for chronological sense
+  df <- df[order(df$date), ]
+  rownames(df) <- NULL
+  
+  df <- df %>%
+      mutate(ome = case_when(
+        opioid == "M" ~ dose,
+        opioid == "O" ~ dose * 1*potency_oxycodone_ome
+      ))
+ 
+  df <- df %>% mutate(
+    robotic = factor(robotic, labels = c("Non-Robotic", "Robotic")),
+    opioid = factor(opioid, levels = c("M", "O"), labels = c("Morphine", "Oxycodone"))
+  )
+
+  return(df)
+}
+```
+
+```{r sim_simple}
+
+sim_simple <- function(n, # total number of patients
+                       delta_p_i, # Difference in proportion of i between groups,
+                       i = c("morphine", "oxycodone"), # The two medications
+                       mu_opioid_requirment_control = 1, 
+                       sigma = 0.1,
+                       treatment_effect = 0,
+                       potency_oxycodone,
+                       potency_morphine,
+                       error_in_c_oxycodone = 0){
+  
+   group_control = data.frame(
+     group = "control",
+     drug = sample(i, size = n/2, replace = TRUE, prob = c(0.5+delta_p_i/2, 0.5-delta_p_i/2)),
+     opioid_req = rnorm(n/2, mean = mu_opioid_requirment_control, sd = sigma)
+   )
+  
+  group_treatment = data.frame(
+     group = "treatment",
+     drug = sample(i, size = n/2, replace = TRUE, prob = c(0.5-delta_p_i/2, 0.5+delta_p_i/2)),
+     opioid_req = rnorm(n/2, mean = mu_opioid_requirment_control+(mu_opioid_requirment_control*treatment_effect), sd = sigma)
+   )
+  
+  result <- rbind(group_control,group_treatment) %>%
+    mutate(dose_recived = ifelse(drug == "morphine",
+                                 opioid_req/potency_morphine,
+                                 opioid_req/potency_oxycodone),
+           ome = ifelse(drug == "morphine",
+                        dose_recived*potency_morphine,
+                        dose_recived*(potency_oxycodone+(potency_oxycodone*error_in_c_oxycodone))
+                        ))
+  
+  analysis <- result %>%
+    group_by(group) %>%
+    summarise(proportion_morphine = sum(drug == "morphine")/n(),
+              mean_ome = mean(ome),
+              n = n(),
+              .groups = "drop") 
+    
+  return(analysis$mean_ome[2] - analysis$mean_ome[1])
+  
+}
+
+```
+
+```{r analyse_dataset}
+#| echo: false
+#| collape: true
+
+analyse_dataset <- function(df){
+  # Perform t-test for difference in mean OME between robotic and non-robotic procedures
+  t_test_result <- t.test(ome ~ robotic, data = df)
+
+  # analyse the difference between the opioid proportions
+  fishers_result <- fisher.test(table(df$robotic, df$opioid)) 
+  
+  # Return results as a list
+  return(list(
+    mean_diff_ome = diff(t_test_result$estimate),
+    p_value_ome = t_test_result$p.value,
+    conf_int_ome = t_test_result$conf.int,
+    chisq_result_medication = fishers_result$p.value
+  ))
+}
+
+```
+
+```{r run_simulation}
+#| echo: false
+#| collape: true
+
+run_simulation <- function(trials = 5,
+                          conversion_values = seq(from=1, to=4, by = 0.2),
+                          morphine_proportion = seq(from =0.1, to= 0.9, by = 0.05))
+                          {
+
+  for(t in 1:trials){
+    for(i in conversion_values){
+      for(j in morphine_proportion){
+    
+    df <- sim_patient(
+      mu_tot = mu_tot,
+      potency_oxycodone_truth = potency_oxycodone,
+      potency_oxycodone_ome = i,
+      proportion_morphine = j,
+      oxycodone_shortage = oxycodone_shortage,
+      t_0 = t_0,
+      t_end = t_end,
+      t_robot = t_robot,
+      annual_n = annual_n,
+      robot_effect_size = robot_effect_size
+    )
+    
+    delta_p_oxycodone <- df |>
+      group_by(robotic) |>
+      summarise(p = mean(opioid == "Oxycodone")) |>
+      pull(p) |>
+      diff()
+    
+    epsilon <- (i - potency_oxycodone)/potency_oxycodone
+    
+    
+    result <- analyse_dataset(df)
+    
+    if(t == 1 & i == conversion_values[1] & j == morphine_proportion[1]){
+      
+      results_grid <- data.frame(
+        trial = t,
+        conversion_value = i,
+        morphine_proportion = j,
+        mean_diff_ome = result$mean_diff_ome,
+        p_value_ome = result$p_value_ome,
+        p_value_fishers = result$chisq_result_medication,
+        delta_p_oxycodone = delta_p_oxycodone,
+        epsilon = epsilon
+      )
+    }else{
+    # Store results
+    results_grid <- rbind(results_grid, data.frame(
+      trial=t,
+      conversion_value = i,
+      morphine_proportion = j,
+      mean_diff_ome = result$mean_diff_ome,
+      p_value_ome = result$p_value_ome,
+      p_value_fishers = result$chisq_result_medication,
+      delta_p_oxycodone = delta_p_oxycodone,
+      epsilon = epsilon
+    ))
+    }
+    
+  }
+  }
+}
+
+  results_grid <- results_grid %>% group_by(conversion_value, morphine_proportion) %>%
+    summarise(mean_diff_ome = mean(mean_diff_ome),
+            p_value_ome = mean(p_value_ome),
+            p_value_fishers = median(p_value_fishers),
+            delta_p_oxycodone = mean(delta_p_oxycodone),
+            epsilon = mean(epsilon),
+            .groups = "drop") %>%
+    mutate(significant = ifelse(p_value_ome < 0.05, "*", ""))
+
+  return(results_grid)
+
+} 
+
+```
+
+```{r plot_grid}
+#| echo: false
+#| collape: true
+
+
+plot_grid <- function(results_grid,
+                      potency_oxycodone_truth,
+                      robot_effect_mg){
+
+midpoint <- robot_effect_mg
+min_val <- min(results_grid$mean_diff_ome, na.rm = TRUE)  # adjust column name as needed
+max_val <- max(results_grid$mean_diff_ome, na.rm = TRUE)
+
+  ggplot(results_grid, aes(x=conversion_value, y=morphine_proportion, fill=mean_diff_ome)) +
+  geom_tile() +
+ # geom_point(data = subset(results_grid, significant == "*"), shape = 4, color = "purple") +
+  symmetric_fill_scale(20)+
+  labs(title = ,
+       x = TeX(r'(Value used for $c_{oxycodone}$)'),
+       y = "Proportion of morphine perscribed",
+       fill = "Mean difference in OME") +
+   geom_vline(xintercept = potency_oxycodone, linetype = "dashed", color = "red")+
+    theme_minimal() +
+    theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid = element_blank(),
+    legend.position = "bottom"
+  )+scale_y_continuous(labels = scales::percent)
+ 
+}
+
+```
+
+```{r}
+potency_oxycodone = 2.25
+potency_morphine = 2
+```
+
+Two simulated studies were performed to demonstrate the sensitivity of the opioid burden metric to differences in the proportions of medications between groups and the conversion values used. In both simulations, the outcome measured is the difference in group mean TOB, there was no treatment effect so this is expected to be 0. Additionally, the ground truth value for oxycodone to morphine is set to `r potency_oxycodone`, to give a similar but not exact value to the commonly accepted potency of 2, compared to oral morphine. 
+
+The **first** (@sec-manuscript-simple-sim) uses a simplified simulation with between groups to understand the variation in results across the full range of parameters. 
+
+The **second** simulation (@sec-manuscript-exemplar-sim) uses a hypothetical study setup across a range of realistic values to establish the extent of the variation in results under commonly seen situations.
+
+## Methods
+
+```{r sim simple parameters}
+
+p_min <- -1
+p_max <- 1
+e_min <- -1
+e_max <- 1
+n = 10000
+mu_opioid_requirment_control = 10
+sigma = 0.1
+treatment_effect = 0
+
+```
+
+### Simple simulation {#sec-manuscript-simple-sim}
+
+```{r sim simple}
+
+
+simple_results <- data.frame(p = numeric(), e = numeric(), diff = numeric())
+for(p in seq(p_min, p_max, by = 0.05)){
+  for(e in seq(e_min, e_max, by = 0.05)){
+    
+    diff <- sim_simple(
+      n = n,
+      delta_p_i = p,
+      sigma = sigma,
+      mu_opioid_requirment_control = mu_opioid_requirment_control,
+      potency_oxycodone = potency_oxycodone,
+      potency_morphine = potency_morphine,
+      error_in_c_oxycodone = e,
+      treatment_effect = treatment_effect
+    )
+    
+    simple_results <- rbind(simple_results, data.frame(p = p, e = e, diff = diff))
+  }
+}
+```
+
+`r scales::comma(n)` samples were divided equally between a control and intervention group. An opioid of either morphine or oxycodone was then sampled from a distribution set by $\Delta p_i$ whereby $\Delta p_i = p_i^{\text{(control)}} - p_i^{\text{(intervention)}}$ to set the proportion $p$ of each opioid to be reciprocal in each group. An opioid requirement was sampled from a normal distribution ($\mathbb{E} =$ `r mu_opioid_requirment_control` with $\sigma =$ `r sigma`) for both groups enforcing a treatment effect of `r percent(treatment_effect)`. For samples where the opioid assigned was morphine, the total opioid dose was set equal to the opioid requirement. For samples where the opioid was oxycodone, the total opioid dose was set to opioid requirement multiplied by the ground truth potency equal to `r potency_oxycodone`. For all samples, the opioid consumed was then converted into a TOB, using a conversion value of `r potency_morphine` for morphine and `r potency_oxycodone` +/- an error, $\epsilon$, for oxycodone. The measured difference between the group mean of the control and intervention groups ($\Delta \mu_{\text{TOB}} = \mu_{\text{TOB}}^{\text{(control)}} - \mu_{\text{TOB}}^{\text{(intervention)}}$) was then calculated. The reference opioid used was oral morphine so the resulting units of the TOB metric are oral morphine equivalence milligrams (OMEmg).
+
+The simulation was then performed once for the range of grid values for ($\Delta p_i \in$ `r p_min`, `r p_max` and $\epsilon \in$ `r percent(e_min)`, `r percent(e_max)` with all other parameters fixed. 
+
+### Hypothetical study simulation {#sec-manuscript-exemplar-sim}
+
+```{r}
+case_volume <- 100
+proportion_robotic <- 0.8
+t_0 = as.Date("2020-01-01")
+t_end = as.Date("2025-12-31")
+t_robot = as.Date("2023-01-01")
+proportion_morphine = 0.7
+oxycodone_shortage = c(as.Date("2024-01-01"), as.Date("2024-12-31"))
+
+mu_tot = 50
+sd_tot = 10
+# potency_oxycodone set in chunk above
+potency_oxycodone_ome = 2
+
+annual_n = 30
+robot_effect_size = 0.9
+robot_effect_mg = mu_tot * (robot_effect_size-1)
+
+p_morph_high = 1
+p_morph_low = 0
+conversion_value_low = 1
+conversion_value_high = 3
+
+trials = 5
+```
+
+A hypothetical study was designed to emulate a retrospective cohort study to compare a surgical intervention on the postoperative opioid requirement. The study set-up is outlined in @nte-sim-design.
+
+::: {#nte-sim-design .callout-note title="Hypothetical study design"}
+
+A research team wish to understand if the use of a robot for a surgical procedure, reduces the post-operative pain. They design a retrospective cohort study for patients treated with a robotic procedure and those without. The primary outcome is the total opioid requirement, as measured in OME mg, in the first 24 hours post-operatively as a surrogate for the total pain caused by the surgical procedure.
+
+The average case volume is `r case_volume` procedures per year, these were all performed using non-robotic surgery until `r format(t_robot, "%e %b %y")` when a robot was acquired, and since `r scales::percent(proportion_robotic)` of cases are performed with the robot. All EHR data was collected between `r format(t_0, "%e %b %y")` and `r format(t_end, "%e %b %y")`. All patients are treated with a Patient Controlled Analgesia (PCA) after their operation and on average the anaesthetist will prescribe a morphine PCA to `r scales::percent(proportion_morphine)` of patients and an oxycodone PCA to the remainder. No other opioid medication was administered. 
+
+During the study there was a national shortage of oxycodone from `r oxycodone_shortage[1]` to `r oxycodone_shortage[2]` and at which time all patients were prescribed a morphine PCA. Whilst the authors described this in their methods section, they did feel it would impact their results as the differing opioids were already accounted for in their OME metric. 
+:::
+
+The difference in proportion ($\Delta p_i$) between groups is simulated using a medication shortage that, due to temporal differences between the groups, impacts the treatment group to a greater extent. The ground truth potency of oxycodone is set to `r potency_oxycodone`. The post-operative opioid requirement was sampled from a normal distribution ($\mathbb{E} =$ `r mu_tot` mg with $\sigma =$ `r sd_tot` mg) for the non-robotic group with the average treatment effect of the intervention is set to `r robot_effect_mg` TOB mg. TOB was calculated as per described previously.
+
+The simulation was performed once with parameters specified in @nte-sim-design and repeated across each of the grid values for the rate of post-operative morphine prescribed between `r percent(p_morph_high)` and `r percent(p_morph_low)` with conversion values of oxycodone:morphine between `r conversion_value_low`:1 and `r conversion_value_high`:1. The result for each study was the measured difference between the group mean of the control and intervention groups ($\Delta \mu_{\text{TOB}}$), the observed difference in proportion ($\Delta p_i$) and the error in the conversion value ($\epsilon$). 
+
+
+## Results
+
+### Simple simulation {#sec-manuscript-results-simple}
+
+`r scales::comma(nrow(simple_results))` different simulations where performed across the grid values of $\Delta p_{\text{oxycodone}}$ and $\epsilon$. @fig-simple-grid-1 demonstrates the observed difference between groups ($\Delta \mu_\text{TOB}$) plotted against the difference in the proportion of morphine in the intervention group over the percentage error in the conversion value $\epsilon$.
+
+Where the conversion value is equal to the ground truth ($\epsilon$ = 0%) or the proportion of opioids in each group are matched ($\Delta p_i$ = 0) then the observed group difference is equal to the true treatment association. However, as either one or both of the grid parameters vary, the resulting observed difference varys across a normal distribution, centred on 0, between `r round(min(simple_results$diff),2)` mg and `r round(max(simple_results$diff),2)` mg as demonstrated by @fig-simple-density
+
+```{r}
+#| label: fig-simple-grid-1
+#| fig-cap: '**Observed total opioid burden (TOB) group mean difference across difference in opioid proportion and error in the conversion value** - Heatmap of the observed difference in group means ($\Delta \mu_{\text{TOB}}$) across grid values of $\Delta p_i$ (difference in opioid proportion between groups) and $\epsilon$ (error in the oxycodone conversion value).'
+#| fig-height: 6
+#| fig-width: 6
+
+plot_simple_grid <- ggplot(simple_results, aes(y = p, x = e, fill = diff)) +
+  geom_tile() +
+  labs(y = TeX(r'($\Delta  p_{morphine}$ (Difference in proportion))'),
+       x = TeX(r'($\epsilon$ (Error in Conversion Value for Oxycodone) )'),
+       fill = TeX(r'(Observed difference ($\Delta \mu_{TOB})$)')
+       ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid = element_blank(),
+    legend.position = "bottom")+
+ # scale_fill_gradientn(
+#  colours = c("blue", "dodgerblue", "white", "orange", "red"))+
+#  geom_vline(xintercept = 0, linetype = "dashed", color = "black")+
+#  geom_hline(yintercept = 0, linetype = "dashed", color = "black")+
+#  annotate("text",x=-0.7, y=0.05, label = "Proportion of medication equal")+
+  annotate("text",x=-0, y=0.95, label = "Control: 100% morphine\nIntervention: 0% morphine", size = 3)+
+  annotate("text",x=-0, y=-0.95, label = "Control: 100% oxycodone\nIntervention: 0% oxycodone", size = 3)+
+  #annotate("text",x=-0.05, y=-0.7, label = "No error in conversion value", angle=90)+
+  annotate("text",x=1, y=-0, label = "Overestimate potency \u2192", size=3, hjust=1)+
+  annotate("text", x = -1, y = -0, label = "\u2190 Underestimate potency", size = 3, hjust = 0)+
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.05)),labels = scales::label_percent()) +
+  symmetric_fill_scale(round(max(simple_results$diff))+0.01)
+
+plot_simple_grid
+
+```
+
+```{r}
+#| label: fig-simple-density
+#| fig-cap: "**Distribution of observed group mean difference across the simple simulation** -Density plot of the observed difference in group means (ΔTOB) across all grid parameter combinations. The dashed red line indicates the true treatment effect of zero."
+
+ggplot(simple_results, aes(x=diff))+
+  geom_density(alpha = 0.8, fill = 'gray')+
+  theme_academic()+
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  scale_x_continuous(expand = expansion(mult = c(0, 0.05)), limits = c(-10.1, 10.1)) +
+  geom_vline(xintercept = 0, colour = "red", linetype = "dashed")+
+  labs(y = "Density",
+       x = TeX(r'(Observed difference ($\Delta \mu_{{TOB}})$)')
+       )
+
+```
+
+@fig-simple-grid-1 demonstrates that the observed difference can be described with a rotated hyperbolic parabola with the scaling constant $k$.
+
+#### Effect of $\mu_{\text{TOB}}^{\text{(control)}}$ on simple simulation {#sec-appendix-sim-1}
+
+To investigate the scaling term of $\mu_{\text{TOB}}^{\text{(control)}}$ on the observed treatment effect, 6 further simulations were performed, each as described in @sec-manuscript-simple-sim but with a different $\mu_{\text{OME}}^{\text{(control)}}$ between 0 OMEmg and 10 OMEmg. The treatment effect was fixed at 0. 
+
+```{r}
+#| echo: false
+#| message: false
+#| fig-width: 6
+#| fig-height: 6
+
+library(ggplot2)
+library(dplyr)
+library(latex2exp)
+
+p_min <- -1
+p_max <- 1
+e_min <- -1
+e_max <- 1
+sigma = 0.1
+
+n = 1000
+space = 0.05
+
+simple_results_mu <- data.frame(p = numeric(), e = numeric(), diff = numeric(), mu=numeric())
+for(mu in seq(0, 10, length.out = 6)){
+for(p in seq(p_min, p_max, by = space)){
+  for(e in seq(e_min, e_max, by = space)){
+    
+    diff <- sim_simple(
+      n = n,
+      delta_p_i = p,
+      sigma = sigma,
+      mu_opioid_requirment_control = mu,
+      potency_oxycodone = potency_oxycodone,
+      potency_morphine = potency_morphine,
+      error_in_c_oxycodone = e,
+      treatment_effect = 0
+    )
+    
+    simple_results_mu <- rbind(simple_results_mu, data.frame(p = p, e = e, diff = diff, mu=mu))
+  }
+}
+}
+```
+
+```{r}
+#| label: fig-appendix-simple-sim-mu
+#| fig-title: Effect of scale of the control group average dose (OMEmg) on observed effect size
+#| fig-cap: Plots of the difference in proportion over the error in conversion values provided faceted by the expected mean dose of the control group. Colour scale demonstrates the observed difference in the treatment group. True effect size is set to 0. 
+#| fig-width: 6
+#| fig-height: 6
+
+label_function <- function(val) {
+  paste0('mu["TOB"] == ', val)
+}
+
+plot_simple_grid_mu <- ggplot(simple_results_mu, aes(y = p, x = e, fill = diff)) +
+  geom_tile() +
+  labs(,
+       y = TeX(r'($\Delta  p_i$ (Difference in proportion))'),
+       x = TeX(r'($\epsilon$ (Error in Conversion Value for Oxycodone) )'),
+       fill = TeX(r'(Observed difference ($\Delta \mu_{{TOB}})$)'),
+       caption = TeX(r'(True $\delta \mu_{{TOB}} = 0$ OMEmg)')
+       ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid = element_blank(),
+    legend.position = "bottom")+
+symmetric_fill_scale(30)+
+  facet_wrap(~mu, labeller = as_labeller(label_function, default = label_parsed)
+             )
+  
+plot_simple_grid_mu
+
+```
+
+#### Effect of $\Delta \mu_{\text{TOB}}$ on simple simulation {#sec-appendix-sim-2}
+
+To investigate the interaction of a true treatment effect on the observed treatment effect, 9 further simulations were performed, each as described in @sec-manuscript-simple-sim but with a different true treatment effect between the values of -1 and 1. 
+
+```{r}
+
+  n = 1000
+  space = 0.1
+
+simple_results_t <- data.frame(p = numeric(), e = numeric(), diff = numeric(), t=numeric())
+for(t in seq(-1, 1, length.out = 9)){
+for(p in seq(p_min, p_max, by = space)){
+  for(e in seq(e_min, e_max, by = space)){
+    
+    diff <- sim_simple(
+      n = n,
+      delta_p_i = p,
+      sigma = sigma,
+      mu_opioid_requirment_control = 10,
+      potency_oxycodone = potency_oxycodone,
+      potency_morphine = potency_morphine,
+      error_in_c_oxycodone = e,
+      treatment_effect = t
+    )
+    
+    simple_results_t <- rbind(simple_results_t, data.frame(p = p, e = e, diff = diff, t=t))
+  }
+}
+}
+
+
+```
+
+```{r}
+#| label: fig-appendix-simple-sim-t
+#| fig-title: Effect of differing true effect size on observed effect size
+#| fig-cap: Plots of the difference in proportion over the error in conversion values provided faceted by the expected mean dose of the control group. Colour scale demonstrates the observed difference in the treatment group.
+#| ig-width: 6
+#| fig-height: 8
+
+label_function <- function(val) {
+  paste0('delta["TOB"] == ', val)
+}
+
+plot_simple_grid_t <- ggplot(simple_results_t, aes(y = p, x = e, fill = diff)) +
+  geom_tile() +
+  labs(,
+       y = TeX(r'($\Delta  p_i$ (Difference in proportion))'),
+       x = TeX(r'($\epsilon$ (Error in Conversion Value for Oxycodone) )'),
+       fill = TeX(r'(Observed difference ($\Delta \mu_{{TOB}})$)'),
+       caption  = TeX(r'($\mu_{{TOB}}^{(control)}$ (Mean dose of control group) $= 10$ )')
+       ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid = element_blank(),
+    legend.position = "bottom")+
+symmetric_fill_scale(30)+
+  facet_wrap(~t, labeller = as_labeller(label_function, default = label_parsed)
+             )
+  
+plot_simple_grid_t
+```
+
+### Hypothetical study simulation
+
+```{r }
+df <- sim_patient(
+  mu_tot = mu_tot,
+  potency_oxycodone_truth = potency_oxycodone,
+  potency_oxycodone_ome = potency_oxycodone_ome,
+  proportion_morphine = proportion_morphine,
+  oxycodone_shortage = oxycodone_shortage,
+  t_0 = t_0,
+  t_end = t_end,
+  t_robot = t_robot,
+  annual_n = annual_n,
+  robot_effect_size = robot_effect_size
+)
+
+```
+
+`r nrow(df)` procedures were simulated using the parameters described in @sec-manuscript-exemplar-sim. 
+
+```{r}
+#| label: tbl-sim-demo
+#| tbl-cap: Demographic table of simulated study population
+#| eval: true
+
+library(gtsummary)
+
+df |>
+  tbl_summary(
+    by = robotic,
+    include = c(opioid, dose, ome),
+    statistic = list(
+      all_continuous() ~ "{mean} ({sd})",
+      all_categorical() ~ "{n} ({p}%)"
+    ),
+    label = list(
+      dose ~ "Dose (mg)",
+      opioid ~ "Opioid",
+      ome ~ "OME (mg)"
+    ),
+    digits = all_continuous() ~ 1
+  ) |>
+  add_overall() |>
+  add_p() |>
+  as_gt() |>
+  gt::tab_options(table.width = gt::pct(100))
+```
+
+A simple demographics table for the study is shown in @tbl-sim-demo, this demonstrates the unequal distributions of opioids between groups. @fig-sim-ome-1 demonstrates this distribution of the total opioid burden (OME mg) of patients in the robotic and non-robotic patients. @fig-sim-ome-2 shows that within the robotic and non-robotic groups the proportion of each opioid is not equal, and the effect of the oxycodone shortage has had a larger impact on the robotic group.
+
+```{r}
+#| label: fig-sim-ome
+#| layout-ncol: 2
+#| fig-cap: "**Opioid prescribing and OME distribution by surgery type**"
+#| fig-subcap: 
+#|   - "**Opioid prescribing proportions by surgery type** - Proportion and count of each opioid prescribed within robotic and non-robotic surgery groups."
+#|   - "**OME distribution by surgery type** - Kernel density of calculated OME (OME mg) for robotic and non-robotic surgery groups."
+#| fig-width: 5
+#| fig-height: 5
+#| out-height: 2.5in
+#| out-width: 2.5in
+
+df %>%
+  count(robotic, opioid) %>%
+  group_by(robotic) %>%
+  mutate(proportion = n / sum(n)) %>%
+  ggplot(aes(x = robotic, y = proportion, fill = opioid)) +
+  geom_col(position = position_dodge(width = 0.9)) +
+  geom_text(
+    aes(label = paste0("n=",n)),
+    position = position_dodge(width = 0.9),
+    vjust = -0.4
+  )+
+  labs(y = "Proportion", x = "", fill = "Opioid") +
+  theme_academic()+
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05)),
+                     labels = scales::percent_format()) +
+  theme(legend.position = "bottom")+
+  paletteer::scale_fill_paletteer_d("MetBrewer::Austria")
+
+ggplot(df, aes(x=ome, fill=robotic))+
+  geom_density(alpha=0.8)+
+  theme_academic()+
+  labs(x="OME (OME mg)",
+        y="Density",
+        fill="Robotic Surgery")+
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  theme(legend.position = "bottom")+
+  paletteer::scale_fill_paletteer_d("MetBrewer::Austria", direction = -1)
+
+
+
+```
+
+```{r}
+obs_robotic_ome <- df %>% filter(robotic == "Robotic") %>% summarise(mean(ome)) %>% pull() 
+obs_non_robotic_ome <- df %>% filter(robotic != "Robotic") %>% summarise(mean(ome)) %>% pull()
+obs_robot_effect_mg <- obs_robotic_ome - obs_non_robotic_ome
+
+result <- analyse_dataset(df)
+
+```
+
+The mean opioid burden value for the robotic surgery group was `r round(obs_robotic_ome, 1)` TOB mg and for the non-robotic surgery group was `r  round(obs_non_robotic_ome, 1)` TOB mg. This gives an observed effect size of the robot as `r round(obs_robot_effect_mg,1)` TOB mg. Using a two sided t-test to assess if there is a significant difference in mean TOB between the robotic and standard surgery groups, the mean difference was `r round(result$mean_diff_ome,1)` TOB mg (95% CI `r paste(round(result$conf_int_ome, 1), collapse = " to ")`) with a p-value of `r pvalue(result$p_value_ome)`. 
+
+### Impact of conversion set and proportions
+
+The hypothetical study was repeated using the grid values of different conversion values and different proportion of postoperative oxycodone prescribing. The prior was informed by ranges observed in the literature and the latter to influence the degree of different in opioid proportions between groups. For each set of grid values, `r if(trials==3){"three"}else{trials}` were performed and the mean observed difference calculated. Given a `r mu_tot` mg expected opioid requirement and a treatment effect of `r scales::percent(robot_effect_size-1)` it is expected the observed difference of the robotic group to be `r (mu_tot * robot_effect_size)-mu_tot` mg.
+
+```{r}
+#| label: fig-sim-grid-search-1
+#| fig-cap: "**Sensitivity of observed treatment effect to conversion value and opioid proportion** - Grid search results showing the observed treatment effect across oxycodone conversion values and post-operative morphine prescribing proportions. True treatment effect is 0 mg. The dashed line indicates the ground truth conversion value."
+#| fig-height: 4
+#| fig-width: 8
+#| out-height: 3in
+#| out-width: 6in
+
+
+simulation1 <- run_simulation(trials= trials ,
+               conversion_values = seq(from=conversion_value_low, to=conversion_value_high, by = 0.1),
+               morphine_proportion = seq(from=p_morph_low, to= p_morph_high, by = 0.05)
+               )
+
+plot_grid_1 <- plot_grid(simulation1,
+          potency_oxycodone_truth = potency_oxycodone,
+          robot_effect_mg = 0)
+
+plot_grid_1
+
+```
+
+@fig-sim-grid-search-1 is a heat map of the mean observed difference of each of the grid values of the postoperative prescribing of morphine rates and the conversion value of oxycodone used. 
+
+Where the proportion of post-operative morphine prescribing is close to 100%, the exogenous effect of an oxycodone shortage has little diverging impact on the proportions of opioids between groups, thus the true treatment effect of `r (mu_tot * robot_effect_size)-mu_tot` mg OME is recovered. However, were the rate of postoperative morphine prescribing is lower,the oxycodone shortage causes further divergence of the proportions between groups, resulting in wider variation in the observed difference. Where the conversion value supplied is close to the ground truth (as indicated by the red line) then the error is low. At the extreme, the maximum and minimum values are `r round(max(simulation1$mean_diff_ome),2)` mg and `r round(min(simulation1$mean_diff_ome),2)`mg respectively.
+
+@fig-compare demonstrates the experiment space for the hypothetical study simulation values where $\Delta p_i < 0$ and for values of $-0.5 < \epsilon < 1$. Despite being a relativity narrow section of the possible grid space detailed in @sec-manuscript-results-simple with a modest effect size of `r robot_effect_mg` OME mg there are still values where the observed effect size is significantly different. 
+
+```{r}
+#| label: fig-compare
+#| fig-cap: "**Hypothetical study simulation parameters mapped onto the simple simulation space** - Side by side comparison of the simple and exemplar simulation grids. The region explored by the hypothetical study experiment (Δp_i < 0; −0.5 < ε < 1) is overlaid on the full simple simulation space."
+#| fig-width: 8
+#| fig-height: 4
+
+
+label_function <- function(val) {
+  paste0('mu["TOB"]^"(control)" == ', val )
+}
+
+bounds <- c(min(simulation1$delta_p_oxycodone),
+            max(simulation1$delta_p_oxycodone),
+            min(simulation1$epsilon),
+            max(simulation1$epsilon))
+
+simple_results <- data.frame(p = numeric(), e = numeric(), diff = numeric())
+for(p in seq(p_min, p_max, by = 0.05)){
+  for(e in seq(e_min, e_max, by = 0.05)){
+    
+    diff <- sim_simple(
+      n = n,
+      delta_p_i = p,
+      sigma = sigma,
+      mu_opioid_requirment_control = mu_tot,
+      potency_oxycodone = potency_oxycodone,
+      potency_morphine = potency_morphine,
+      error_in_c_oxycodone = e,
+      treatment_effect = robot_effect_size -1
+    )
+    
+    simple_results <- rbind(simple_results, data.frame(p = p, e = e, diff = diff))
+  }
+}
+
+
+plot_simple_grid <- ggplot(simple_results, aes(y = p, x = e, fill = diff)) +
+  geom_tile() +
+  labs(       y = TeX(r'($\Delta  p_i$ (Difference in proportion))'),
+       x = TeX(r'($\epsilon$ (Error in Conversion Value for Oxycodone) )'),
+       fill = TeX(r'(Observed difference ($\Delta \mu_{{TOB}})$)')
+       ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid = element_blank(),
+    legend.position = "none")+
+  symmetric_fill_scale(20)+
+  geom_rect(ymin=bounds[1],
+            ymax=bounds[2],
+            xmin=bounds[3],
+            xmax=bounds[4],
+            colour="black",
+            fill=alpha("grey",0), linewidth=1)+
+  geom_line(data = data.frame(x = c(0,0), y = bounds[1:2]), aes(x,y), linetype = "dashed", color = "red")+
+  scale_y_continuous(labels = scales::percent,
+                     expand = expansion(mult = c(0, 0)))+
+  scale_x_continuous(labels = scales::percent,
+                     expand = expansion(mult = c(0, 0)))
+ # annotate("text", label = "Parameter space of exemplar simulation", x=mean(bounds[3:4]), y=bounds[2]+0.1)
+
+plot_grid_2 <- ggplot(simulation1, aes(x=conversion_value, y=morphine_proportion, fill=mean_diff_ome)) +
+  geom_tile() +
+  symmetric_fill_scale(20)+
+  labs(y = TeX(r'(Proportion of post-op perscribing as morphine )'),
+       x = TeX(r'($\c_{oxycodone}$ (Conversion Value for Oxycodone used) )'),
+       fill = "Mean difference in TOB") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid = element_blank(),
+    legend.position = "bottom",
+    panel.border = element_rect(colour='black', linewidth=3))+
+  scale_y_continuous(position = "right", labels = scales::percent,
+                     expand = expansion(mult = c(0, 0)))+
+  scale_x_continuous(expand = expansion(mult = c(0, 0)))+
+  geom_vline(xintercept = potency_oxycodone, linetype = "dashed", color = "red")
+  
+layout <- c(
+  area(t = 1, l = 1, b = 10, r = 10),
+  area(t = 6, l = 11, b = 10, r = 20)
+)
+
+plot_simple_grid + plot_grid_2 +
+  plot_layout(design = layout)
+
+```
+

@@ -2,7 +2,7 @@
 format: html
 ---
 
-# Literature rapid review {#sec-lit-review}
+# Literature rapid review protocol {#sec-lit-review}
 
 ```{r source_files}
 #| echo: FALSE
@@ -12,32 +12,38 @@ format: html
 source("functions.R", echo = FALSE)
 ```
 
+**Title**: Literature Rapid Review Of Total Opioid Burden Metric Methodology And Reporting Within Preoperative Care Research.
 
-## Methods
+**Registration**: The rapid review protocol is pre-registered on the [Open Science Framework](https://doi.org/10.17605/OSF.IO/EFJ8G
 
-```{r}
-#| echo: false
+Authors, contributions and support as per main manuscript. 
 
-# To get screening data:
-# Covidence -> Export -> References subsection -> Title and absract screening -> Export as .csv -> Drag to data foler -> Rename to lit_screen.csn
-lit_screen <- read.csv("data/lit_screen.csv")
-lit_select <- read.csv("data/lit_select.csv")
-lit_included <- read.csv("data/lit_included.csv")
-lit_excluded <- read.csv("data/lit_excluded.csv")
-lit_data <- read.csv("data/lit_data.csv") %>% filter(Reviewer.Name == "Dylan Whitaker")
-conversion <- read.csv("data/conversion_sets.csv")
+## Introduction
 
-n_lit_data <- nrow(lit_data)
+### Rationale
+There are a wide range of different opioid used across the range of medical specialities and patient groups, each with their own potency to provide analgesia. Opioid conversion values have offered the ability to convert a specific opioid into the equivalent units of a reference opioid, usually morphine, to produce doses in oral morphine equivalent milligrams (OME mg) or milligram morphine equivalent (MME).
 
-```
+A number of conversion value tables have been published in an attempt to provide a best estimate of the conversion values between opioids. Within clinical practice, these cited value sets are a good surrogate for the true conversion value when used in opioid rotation5. Despite this, application of the value sets remains variable in both clinical and research practice.
 
-A rapid literature review of the use of opioid equivalence metrics in peri-operative and surgical studies published in 2025 was performed. A structured search of the PUBMED database was performed on 7th July 2026 using the following search string.
+It is unclear how well the methodology is described and reported within research. 
 
-::: {.callout-note appearance="simple" title = "PUBMED search term"}
-(((((("opioid equivalent" OR "oral morphine equivalence" OR "oral morphine equivalent" OR "oral morphine equivalents" OR "OME" OR "morphine milligram equivalents" OR "morphine milligram equivalence" OR "MME" OR "morphine equivalent daily dose" OR "MEDD") AND ("perioperative" OR "peri-operative" OR "postoperative" OR "post-operative" OR "surgical" OR "surgery" OR "post-surgical" OR "postsurgical"))) AND ("2025/01/01"[Date - Publication] : "2025/12/31"[Date - Publication]))) AND ("clinical trial"[Filter] OR "clinical trial" OR "controlled clinical trial" OR "randomized controlled trial" OR "interventional" OR "intervention study" OR "clinical trials as topic"[MeSH Terms] OR "cohort studies"[MeSH Terms] OR "cohort" OR "prospective" OR "retrospective" OR "case-control" OR "comparative study" OR "evaluation study"))
-:::
+It is expec
 
-Primary and full text screening was carried out using the inclusion criteria detailed in @tbl-screening by one author.
+### Objectives
+
+Primary research question:
+- Describe the methodologies of reporting of TOB metrics used in the perioperative literature.
+
+Secondary research question(s)
+
+- What proportion of study report the opioid proportions between comparative groups
+
+- What proportion go study report the conversion values used to calculate the TOB metrics. 
+
+- To extract and calculate the outcomes de-novo for studies that publish the required minimum data of mean opioid doses within groups. 
+### Methods
+
+The eligibility criteria is set using the PCCO framework as described in @tbl-screening. Only papers published in 2025 will be considered to ensure the methodology reviewed is representative of current practice. 
 
 ```{r}
 #| label: tbl-screening
@@ -52,7 +58,42 @@ knitr::kable(tbl_screening)
 
 ```
 
-Papers where ordered randomly within the Covidence platform and data was extracted from a random subset by a single author @zotero-item-670. Data extraction was performed using a drop down selection proforma including study design, methodology and reporting of total opioid metrics as detailed in @tbl-extraction-form. 
+
+### Search strategy
+
+Databases searched will include PUBMED, SCOPUS and Web of Science though their respective web portals using the respective search string. No gray literature will be included as the review aims to capture the practice of current and published research methodologies. 
+
+::: {.callout-note appearance="simple" title = "PUBMED search term"}
+(((((("opioid equivalent" OR "oral morphine equivalence" OR "oral morphine equivalent" OR "oral morphine equivalents" OR "OME" OR "morphine milligram equivalents" OR "morphine milligram equivalence" OR "MME" OR "morphine equivalent daily dose" OR "MEDD") AND ("perioperative" OR "peri-operative" OR "postoperative" OR "post-operative" OR "surgical" OR "surgery" OR "post-surgical" OR "postsurgical"))) AND ("2025/01/01"[Date - Publication] : "2025/12/31"[Date - Publication]))) AND ("clinical trial"[Filter] OR "clinical trial" OR "controlled clinical trial" OR "randomized controlled trial" OR "interventional" OR "intervention study" OR "clinical trials as topic"[MeSH Terms] OR "cohort studies"[MeSH Terms] OR "cohort" OR "prospective" OR "retrospective" OR "case-control" OR "comparative study" OR "evaluation study"))
+:::
+
+::: {.callout-note appearance="simple" title = "SCOPUS search term"}
+TITLE-ABS-KEY ( "opioid equivalent" OR "oral morphine equivalence" OR "oral morphine equivalent" OR "oral morphine equivalents" OR "OME" OR "morphine milligram equivalents" OR "morphine milligram equivalence" OR "MME" OR "morphine equivalent daily dose" OR "MEDD" ) AND TITLE-ABS-KEY ( "perioperative" OR "peri-operative" OR "postoperative" OR "post-operative" OR "surgical" OR "surgery" OR "post-surgical" OR "postsurgical" ) AND TITLE-ABS-KEY ( "clinical trial" OR "controlled clinical trial" OR "randomized controlled trial" OR "interventional" OR "intervention study" OR "cohort" OR "prospective" OR "retrospective" OR "case-control" OR "comparative study" OR "evaluation study" ) AND PUBYEAR = 2025
+:::
+
+::: {.callout-note appearance="simple" title = "Web of Science search term"}
+TS=("opioid equivalent" OR "oral morphine equivalence" OR "oral morphine equivalent" OR "oral morphine equivalents" OR "OME" OR "morphine milligram equivalents" OR "morphine milligram equivalence" OR "MME" OR "morphine equivalent daily dose" OR "MEDD") 
+AND 
+TS=("perioperative" OR "peri-operative" OR "postoperative" OR "post-operative" OR "surgical" OR "surgery" OR "post-surgical" OR "postsurgical") 
+AND 
+TS=("clinical trial" OR "controlled clinical trial" OR "randomized controlled trial" OR "interventional" OR "intervention study" OR "cohort" OR "prospective" OR "retrospective" OR "case-control" OR "comparative study" OR "evaluation study") 
+AND 
+PY=(2025)
+:::
+
+### Study records and screening
+
+Extracts from each search term will be uploaded to the Covidence review platform. Duplicate items will be removed.
+
+Screening and data extraction will happen in two stages:
+
+**Screening** - Screening on title and abstract only
+
+**Full text screening and extraction** - Manuscripts that pass screening will have a full text review. If at this stage it is not eligible it will be removed, if it is eligible it will have data extracted. 
+
+### Data items
+
+Data will be extracted using the proforma as detailed in @tbl-extraction-form. 
 
 ```{r}
 #| label: tbl-extraction-form
@@ -83,6 +124,49 @@ knitr::kable(tbl_extraction_form,
 )
 
 ```
+
+
+
+
+# Literature rapid review preliminary results 
+
+## Methods
+
+```{r}
+#| echo: false
+
+# To get screening data:
+# Covidence -> Export -> References subsection -> Title and absract screening -> Export as .csv -> Drag to data foler -> Rename to lit_screen.csn
+lit_screen <- read.csv("data/lit_screen.csv")
+lit_select <- read.csv("data/lit_select.csv")
+lit_included <- read.csv("data/lit_included.csv")
+lit_excluded <- read.csv("data/lit_excluded.csv")
+lit_data <- read.csv("data/lit_data.csv") %>% filter(Reviewer.Name == "Dylan Whitaker")
+conversion <- read.csv("data/conversion_sets.csv")
+
+n_lit_data <- nrow(lit_data)
+
+```
+
+A rapid literature review of the use of opioid equivalence metrics in peri-operative and surgical studies published in 2025 was performed. A structured search of the PUBMED database was performed on 7th July 2026 using the following search string.
+
+
+Primary and full text screening was carried out using the inclusion criteria detailed in @tbl-screening by one author.
+
+```{r}
+#| label: tbl-screening
+#| tbl-cap: "Litrature extraction proforma"
+#| output: TRUE
+
+tbl_screening <- data.frame("Criteria" = c("Population", "Concept","Context", "Other"),
+                            "Include" =c("All patient groups undergoing a surgical procedure", "Studies using a total opioid burden metric as a primary or secondary outcome (Such as oral morphine equivalence (OME), milligram morphine equivalence (MME) or opioid equivalence)", "Patients undergoing surgical procedures", "Any studies comparing a control against and intervention or two interventions."),
+                            "Exclude" = c("Patients not undergoing surgical procedures. Non-human studies", "Outcomes not including opioid totals", "Palliative care studies or Pharmacology studies", "Studies with no difference between intervention groups" ))
+
+knitr::kable(tbl_screening) 
+
+```
+
+Papers where ordered randomly within the Covidence platform and data was extracted from a random subset by a single author @zotero-item-670. Data extraction was performed using a drop down selection proforma including study design, methodology and reporting of total opioid metrics 
 
 ```{r}
 papers <- read.csv("data/exemplars.csv") 

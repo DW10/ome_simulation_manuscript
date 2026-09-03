@@ -34,7 +34,13 @@ The total opioid burden (TOB) for patient $j$ is defined as the a weighted sum o
 $$\text{TOB}_j = \sum_{i\in\mathbf{M}} d_i c_{i,r}
 $${#eq-ome}
 
-For many studies, the TOB for each patient within a group, is often averaged and compared to draw conclusions about difference in opioid requirement. There is an implicit claim that once converted, it no longer matters which opioids a patient receives. However, this is only true if the mixture of opioids in each group are the same or there is no error in the conversion values used. 
+For many studies, the TOB for each patient within a group, is often averaged and compared to draw conclusions about difference in opioid requirement. There is an implicit claim that once converted, it no longer matters which opioids a patient receives. However, this is only true if one of the two following conditions are true:
+
+::: {.callout-important title='Conditions to use TOB metrics'}
+1) If the mixture of opioids in each group are the same 
+
+2) There is no error in the conversion values used
+:::
 
 We aim to quantify the degree of this bias and describe the methodologies of reporting of TOB metrics used in the perioperative literature. 
 
@@ -46,11 +52,12 @@ In the first simulation, 10,000 participants are simulated for each of the grid 
 
 To assess the current practices of TOB methodology and reporting in perioperative research a literature rapid review protocol was developed @sec-lit-review. To assess the protocol, a preliminary pilot was performed to screen and extract data from 20% of the the studies. From eligible studies that reported the group mean doses of each opioid, it was attempted to recalculate the TOB outcomes as a point estimate and then as a minimum and maximum using a range of different conversion values.  
 
-No ethics was required for this study. All simulations were performed in `r version$version.string` and code is available on [Github](https://github.com/DW10/ome_simulation_manuscript). Methods are reported with the relevant guideline [@chengReportingGuidelinesHealth2016; @moherPreferredReportingItems2015]. The rapid review protocol is pre-registered on the [Open Science Framework](https://doi.org/10.17605/OSF.IO/EFJ8G)
+No ethics was required for this study. All simulations were performed in `r version$version.string` and code is available on [Github](https://github.com/DW10/ome_simulation_manuscript). Methods are reported with the relevant guideline [@morrisUsingSimulationStudies2019; @moherPreferredReportingItems2015]. The rapid review protocol is pre-registered on the [Open Science Framework](https://doi.org/10.17605/OSF.IO/EFJ8G).
 
 ## Results
 
 The first simulation found that if either condition is met (equal group opioid proportion or no error in the conversion value), the observed difference is equal to the expected difference, thus there is no bias. When fixing the error in the conversion value, a linear bias arises with respect to any difference in opioid proportions between groups as show in @fig-1. When the error is also varied, this bias compounds. Under the hypothetical experimental conditions of a observational trial, the bias is able to significantly alter the results, mask and even invert the observed treatment effect as shown in @fig-2. 
+
 
 ::: {#fig-sim-ome layout-ncol=2}
 
@@ -78,19 +85,18 @@ plot_simple_grid+
 
 plot_grid_2
 ```
-Results of simulation studies demonstrating the parameter space of the bias. Heatmap of the observed difference between the control and intervention group. Plotted on an axis of the error in the conversion value over the difference in proportion of opioids between groups. Black outline box and red dashed line represents the hypothetical experimental space and ground truth value of oxycodone use.
+Results of simulation studies demonstrating the parameter space of the bias. Heat map of the observed difference between the control and intervention group. Plotted on an axis of the error in the conversion value over the difference in proportion of opioids between groups. Black outline box and red dashed line represents the hypothetical experimental space and ground truth value of oxycodone use.
 :::
 
 Across the perioperative literature, `r n_lit_data` studies had data extracted. Only `r scales::percent(lit_not_described)` of papers described the conversion values used and `r scales::percent(lit_provide_doses)` described the proportions of different opioids between intervention groups. 5 studies reported the minimum dataset to attempt to reproduce the TOB calculation. 
 
-
 ## Discussion
 
-This study is limited by only simulating a two opioid paradigm and by of comparing group means; it is unclear how this bias may effect multiple opioid or comparison of group medians. Furthermore, the literature review across the perioperative domain in 2025 may not be representative  of wider use of TOB metrics. 
+In observational research, it will be vanishingly rare that the first condition of balanced groups is met exactly. Whilst a randomised controlled trial may offer more hope, a collider bias may easily occur if the treatment itself has an effect on the choice of analgesia used, if the post-operative analgesia treatment is not protocolised @pearlBookWhyNew2019.
 
-In observational research, it will be vanishingly rare that the first condition of balanced groups is met exactly. Whilst a randomised controlled trial may offer more hope, a collider bias may easily occur if the treatment itself has an effect on the choice of analgesia used as the post-operative analgesia is not protocolised @pearlBookWhyNew2019.
+The influence of the error in the conversion value is a significant problem.  McPherson describes a range of limitations in the use of these equianalgesic tables for clinical care including the single opioid studies as source of the data and the lack of patient specific variables @mcphersonWhyEquianalgesicTables2020. We propose that distributions of possible conversion value should instead be produced, this would allow quantitation of uncertainty in the TOB metrics and also offer the opportunity to tailor conversion values to specific populations that have known pharmacokinetic differences @leeOpioidRequirementsResponses1997.
 
-The influence of the error in the conversion value is a significant problem.  McPherson describes a range of limitations in the use of these equianalgesic tables for clinical care including the single opioid studies as source of the data and the lack of patient specific variables @mcphersonWhyEquianalgesicTables2020. Distributions of possible conversion value should instead be produced, this also offer the opportunity to tailor to specific populations that have known pharmacokinetic differences @leeOpioidRequirementsResponses1997.
+This study is limited by only simulating a two opioid paradigm and by of comparing group means; it is unclear how this bias may effect multiple opioid or comparison of group medians. Furthermore, the preliminary results from the literature search may not be representative of the wider literature.  
 
 We recommend the following:
 

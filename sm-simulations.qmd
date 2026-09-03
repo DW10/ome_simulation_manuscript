@@ -270,15 +270,24 @@ max_val <- max(results_grid$mean_diff_ome, na.rm = TRUE)
 ```{r}
 potency_oxycodone = 2.25
 potency_morphine = 2
+seed = 222
+
+set.seed(seed)
 ```
 
-Two simulated studies were performed to demonstrate the sensitivity of the opioid burden metric to differences in the proportions of medications between groups and the conversion values used. In both simulations, the outcome measured is the difference in group mean TOB, there was no treatment effect so this is expected to be 0. Additionally, the ground truth value for oxycodone to morphine is set to `r potency_oxycodone`, to give a similar but not exact value to the commonly accepted potency of 2, compared to oral morphine. 
+## Introduction
+
+Two simulated studies were performed to demonstrate the sensitivity of the total opioid burden (TOB) metric to differences in the proportions of medications between groups and the conversion values used. In both simulations, the outcome measured is the difference in group mean TOB, there was no treatment effect so this is expected to be 0. Additionally, the ground truth value for oxycodone to morphine is set to `r potency_oxycodone`, to give a similar but not exact value to the commonly accepted potency of 2, compared to oral morphine. 
 
 The **first** (@sec-manuscript-simple-sim) uses a simplified simulation with between groups to understand the variation in results across the full range of parameters. 
 
 The **second** simulation (@sec-manuscript-exemplar-sim) uses a hypothetical study setup across a range of realistic values to establish the extent of the variation in results under commonly seen situations.
 
-## Methods
+### Aims
+
+To demonstrate the direction and extent of a bias when comparing group means of TOB metrics between groups with differing opioid proportions and with an error in the conversion values. 
+
+## Data generating mechanisms
 
 ```{r sim simple parameters}
 
@@ -320,7 +329,7 @@ for(p in seq(p_min, p_max, by = 0.05)){
 
 `r scales::comma(n)` samples were divided equally between a control and intervention group. An opioid of either morphine or oxycodone was then sampled from a distribution set by $\Delta p_i$ whereby $\Delta p_i = p_i^{\text{(control)}} - p_i^{\text{(intervention)}}$ to set the proportion $p$ of each opioid to be reciprocal in each group. An opioid requirement was sampled from a normal distribution ($\mathbb{E} =$ `r mu_opioid_requirment_control` with $\sigma =$ `r sigma`) for both groups enforcing a treatment effect of `r percent(treatment_effect)`. For samples where the opioid assigned was morphine, the total opioid dose was set equal to the opioid requirement. For samples where the opioid was oxycodone, the total opioid dose was set to opioid requirement multiplied by the ground truth potency equal to `r potency_oxycodone`. For all samples, the opioid consumed was then converted into a TOB, using a conversion value of `r potency_morphine` for morphine and `r potency_oxycodone` +/- an error, $\epsilon$, for oxycodone. The measured difference between the group mean of the control and intervention groups ($\Delta \mu_{\text{TOB}} = \mu_{\text{TOB}}^{\text{(control)}} - \mu_{\text{TOB}}^{\text{(intervention)}}$) was then calculated. The reference opioid used was oral morphine so the resulting units of the TOB metric are oral morphine equivalence milligrams (OMEmg).
 
-The simulation was then performed once for the range of grid values for ($\Delta p_i \in$ `r p_min`, `r p_max` and $\epsilon \in$ `r percent(e_min)`, `r percent(e_max)` with all other parameters fixed. 
+
 
 ### Hypothetical study simulation {#sec-manuscript-exemplar-sim}
 
@@ -363,8 +372,17 @@ During the study there was a national shortage of oxycodone from `r oxycodone_sh
 
 The difference in proportion ($\Delta p_i$) between groups is simulated using a medication shortage that, due to temporal differences between the groups, impacts the treatment group to a greater extent. The ground truth potency of oxycodone is set to `r potency_oxycodone`. The post-operative opioid requirement was sampled from a normal distribution ($\mathbb{E} =$ `r mu_tot` mg with $\sigma =$ `r sd_tot` mg) for the non-robotic group with the average treatment effect of the intervention is set to `r robot_effect_mg` TOB mg. TOB was calculated as per described previously.
 
-The simulation was performed once with parameters specified in @nte-sim-design and repeated across each of the grid values for the rate of post-operative morphine prescribed between `r percent(p_morph_high)` and `r percent(p_morph_low)` with conversion values of oxycodone:morphine between `r conversion_value_low`:1 and `r conversion_value_high`:1. The result for each study was the measured difference between the group mean of the control and intervention groups ($\Delta \mu_{\text{TOB}}$), the observed difference in proportion ($\Delta p_i$) and the error in the conversion value ($\epsilon$). 
+### Estimand
 
+Across all simulations the estimand is the difference in the expected group mean difference and the observed group mean difference $\Delta \mu_{\text{TOB}}$ 
+
+## Methods
+
+The first simulation was then performed once for the range of grid values for ($\Delta p_i \in$ `r p_min`, `r p_max` and $\epsilon \in$ `r percent(e_min)`, `r percent(e_max)` with all other parameters fixed. 
+
+The second simulation was performed once with parameters specified in @nte-sim-design and repeated across each of the grid values for the rate of post-operative morphine prescribed between `r percent(p_morph_high)` and `r percent(p_morph_low)` with conversion values of oxycodone:morphine between `r conversion_value_low`:1 and `r conversion_value_high`:1. The result for each study was the measured difference between the group mean of the control and intervention groups ($\Delta \mu_{\text{TOB}}$), the observed difference in proportion ($\Delta p_i$) and the error in the conversion value ($\epsilon$). 
+
+All simulations were performed in `r version$version.string`, using seed `r seed`and code is available on [Github](https://github.com/DW10/ome_simulation_manuscript).
 
 ## Results
 
@@ -772,8 +790,11 @@ plot_grid_2 <- ggplot(simulation1, aes(x=conversion_value, y=morphine_proportion
     panel.grid = element_blank(),
     legend.position = "bottom",
     panel.border = element_rect(colour='black', linewidth=3,))+
-  scale_y_continuous(position = "right", labels = scales::percent,)
-  geom_vline(xintercept = potency_oxycodone, linetype = "dashed", color = "red")
+  scale_y_continuous(position = "right", labels = scales::percent,
+                     expand = expansion(mult = c(0, 0)))+
+  scale_x_continuous(expand = expansion(mult = c(0, 0)))+
+  geom_vline(xintercept = potency_oxycodone, linetype = "dashed", color = "red")+
+  theme(plot.margin = margin(5,10,5,5))
   
 layout <- c(
   area(t = 1, l = 1, b = 10, r = 10),

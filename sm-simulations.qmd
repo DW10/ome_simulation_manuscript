@@ -396,11 +396,11 @@ plot_simple_grid <- ggplot(simple_results, aes(y = p, x = e, fill = diff)) +
 #  geom_vline(xintercept = 0, linetype = "dashed", color = "black")+
 #  geom_hline(yintercept = 0, linetype = "dashed", color = "black")+
 #  annotate("text",x=-0.7, y=0.05, label = "Proportion of medication equal")+
-  annotate("text",x=-0, y=0.95, label = "Control: 100% morphine\nIntervention: 0% morphine", size = 3)+
-  annotate("text",x=-0, y=-0.95, label = "Control: 100% oxycodone\nIntervention: 0% oxycodone", size = 3)+
+  annotate("text",x=-0, y=1, label = "Control: 100% morphine\nIntervention: 0% morphine", size = 3, vjust=1)+
+  annotate("text",x=-0, y=-1, label = "Control: 100% oxycodone\nIntervention: 0% oxycodone", size = 3, vjust=0)+
   #annotate("text",x=-0.05, y=-0.7, label = "No error in conversion value", angle=90)+
-  annotate("text",x=1, y=-0, label = "Overestimate potency \u2192", size=3, hjust=1)+
-  annotate("text", x = -1, y = -0, label = "\u2190 Underestimate potency", size = 3, hjust = 0)+
+  annotate("text",x=1, y=0.2, label = "Overestimate potency \u2192", size=3, hjust=1)+
+  annotate("text", x = -1, y = 0.2, label = "\u2190 Underestimate potency", size = 3, hjust = 0)+
   scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
   scale_x_continuous(expand = expansion(mult = c(0, 0.05)),labels = scales::label_percent()) +
   symmetric_fill_scale(round(max(simple_results$diff))+0.01)
@@ -441,13 +441,7 @@ library(ggplot2)
 library(dplyr)
 library(latex2exp)
 
-p_min <- -1
-p_max <- 1
-e_min <- -1
-e_max <- 1
-sigma = 0.1
 
-n = 1000
 space = 0.05
 
 simple_results_mu <- data.frame(p = numeric(), e = numeric(), diff = numeric(), mu=numeric())
@@ -741,7 +735,7 @@ for(p in seq(p_min, p_max, by = 0.05)){
 }
 
 
-plot_simple_grid <- ggplot(simple_results, aes(y = p, x = e, fill = diff)) +
+plot_simple_grid_2 <- ggplot(simple_results, aes(y = p, x = e, fill = diff)) +
   geom_tile() +
   labs(       y = TeX(r'($\Delta  p_i$ (Difference in proportion))'),
        x = TeX(r'($\epsilon$ (Error in Conversion Value for Oxycodone) )'),
@@ -769,7 +763,7 @@ plot_simple_grid <- ggplot(simple_results, aes(y = p, x = e, fill = diff)) +
 plot_grid_2 <- ggplot(simulation1, aes(x=conversion_value, y=morphine_proportion, fill=mean_diff_ome)) +
   geom_tile() +
   symmetric_fill_scale(20)+
-  labs(y = TeX(r'(Proportion of post-op perscribing as morphine )'),
+  labs(y = expression("Proportion of postoperative \n perscribing as morphine"),,
        x = TeX(r'($\c_{oxycodone}$ (Conversion Value for Oxycodone used) )'),
        fill = "Mean difference in TOB") +
   theme_minimal() +
@@ -777,10 +771,8 @@ plot_grid_2 <- ggplot(simulation1, aes(x=conversion_value, y=morphine_proportion
     axis.text.x = element_text(angle = 45, hjust = 1),
     panel.grid = element_blank(),
     legend.position = "bottom",
-    panel.border = element_rect(colour='black', linewidth=3))+
-  scale_y_continuous(position = "right", labels = scales::percent,
-                     expand = expansion(mult = c(0, 0)))+
-  scale_x_continuous(expand = expansion(mult = c(0, 0)))+
+    panel.border = element_rect(colour='black', linewidth=3,))+
+  scale_y_continuous(position = "right", labels = scales::percent,)
   geom_vline(xintercept = potency_oxycodone, linetype = "dashed", color = "red")
   
 layout <- c(
@@ -788,8 +780,37 @@ layout <- c(
   area(t = 6, l = 11, b = 10, r = 20)
 )
 
-plot_simple_grid + plot_grid_2 +
+plot_simple_grid_2 + plot_grid_2 +
   plot_layout(design = layout)
+
+```
+
+
+
+```{r save materaisl}
+
+plot_simple_grid + geom_rect(ymin=bounds[1],
+            ymax=bounds[2],
+            xmin=bounds[3],
+            xmax=bounds[4],
+            colour="black",
+            linewidth = 3 ,
+            fill=alpha("grey",0))
+
+shared_objects <- list(
+  bounds=bounds,
+  plot_simple_grid_2 = plot_simple_grid_2,
+  plot_simple_grid = plot_simple_grid,
+  plot_grid_2 = plot_grid_2,
+  potency_oxycodone = potency_oxycodone,
+  p_min = p_min,
+  p_max = p_max,
+  e_min = e_min,
+  e_max = e_max,
+  n_second_sim = nrow(df),
+  robot_effect_mg = robot_effect_mg
+)
+saveRDS(shared_objects, file = "data/shared_objects_sim.rds")
 
 ```
 

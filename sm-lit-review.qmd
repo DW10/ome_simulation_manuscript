@@ -446,7 +446,7 @@ shared_objects <- list(
   lit_provide_doses = lit_provide_doses,
   plot_point_whisker = plot_point_whisker
 )
-saveRDS(shared_objects, file = "data/shared_objects.rds")
+saveRDS(shared_objects, file = "data/shared_objects_lit.rds")
 
 ```
  

@@ -8,10 +8,13 @@ format: html
 
 ```{r}
 #| eval: true
+#| message: false
 library(dplyr)
 library(gt)
 library(scales)
 library(ggplot2)
+
+source("functions.R", echo = FALSE)
 
 
 # To get screening data:
@@ -235,7 +238,7 @@ ggplot(heatmap_data, aes(y = Opioid.proportions.within.group, x = Opioid.convers
 
 ### Impact of varying conversion values on studies
 
-@tbl-lit-summary details the `r length(unique(exemplars_summary$Ref))` studies where opioid proportions could be recovered. Of note, only Baran cited a opioid conversion set @baranOptimizingAnalgesiaMinimally2025, all other authors did not describe which value sets were used. Two studies were randomised controlled trials (RCT), whilst the remainder were retrospective cohort studies. With regards to the interventions analysed, in this subset, all were concerning analgesia either during or after the surgical procedure and were classed as anesthesia interventions. 
+@tbl-lit-summary details the `r length(unique(exemplars_summary$Ref))` studies where opioid proportions could be recovered. Of note, only Baran cited a opioid conversion set @baranoOptimizingAnalgesiaMinimally2025, all other authors did not describe which value sets were used. Two studies were randomised controlled trials (RCT), whilst the remainder were retrospective cohort studies. With regards to the interventions analysed, in this subset, all were concerning analgesia either during or after the surgical procedure and were classed as anesthesia interventions. 
 
 ```{r}
 #| label: tbl-lit-summary
@@ -362,7 +365,7 @@ exemplars_summary_table %>%
   )
 ```
 
-This table highlights the difficulty in re-calculating the total opioid burdens that the authors have produced. This is likely due to a number of assumptions as details in the methods such as estimating mean values from medians and assuming medication routes. Only one study, Fedorka 2025, showed no sensitivity to the conversion value set used @fedorkaLiposomalBupivacaineBupivacaine2025. This is because, in the RCT only oxycodone was used in the post-operative period, as so whilst the group estimates may vary, the treatment effect percentage is fixed at 10%.  
+This table highlights the difficulty in re-calculating the total opioid burdens that the authors have produced. This is likely due to a number of assumptions as details in the methods such as estimating mean values from medians and assuming medication routes. Only one study, Fedorka 2025, showed no sensitivity to the conversion value set used @fedorkacjLiposomalBupivacaineBupivacaine2025 This is because, in the RCT only oxycodone was used in the post-operative period, as so whilst the group estimates may vary, the treatment effect percentage is fixed at 10%.  
 
 @fig-lit-outcomes demonstrates the reported difference in opioid burden (red cross) compared to the de-novo calculated difference (green cross). When the the grid search of the possible combinations of the values used by Neilsen was performed, the minimum and maximum values are demonstrated by the orange whiskers.
 

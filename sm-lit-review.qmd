@@ -10,6 +10,8 @@ format: html
 #| eval: true
 library(dplyr)
 library(gt)
+library(scales)
+library(ggplot2)
 
 
 # To get screening data:

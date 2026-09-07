@@ -268,7 +268,7 @@ max_val <- max(results_grid$mean_diff_ome, na.rm = TRUE)
 ```
 
 ```{r}
-potency_oxycodone = 2.25
+potency_oxycodone = 2.2
 potency_morphine = 2
 seed = 222
 
@@ -328,8 +328,6 @@ for(p in seq(p_min, p_max, by = 0.05)){
 ```
 
 `r scales::comma(n)` samples were divided equally between a control and intervention group. An opioid of either morphine or oxycodone was then sampled from a distribution set by $\Delta p_i$ whereby $\Delta p_i = p_i^{\text{(control)}} - p_i^{\text{(intervention)}}$ to set the proportion $p$ of each opioid to be reciprocal in each group. An opioid requirement was sampled from a normal distribution ($\mathbb{E} =$ `r mu_opioid_requirment_control` with $\sigma =$ `r sigma`) for both groups enforcing a treatment effect of `r percent(treatment_effect)`. For samples where the opioid assigned was morphine, the total opioid dose was set equal to the opioid requirement. For samples where the opioid was oxycodone, the total opioid dose was set to opioid requirement multiplied by the ground truth potency equal to `r potency_oxycodone`. For all samples, the opioid consumed was then converted into a TOB, using a conversion value of `r potency_morphine` for morphine and `r potency_oxycodone` +/- an error, $\epsilon$, for oxycodone. The measured difference between the group mean of the control and intervention groups ($\Delta \mu_{\text{TOB}} = \mu_{\text{TOB}}^{\text{(control)}} - \mu_{\text{TOB}}^{\text{(intervention)}}$) was then calculated. The reference opioid used was oral morphine so the resulting units of the TOB metric are oral morphine equivalence milligrams (OMEmg).
-
-
 
 ### Hypothetical study simulation {#sec-manuscript-exemplar-sim}
 

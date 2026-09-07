@@ -2,7 +2,7 @@ project:
   type: book
  # pre-render: pre_render.R
 book:
-  title: 'The inherent bias in studies of reporting outcomes using total opioid burden
+  title: 'The inherent bias in studies reporting outcomes using total opioid burden
     metrics: a simulation study'
   search: false
   downloads:

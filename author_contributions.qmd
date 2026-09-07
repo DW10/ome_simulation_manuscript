@@ -23,7 +23,7 @@ Writing - review & editing: DW, MW and SH\
 
 # Acknowledgements
 
-The authors wish to thank the following for their support: Dr Thomas Frost for early direction and support, University College London Hospitals National Health Service Foundation Trust Critical Care Special Interest Project Scheme.
+The authors wish to thank the following for their support: Dr Thomas Frost for early direction and support, Dr Yogini Jani for feedback, University College London Hospitals National Health Service Foundation Trust Critical Care Special Interest Project Scheme and the University College London Health Algorithm Laboratory.
 
 # Declaration of interests
 

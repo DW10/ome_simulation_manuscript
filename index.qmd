@@ -16,13 +16,13 @@ NY,\
 USA\
 :::
 
-Dear Professor Hemmings
+Dear Professor Hemmings,
 
-We thank you for considering our **Research Communication** manuscript titled *"The inherent bias in studies of reporting outcomes using total opioid burden metrics: a simulation study"* to the British Journal of Anaesthesia. 
+We thank you for considering our **Research Communication** manuscript titled *"The inherent bias in studies reporting outcomes using total opioid burden metrics: a simulation study"* to the British Journal of Anaesthesia. 
 
-Our paper is a methodological critique of total opioid burden metrics such as oral morphine equivalent (OME) that finds an important and unpublished bias. This bias is dependent on the proportions of differing opioid and the error in the conversion values used, whilst it applies predominantly to observational research, there are key implications for randomised controlled trials. 
+Our paper is a methodological critique of total opioid burden metrics such as oral morphine equivalent (OME) that finds an important and unpublished bias. This bias arises when comparing groups with unmatched proportions of differing opioid or there is an error in the conversion values used. Whilst this applies predominantly to observational research, there are key implications for randomised controlled trials. 
 
-The opioid conversion set by Nielsen et al has been cited in 678 time whilst CDC's value set has over 2,500 citations. Despite multiple attempts to unify the methodology the inherent bias in the methodology continues to be overlooked. We hope this paper will start the conversation about how and where total opioid burden metrics are used in perioperative research and start the process to improve the accuracy in the metrics already widely used across perioperative research. We aim to set the new standard for how opioid burden metrics are reported.
+A number of high profile manuscripts have published various opioid conversion value tables with the most cited being the Center of Disease Control, USA with over 2,500 citations. Despite multiple attempts to unify the methodology, the inherent bias continues to be overlooked. We hope this paper will lead to a critical review of how  total opioid burden metrics are used in research and improve the accuracy in the metrics already widely used. We aim to set the new standard for how opioid burden metrics are reported.
 
 We can confirm no parts of this work have been presented before and it is not under consideration at any other journal. 
 

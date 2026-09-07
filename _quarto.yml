@@ -1,6 +1,6 @@
 project:
   type: book
-#  pre-render: pre_render.R
+ # pre-render: pre_render.R
 book:
   title: 'The inherent bias in studies of reporting outcomes using total opioid burden
     metrics: a simulation study'
@@ -16,6 +16,7 @@ book:
   appendices:
     - sm-simulations.qmd
     - sm-lit-review.qmd
+    - sm-lit-protocol.qmd
 comments:
   hypothesis:
     theme: clean

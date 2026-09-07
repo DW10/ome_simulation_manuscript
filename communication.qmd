@@ -50,9 +50,11 @@ Two simulation studies where performed as detailed in @sec-sims. In both, an obs
 
 In the first simulation, 10,000 participants are simulated for each of the grid values across the parameter space ($\Delta p_i \in$ `r shared_objects$p_min`, `r shared_objects$p_max` and $\epsilon \in$ `r percent(shared_objects$e_min)`, `r percent(shared_objects$e_max)`) with no treatment effect. The second simulates a realistic hypothetical study of `r shared_objects$n_second_sim` participants, of the effect of robotic surgery on pain, to understand the extent of the bias under realistic study conditions. The robotic surgery has a true treatment effect of `r shared_objects$robot_effect_mg` OME mg.
 
-To assess the current practices of TOB methodology and reporting in perioperative research a literature rapid review protocol was developed @sec-lit-review. To assess the protocol, a preliminary pilot was performed to screen and extract data from 20% of the the studies. From eligible studies that reported the group mean doses of each opioid, it was attempted to recalculate the TOB outcomes as a point estimate and then as a minimum and maximum using a range of different conversion values.  
+To assess the current practices of TOB methodology and reporting in perioperative research a exploratory literature search was performed (@sec-lit-review). After screening, data was extracted from a random subset of 20% of eligable studies. Manuscripts that reported the group mean doses of each opioid, it was attempted to recalculate the TOB outcomes as a point estimate and then as a minimum and maximum using a range of different conversion values.
 
-No ethics was required for this study. All simulations were performed in `r version$version.string` and code is available on [Github](https://github.com/DW10/ome_simulation_manuscript). Methods are reported with the relevant guideline [@morrisUsingSimulationStudies2019; @moherPreferredReportingItems2015]. The rapid review protocol is pre-registered on the [Open Science Framework](https://doi.org/10.17605/OSF.IO/EFJ8G).
+literature rapid review protocol was developed . To assess the protocol, a preliminary pilot was performed to screen and extract data from 20% of the the studies. From eligible studies  The protocol was then formalised ( @sec-sm-lit-protocol) and registered on the [Open Science Framework](https://doi.org/10.17605/OSF.IO/EFJ8G)..    
+
+No ethics was required for this study. All simulations were performed in `r version$version.string` and code is available on [Github](https://github.com/DW10/ome_simulation_manuscript). Methods are reported with the relevant guideline [@morrisUsingSimulationStudies2019; @moherPreferredReportingItems2015].
 
 ## Results
 

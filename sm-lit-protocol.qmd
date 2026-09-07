@@ -1,0 +1,187 @@
+
+# Literature Rapid Review Of Total Opioid Burden Metric Methodology And Reporting Within Preoperative Care Research: Protocol {#sec-sm-lit-protocol}
+
+```{r source_files}
+#| echo: FALSE
+#| message: FALSE
+#| output: FALSE
+
+source("functions.R", echo = FALSE)
+
+library(dplyr)
+library(gt)
+```
+
+**Registration**: The rapid review protocol is pre-registered on the [Open Science Framework](https://doi.org/10.17605/OSF.IO/EFJ8G)
+
+## Introduction
+
+### Rationale
+There are a wide range of different opioid used across the range of medical specialities and patient groups, each with their own potency to provide analgesia. Opioid conversion values have offered the ability to convert a specific opioid into the equivalent units of a reference opioid, usually morphine, to produce doses in oral morphine equivalent milligrams (OME mg) or milligram morphine equivalent (MME).
+
+A number of conversion value tables have been published in an attempt to provide a best estimate of the conversion values between opioids. Within clinical practice, these cited value sets are a good surrogate for the true conversion value when used in opioid rotation5. Despite this, application of the value sets remains variable in both clinical and research practice.
+
+It is unclear how well the methodology is described and reported within research. 
+
+### Objectives
+
+Primary research question:
+- Describe the methodologies of reporting of TOB metrics used in the perioperative literature.
+
+Secondary research question(s)
+
+- What proportion of study report the opioid proportions between comparative groups
+
+- What proportion go study report the conversion values used to calculate the TOB metrics. 
+
+- To extract and calculate the outcomes de-novo for studies that publish the required minimum data of mean opioid doses within groups. 
+
+### Methods
+
+The eligibility criteria is set using the PCCO framework as described in @tbl-screening. Only papers published in 2025 will be considered to ensure the methodology reviewed is representative of current practice. 
+
+```{r}
+#| label: tbl-screening
+#| tbl-cap: "Litrature extraction proforma"
+#| output: TRUE
+
+tbl_screening <- data.frame("Criteria" = c("Population", "Concept","Context", "Other"),
+                            "Include" =c("All patient groups undergoing a surgical procedure", "Studies using a total opioid burden metric as a primary or secondary outcome (Such as oral morphine equivalence (OME), milligram morphine equivalence (MME) or opioid equivalence)", "Patients undergoing surgical procedures", "Any studies comparing a control against and intervention or two interventions."),
+                            "Exclude" = c("Patients not undergoing surgical procedures. Non-human studies", "Outcomes not including opioid totals", "Palliative care studies or Pharmacology studies", "Studies with no difference between intervention groups" ))
+
+knitr::kable(tbl_screening) 
+
+```
+
+
+### Search strategy
+
+Databases searched will include PUBMED, SCOPUS and Web of Science though their respective web portals using the respective search string. No gray literature will be included as the review aims to capture the practice of current and published research methodologies. 
+
+::: {.callout-note appearance="simple" title = "PUBMED search term"}
+(((((("opioid equivalent" OR "oral morphine equivalence" OR "oral morphine equivalent" OR "oral morphine equivalents" OR "OME" OR "morphine milligram equivalents" OR "morphine milligram equivalence" OR "MME" OR "morphine equivalent daily dose" OR "MEDD") AND ("perioperative" OR "peri-operative" OR "postoperative" OR "post-operative" OR "surgical" OR "surgery" OR "post-surgical" OR "postsurgical"))) AND ("2025/01/01"[Date - Publication] : "2025/12/31"[Date - Publication]))) AND ("clinical trial"[Filter] OR "clinical trial" OR "controlled clinical trial" OR "randomized controlled trial" OR "interventional" OR "intervention study" OR "clinical trials as topic"[MeSH Terms] OR "cohort studies"[MeSH Terms] OR "cohort" OR "prospective" OR "retrospective" OR "case-control" OR "comparative study" OR "evaluation study"))
+:::
+
+::: {.callout-note appearance="simple" title = "SCOPUS search term"}
+TITLE-ABS-KEY ( "opioid equivalent" OR "oral morphine equivalence" OR "oral morphine equivalent" OR "oral morphine equivalents" OR "OME" OR "morphine milligram equivalents" OR "morphine milligram equivalence" OR "MME" OR "morphine equivalent daily dose" OR "MEDD" ) AND TITLE-ABS-KEY ( "perioperative" OR "peri-operative" OR "postoperative" OR "post-operative" OR "surgical" OR "surgery" OR "post-surgical" OR "postsurgical" ) AND TITLE-ABS-KEY ( "clinical trial" OR "controlled clinical trial" OR "randomized controlled trial" OR "interventional" OR "intervention study" OR "cohort" OR "prospective" OR "retrospective" OR "case-control" OR "comparative study" OR "evaluation study" ) AND PUBYEAR = 2025
+:::
+
+::: {.callout-note appearance="simple" title = "Web of Science search term"}
+TS=("opioid equivalent" OR "oral morphine equivalence" OR "oral morphine equivalent" OR "oral morphine equivalents" OR "OME" OR "morphine milligram equivalents" OR "morphine milligram equivalence" OR "MME" OR "morphine equivalent daily dose" OR "MEDD") 
+AND 
+TS=("perioperative" OR "peri-operative" OR "postoperative" OR "post-operative" OR "surgical" OR "surgery" OR "post-surgical" OR "postsurgical") 
+AND 
+TS=("clinical trial" OR "controlled clinical trial" OR "randomized controlled trial" OR "interventional" OR "intervention study" OR "cohort" OR "prospective" OR "retrospective" OR "case-control" OR "comparative study" OR "evaluation study") 
+AND 
+PY=(2025)
+:::
+
+### Study records and screening
+
+#### Data management
+
+Extracts from each search term will be uploaded to the Covidence review platform. Duplicate items will be removed. At each stage, records will be extracted and stored for backup. 
+
+#### Selection process
+
+Screening of title and abstract will happen within the Covidence platform screening section. It will be performed by one reviewer with a subset review of 20% being reviewed by a second author to reduce bias and verify quality. Any discrepancies will reviewed and resolved though a moderation discussion. 
+
+
+#### Data collection process
+
+Data collection will occur in two phases
+
+1. **Full text screening and primary data extraction** - Manuscripts that pass screening will have a full text review. If at this stage it is not eligible it will be removed, if it is eligible it will have data extracted. Primary data collection will then occur by a single reviewer with a subset review of 20% being reviewed by a second author to reduce bias and verify quality
+
+2. **Secondary data extraction** - A second stage data extraction will be performed for papers that cite/describe either a conversion value or report the opioid doses within control and intervention groups. This will provide further details, for that papers that do report their methodology. This will then occur by a single reviewer with a subset review of 20% being reviewed by a second author to reduce bias and verify quality.
+
+### Data items
+
+Standard metadata including author, title, data of publication, journal of publication, doi and abstract (where possible) will be extracted at the search stage. 
+
+**Primary data extraction**:
+Review specific data will be extracted from all papers that pass screening using the proforma as detailed in @tbl-extraction-form. 
+```{r}
+#| label: tbl-extraction-form
+#| tbl-cap: "Primary data extraction proforma"
+#| output: TRUE
+
+tbl_extraction_form <- data.frame(
+  "Variable" = c("Study type","Intervention type","Conversion set","Opioid proportions"),
+  "Options" = c(
+    "Randomised controlled trial, Cohort study, Case controlled study, Other",
+    "Surgical, Anaesthetic, Analgesia, Other",
+    "Described, Cited, Not described",
+    "Reported, Not reported"
+  ),
+  "Description" = c("What is the methodology of the study? If the study is not comparing an intervention between two groups, return to screening and mark as not eligable.",
+                                  "In the manuscript, is the conversion set used to generate the TOB metric described. If it is cited, copy the citation into the free text box below. If values are given, state the values in the free text box. This should usually be included in the methods section but may be included in other places of the manuscript such as tables or footnotes.",
+                                  "What type of intervention is given. For trials comparing surgical technique, approach, methods or surgical tools select surgical. For trials comparing anaesthesia technique, blocks, interoperative medications select anaesthesia. For trials comparing analgeisa including analgesia protocols, postoperative analgesic medications, etc select  analgeisa Otherwise, select other and describe the intervention in the free text box.",
+                                  "Assess the results section, Is it possible to establish the proportion, mean or total doses of each opioid between intervention groups. If authors explicilty state only one type of opioid used in the TOB metric select 'Reported'.")
+  )
+
+knitr::kable(tbl_extraction_form,
+             escape=FALSE)
+
+```
+
+**Secondary data extraction:**
+The data will be collected using an excel spreadsheet with the following data item names and descriptors (@tbl-secondary-data). 
+
+```{r}
+#| message: false
+#| label: tbl-secondary-data
+#| tbl-cap: "Secondary data extraction proforma"
+
+template_path <- "data/data_collection_template.xlsx"
+
+sheet_names <- readxl::excel_sheets(template_path)
+
+process_sheet <- function(sheet) {
+  readxl::read_excel(template_path, sheet = sheet, col_names = FALSE, n_max = 2) %>%
+    mutate(row_id = c("Data_item", "Description")) %>%
+    tidyr::pivot_longer(cols = -row_id) %>%
+    tidyr::pivot_wider(names_from = row_id, values_from = value) %>%
+    mutate(Sheet = sheet) %>%
+    select(Sheet, `Data item` = Data_item, Description)
+}
+
+final_table <- purrr::map_dfr(sheet_names, process_sheet)
+
+final_table %>%
+  gt()
+  
+```
+
+## Outcomes
+
+Primary outcomes:
+
+- To report the proportion of manuscripts that use a total opioid burden metrics in perioperative research that report the conversion values used and the opioid doses within groups. 
+
+Secondary outcomes:
+
+- To report the range and variability of the opioid conversion values used within the perioperative literature
+
+- To report the variability in the reported outcomes and de-novo calculates outcome for studies that report the opioid doses within groups 
+
+## Data synthesis
+
+Data will be analysed quantitative. For papers that are eligible and have primary data extraction, the counts and proportions will be presented.
+
+No qualitative analysis will be performed. 
+
+### Subgroup analysis
+
+For papers that provide a conversion value or the papers cited, the conversion values for each opioid will be be presented with the range, mean and median. 
+
+For papers that provide opioid proportions, the reported outcome will be presented alongside the de-novo point estimate and the range estimate utilising the range presented previously. 
+
+## Meta-bias
+
+No planned assessment of meta-biases
+
+## Confidence in cumulative evidence
+
+This is a rapid review of the methodology reporting, it aims to look at all published studys regardless of methodologies or study design therefore the body of evidence will not be assessed for strength. 
+

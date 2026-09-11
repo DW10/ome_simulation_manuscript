@@ -611,8 +611,8 @@ As $\epsilon_\text{morphine}$ is 0, this index will not produce any bias as will
 $$
 \begin{align}
 \text{Given:}\\
-\bar{D} &= 0.5(44.11 + 40.89) = &42.5   \\
-\Delta D &= (44.11 - 40.89) = &3.22 \\
+\bar{D} &= 0.5(40.89 + 44.11) = &42.5   \\
+\Delta D &= (40.89 - 44.11) = &-3.22 \\
 \bar{p}_\text{morphine} &= 0.5(0.934 + 0.889) = & 0.9115\\
 \Delta p_\text{morphine} &= 0.934 - 0.889 = &0.045 \\
 \bar{p}_\text{oxycodone} &= 0.5(0.066 + 0.111) = & 0.0885\\
@@ -620,8 +620,8 @@ $$
 \\
 \mathcal{B} &= \bar{D} \sum_i \epsilon_i \Delta p_i + \Delta D \sum_i \epsilon_i \bar p_i \\
 \mathcal{B} &= 42.5((0\cdot-0.045) +(-0.2 \cdot - 0.045)) + 3.22((0\cdot0.9115) +(-0.2 \cdot - 0.0885)) \\
-\mathcal{B} &= 42.5(-0.2 \cdot - 0.045)) + 3.22(-0.2 \cdot - 0.0885)\\
-\mathcal{B} &= 
+\mathcal{B} &= 42.5(-0.2 \cdot - 0.045)) + -3.22(-0.2 \cdot - 0.0885)\\
+\mathcal{B} &= 0.32
 \end{align}
 $$
 

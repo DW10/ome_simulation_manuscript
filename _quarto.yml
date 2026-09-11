@@ -14,6 +14,7 @@ book:
     - author_contributions.qmd
     - references.qmd
   appendices:
+    - sm-proofs.qmd
     - sm-simulations.qmd
     - sm-lit-review.qmd
     - sm-lit-protocol.qmd
@@ -21,7 +22,7 @@ comments:
   hypothesis:
     theme: clean
     openSidebar: false
-bibliography: /Users/dylanwhitaker/Documents/UCL OneDrive/refs.bib
+bibliography: /Users/dylanwhitaker/Documents/OneDrive - UCL/refs.bib
 csl: bja.csl
 format:
   html:

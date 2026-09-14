@@ -25,9 +25,9 @@ plot_point_whisker <- shared_objects_lit$plot_point_whisker
 
 ## Introduction
 
-There is a wide variety of opioids used across the range of clinical specialities and patient groups, each with their own potency to provide analgesia @bhatnagarOpioidEquivalency2026. Opioid conversion values offer the ability to convert a specific opioid into the equivalent units of a reference opioid, to produce equi-analgesic doses measured in oral morphine equivalent milligrams (OME mg) or milligram morphine equivalent (MME).  
+There is a wide variety of opioids used across the range of clinical specialities and patient groups, each with their own potency to provide analgesia @bhatnagarOpioidEquivalency2026. Opioid conversion values offer the ability to convert a specific opioid into the equivalent units of a reference opioid, to produce equi-analgesic doses measured in oral morphine equivalent (OME) or milligram morphine equivalent (MME), depending on the reference.  
 
-We define the total opioid burden (TOB) to be the weighted sum of the dose $d$ for medication $i$ in the set of medications $\mathbf{M}$ multiplied by the conversion value $c$ for a given route $r$ (@eq-ome).
+We define the total opioid burden (TOB) as the generalisation of the reference-specific metrics OME and MME, estimating the summed analgesic exposure through opioid medications to a patient. Formalised, TOB is the weighted sum of the dose $d$ for medication $i$ in the set of medications $\mathbf{M}$ multiplied by the conversion value $c$ for a given route $r$ (@eq-ome).
 
 $$\text{TOB} = \sum_{i\in\mathbf{M}} d_i c_{i,r}
 $${#eq-ome}
@@ -36,13 +36,9 @@ A number of conversion value tables have been published in an attempt to provide
 
 There is an implicit claim that once converted, it no longer matters which opioids a patient receives. However, the mathematical proof in @sec-proof demonstrates that this is only true if one of the two following conditions are satisfied (@eq-logic):
 
-1) If the mixture of opioids in each group is the same 
+1) If the mixture and scale of opioids in each group is the same 
 
 2) There is no error in the conversion values used
-
-$$
-\Delta \mu = \Delta \mu^0 \iff \left(\Delta p_i = 0 \ \forall i\right) \lor \left(\epsilon_i = 0 \ \forall i\right) \tag{A.6}
-$$
 
 If neither condition is satisfied exactly, a previously undescribed bias arises that can skew or even invert the results of a study. In this simulation study we aim to quantify the extent of this bias and furthermore to estimate the impact on the current body of literature. 
 
@@ -73,11 +69,11 @@ plot_point_whisker
 
 ## Discussion
 
-In observational research, it will be rare that the first condition of balanced groups is met exactly. An RCT may offer more hope of eliminating the TOB bias, however if a collider bias occurs (where the treatment itself has an effect on the choice of analgesia used @pearlBookWhyNew2019) or the post-operative analgesia treatment is not protocolised, the bias will persist.
+In observational research, it will be rare that the first condition of balanced groups is met exactly. An RCT may offer more hope of eliminating the TOB bias, however if a collider bias occurs (where the treatment itself has an effect on the choice of analgesia used @pearlBookWhyNew2019) or the post-operative analgesia treatment is not protocolised, the bias will persist. For studies where a treatment associational effect is expected then it is expected that the group scale will not be equal and hence a bias will be present. 
 
-The influence of the bias in the conversion value is a significant problem; the degree of error to the biological ground truth can never be known and estimates very widely [@rennickVariabilityOpioidEquivalence2016; @yessaillianSystematicReviewMorphine2024]. It is known that the conversion value tables are built on small, single opioid studies and have been formalised from clinical rules of thumb @mcphersonWhyEquianalgesicTables2020. We propose that data driven distributions of possible conversion value should instead be produced, this would allow quantification of uncertainty in the TOB metrics.
+The influence of the bias in the conversion value is a considerable problem; the degree of error to the biological ground truth can never be known and estimates very [@rennickVariabilityOpioidEquivalence2016; @yessaillianSystematicReviewMorphine2024]. It is known that the conversion value tables are built on small, single opioid studies and have been formalised from clinical rules of thumb @mcphersonWhyEquianalgesicTables2020. We propose that data driven distributions of possible conversion value should instead be produced, this would allow quantification of uncertainty in the TOB metrics.
 
-This study is limited by only simulating a two opioid paradigm and by of comparing group means; it is unclear how this bias will interact in multiple opioid studies or comparison of group medians. Furthermore, the literature search without a systemic approach isn't representative of the wider literature. 
+This study is limited by only simulating a two opioid paradigm and by comparing group means; the extent of the bias in multiple opioid studies or comparison of group medians has not been investigated. Furthermore, the literature search was exploratory rather than systematic and may not be representative of the wider literature. 
 
 We recommend:
 

@@ -7,7 +7,7 @@ As a research metric, measuring differences in group means intents to measure th
 
 We will demonstrate that the measured difference in means is equal to true difference in means one when the following conditions are met:
 
-1. The proportion of opioids is equal: $p{i_A} = p{i_B}$
+1. The proportion and total exposure of opioids is equal: $p_{i,T^0} = p_{i,T^1}$ and $D_{T^0} = D_{T^1}$
 
 2. There is no error in the conversion value used: $\epsilon = 0$ 
 
@@ -16,37 +16,44 @@ We will demonstrate that the measured difference in means is equal to true diffe
 The Total Opioid Burden $\text{TOB}$ for a given patient over a given timeframe is the sum of the doses $d$ of medications $i$ multiplied by the conversion value $c$ for the given medication via the route $r$^[For clarity we have defined the conversion value for a given medication and route. The route will often be folded into the medication index where conversion values differ between groups as demonstrated in the proof.]. 
 
 $$
-\text{TOB}_j = \sum_{i\in\mathbf{M}} d_i c_{i,r}
-$$
-The mean dose of a given medication within a given group $\bar{d}_{i,G}$ is defined as the sum of the doses $d$ of the medication for the patients within the group divided by the group size $n_G$
+\text{TOB}_j = \sum_{i\in\mathbf{M}} d_{i,j} c_{i,r}
+$${#eq-ome1}
+The mean dose of a given medication within a given group $\bar{d}_{i,G}$ is defined as the sum of the doses $d$ of the medication for the patients within the group.
 
 $$
 \bar{d}_{i,G} = \frac{1}{n_G} \sum_{j \in G} d_{i,j}
-$$
+$${#eq-mean-dose}
 
-The group mean TOB can be rearranged from @eq-ome as a sum of weighted means where $\mu_{TOB, G}$ is equal to the is the sum $\bar{d}_{i,G}$ mulitplied by the conversion value $c_i$ divided by the group size $n_G$.
+The group mean TOB can be rearranged from @eq-ome as a sum of weighted means where $\mu_{\text{TOB}, G}$ is equal to the sum $\bar{d}_{i,G}$ multiplied by the conversion value $c_i$ divided by the group size $n_G$.
 
 $$
-\mu_{TOB, G} = \frac{1}{n_G} \sum_{j \in G} d_{i,j} c_i
+\mu_{\text{TOB}, G} = \frac{1}{n_G} \sum_{j \in G} d_{i,j} c_i
 $${#eq-tob-G}
-The conversion value $c_i$ is the unknown ground truth conversion value $c_i^0$ with the error term $\epsilon_i$ of the given medication in the published value.
+
+The conversion value $c_i$ is the unknown ground truth conversion value $c_i^0$ with the error term $\epsilon_i$ of the given medication in the published value. It is noted that there is no error term in the doses given $d$ term. Whilst there may be a number of type 2 errors in the dose administered compared to the dose recorded this is not considered.  
 
 $$
 c_i = c_i^0 + \epsilon_i
 $${#eq-c-i}
 
-The group total opioid exposure $D_G$ (also known as the group total opioid requirement) is the sum of the mean dose $\bar{d}_i$. 
-
+The group's total opioid exposure $D_G$ (also known as the group total opioid requirement) is the sum of the mean dose $\bar{d}_i$. 
 $$
 D_G = \sum_{i \in M} \bar{d}_{i,G}
-$$
-The proportion $p_{i,G}$ of medication $i$ within a group $G$ is defined as the mean dose of the medication divided by the group total exposure $D_G$.
+$${#eq-group-total}
+
+The proportion $p_{i,G}$ of medication $i$ within a group $G$ is defined as the mean dose of the medication divided by the group total exposure $D_G$. The sum of the proportions within a group is equal to 1.
 
 $$
 p_{i,G} = \frac{\bar{d}_{i,G}}{D_G}
+$${#eq-prop}
 $$
+\sum_i p_{i,G} = 1
+$${#eq-prop-sum}
 
-
+Let $\bar{D}$ be the average opioid exposure where $\bar{D} = \frac{1}{2}(D_{T^1} + D_{T^0})$. \
+Let $\Delta D$ be the difference in group exposure where $\Delta D = D_{T^1} - D_{T^0}$. \
+Let $\bar p_i$ be the average proportion where $\bar p_i = \frac{1}{2}(p_{i,T^1} + p_{i,T^0})$. \
+Let $\Delta p_i$ be the difference in proportion where $\Delta p_i = p_{i,T^1} - p_{i,T^0}$.\
 
 ## Rearrangement of @eq-tob-G
 
@@ -59,15 +66,15 @@ $${#eq-bar-d}
 Substituting @eq-bar-d into @eq-tob-G provides the group mean dose expressed as the groups total opioid exposure $D_G$ multiplied the the proportion weighted sum of the conversion values. 
 
 $$
-\mu_{TOB, G} = D_G \sum_{i} p_{i,G} c_i
+\mu_{\text{TOB}, G} = D_G \sum_{i} p_{i,G} c_i
 $${#eq-tob-G2}
 
-@eq-tob-G2 demonstrates that the group mean TOB can vary due to either the total scale of the group ($D_G$) and or the mixture of opioids within the group. 
+@eq-tob-G2 demonstrates that the group mean TOB can vary due to either the total scale of the group ($D_G$) and/or the mixture of opioids within the group. 
 
 ## Proof of bias
 
 Let $G \in \{T^0, T^1\}$ index the control and intervention groups of size $n_{T=0}$ and $n_{T=1}$. \
-Let $M = \{ \text{morphine}, ..., m \}$ index the opioid types.
+Let $M = \{ \text{morphine}, \text{oxycodone}, ... \}$ index the opioid types.
 
 The difference in group means $\Delta \mu$ is 
 
@@ -76,20 +83,15 @@ $$
 \Delta \mu &= \mu_{\text{TOB}, T^1} - \mu_{\text{TOB}, T^0} \\
  &= D_{T^1} \sum p_{i,T^1} c_i - D_{T^0} \sum p_{i,T^0} c_i
 \end{align}
-$$
+$${eq-bias-proof}
 
 The conversion value can then be substituted with @eq-c-i and split into the true effect $\Delta \mu^0$ and the bias $\mathcal{B}$. Throughout, $\Delta$ and bar notation follow the $T^1 - T^0$ (intervention minus control) convention.
 
 $$
 \Delta \mu = \underbrace{\left( D_{T^1} \sum_i p_{i,T^1} c_i^0 -  D_{T^0} \sum_i p_{i,T^0} c_i^0 \right) }_{\Delta \mu^0\text{, true difference}} + \underbrace{\left( D_{T^1} \sum_i p_{i,T^1} \epsilon_i -  D_{T^0} \sum_i p_{i,T^0} \epsilon_i \right) }_{\mathcal{B} \text{, bias}}
-$$
+$${eq-total}
 
-## Bias term as a function of $p$ and $\epsilon$.
-
-Let $\bar{D}$ be the average opioid exposure where $\bar{D} = \frac{1}{2}(D_{T^1} + D_{T^0})$. \
-Let $\Delta D$ be the difference in group exposure where $\Delta D = D_{T^1} - D_{T^0}$. \
-Let $\bar p_i$ be the average proportion where $\bar p_i = \frac{1}{2}(p_{i,T^1} + p_{i,T^0})$. \
-Let $\Delta p_i$ be the difference in proportion where $\Delta p_i = p_{i,T^1} - p_{i,T^0}$.\
+## Bias term as a function of the proportion, error and scale.
 
 The bias term can be be substituted and simplified as shown in @eq-bias, demonstrating the core conditions of the TOB metrics. 
 
@@ -99,10 +101,16 @@ $${#eq-bias}
 
 ## Conclusion
 
-For the measured difference $\Delta \mu$ to be equal to the true difference $\Delta \mu^0$ it must satisfy one of the following two conditions to ensure that $\mathcal{B} = 0$. That either there is no difference in the proportions of opioid within groups or that there is no error in the conversion values used (@eq-logic). 
+For the bias to be 0 and thus the measured difference $\Delta \mu$ to be equal to the true difference $\Delta \mu^0$  it must satisfy the following condition.
 
 $$
-\Delta \mu = \Delta \mu^0 \iff \left(\Delta p_i = 0 \ \forall i\right) \lor \left(\epsilon_i = 0 \ \forall i\right)
+\mathcal{B} = 0 \iff \bar{D} \sum_i \epsilon_i \Delta p_i  = - \Delta D \sum_i \epsilon_i \bar p_i 
 $${#eq-logic}
 
+Special cases where this is sufficient:
 
+1. $\epsilon_i = 0 \forall i$
+
+2. $\Delta p_i = 0 \forall i$ *and* $\Delta D = 0$
+
+There may also arise unique conditions where the error and proportions may cancel and thus satisfy @eq-logic

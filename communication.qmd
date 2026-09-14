@@ -73,7 +73,7 @@ plot_point_whisker
 
 ## Discussion
 
-In observational research, it will be vanishingly rare that the first condition of balanced groups is met exactly. An RCT may offer more hope of eliminating the TOB bias, however if a collider bias occurs (where the treatment itself has an effect on the choice of analgesia used @pearlBookWhyNew2019) or the post-operative analgesia treatment is not protocolised, the bias will persist.
+In observational research, it will be rare that the first condition of balanced groups is met exactly. An RCT may offer more hope of eliminating the TOB bias, however if a collider bias occurs (where the treatment itself has an effect on the choice of analgesia used @pearlBookWhyNew2019) or the post-operative analgesia treatment is not protocolised, the bias will persist.
 
 The influence of the bias in the conversion value is a significant problem; the degree of error to the biological ground truth can never be known and estimates very widely [@rennickVariabilityOpioidEquivalence2016; @yessaillianSystematicReviewMorphine2024]. It is known that the conversion value tables are built on small, single opioid studies and have been formalised from clinical rules of thumb @mcphersonWhyEquianalgesicTables2020. We propose that data driven distributions of possible conversion value should instead be produced, this would allow quantification of uncertainty in the TOB metrics.
 

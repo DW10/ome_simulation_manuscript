@@ -5,6 +5,8 @@ library(ggplot2)
 library(patchwork)
 library(latex2exp)
 library(gt)
+library(foreach)
+library(doParallel)
 
 theme_academic <- function() {
   theme_minimal(base_size = 12) +

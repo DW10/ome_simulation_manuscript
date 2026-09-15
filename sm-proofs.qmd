@@ -5,7 +5,7 @@
 
 As a research metric, measuring differences in group means intents to measure the difference in total scale of the groups, known as the associational effect (or treatment effect in causal work), to assess if an intervention applied to one group is associated (or causes) a reduction in the total amount of opioids. 
 
-We will demonstrate that the measured difference in means is equal to true difference in means one when the following conditions are met:
+We will demonstrate that the measured difference in means is equal to true difference in means once when the following conditions are met:
 
 1. The proportion and total exposure of opioids is equal: $p_{i,T^0} = p_{i,T^1}$ and $D_{T^0} = D_{T^1}$
 
@@ -24,10 +24,10 @@ $$
 \bar{d}_{i,G} = \frac{1}{n_G} \sum_{j \in G} d_{i,j}
 $${#eq-mean-dose}
 
-The group mean TOB can be rearranged from @eq-ome as a sum of weighted means where $\mu_{\text{TOB}, G}$ is equal to the sum $\bar{d}_{i,G}$ multiplied by the conversion value $c_i$ divided by the group size $n_G$.
+The group mean TOB can be rearranged from @eq-ome as a sum of weighted means where $\mu_{\text{TOB}, G}$ is equal to the sum $\bar{d}_{i,G}$ multiplied by the conversion value $c_i$.
 
 $$
-\mu_{\text{TOB}, G} = \frac{1}{n_G} \sum_{j \in G} d_{i,j} c_i
+\mu_{\text{TOB}, G} = \frac{1}{n_G} \sum_{j \in G} \sum_{i \in \mathbf{M}} d_{i,j} c_i
 $${#eq-tob-G}
 
 The conversion value $c_i$ is the unknown ground truth conversion value $c_i^0$ with the error term $\epsilon_i$ of the given medication in the published value. It is noted that there is no error term in the doses given $d$ term. Whilst there may be a number of type 2 errors in the dose administered compared to the dose recorded this is not considered.  
@@ -36,7 +36,7 @@ $$
 c_i = c_i^0 + \epsilon_i
 $${#eq-c-i}
 
-The group's total opioid exposure $D_G$ (also known as the group total opioid requirement) is the sum of the mean dose $\bar{d}_i$. 
+The group's total opioid exposure $D_G$ (also known as the group total opioid requirement) is the sum of the mean dose $\bar{d}_i$. This is the pooled drug-milligram, not the group total $\text{TOB}$ calculated in @eq-tob-G.
 $$
 D_G = \sum_{i \in M} \bar{d}_{i,G}
 $${#eq-group-total}
@@ -79,17 +79,17 @@ Let $M = \{ \text{morphine}, \text{oxycodone}, ... \}$ index the opioid types.
 The difference in group means $\Delta \mu$ is 
 
 $$
-\begin{align}
+\begin{aligned}
 \Delta \mu &= \mu_{\text{TOB}, T^1} - \mu_{\text{TOB}, T^0} \\
  &= D_{T^1} \sum p_{i,T^1} c_i - D_{T^0} \sum p_{i,T^0} c_i
-\end{align}
-$${eq-bias-proof}
+\end{aligned}
+$${#eq-bias-proof}
 
 The conversion value can then be substituted with @eq-c-i and split into the true effect $\Delta \mu^0$ and the bias $\mathcal{B}$. Throughout, $\Delta$ and bar notation follow the $T^1 - T^0$ (intervention minus control) convention.
 
 $$
 \Delta \mu = \underbrace{\left( D_{T^1} \sum_i p_{i,T^1} c_i^0 -  D_{T^0} \sum_i p_{i,T^0} c_i^0 \right) }_{\Delta \mu^0\text{, true difference}} + \underbrace{\left( D_{T^1} \sum_i p_{i,T^1} \epsilon_i -  D_{T^0} \sum_i p_{i,T^0} \epsilon_i \right) }_{\mathcal{B} \text{, bias}}
-$${eq-total}
+$${#eq-total}
 
 ## Bias term as a function of the proportion, error and scale.
 

@@ -159,14 +159,14 @@ The group mean of total opioid burden reported by the paper was extracted. Then 
 ```{r}
 #| label: tbl-conversion-ranges
 
-conversion_value_ranges <- data.frame(
+tbl_conversion_ranges <- data.frame(
   Medication = names(conversion_value_ranges),
   `Conversion values` = sapply(conversion_value_ranges, paste, collapse = ", "),
   check.names = FALSE,
   row.names = NULL
 )
 
-knitr::kable(conversion_value_ranges)
+knitr::kable(tbl_conversion_ranges)
 ```
 
 ## Results
@@ -411,13 +411,13 @@ lit_not_described <- 1-lit_data %>% filter(Opioid.conversion.set == "Not describ
 lit_provide_doses <- lit_data %>% filter(Opioid.proportions.within.group == "Described") %>% nrow()/n_lit_data
 
 
-shared_objects <- list(
+shared_objects_lit <- list(
   n_lit_data = nrow(lit_data),
   lit_not_described = lit_not_described,
   lit_provide_doses = lit_provide_doses,
   plot_point_whisker = plot_point_whisker
 )
-saveRDS(shared_objects, file = "data/shared_objects_lit.rds")
+saveRDS(shared_objects_lit, file = "data/shared_objects_lit.rds")
 
 ```
  

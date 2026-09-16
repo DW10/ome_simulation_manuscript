@@ -45,11 +45,11 @@ The eligibility criteria is set using the PCCO framework as described in @tbl-sc
 #| tbl-cap: "Litrature extraction proforma"
 #| output: TRUE
 
-tbl_screening <- data.frame("Criteria" = c("Population", "Concept","Context", "Other"),
+tbl_screening_protocol <- data.frame("Criteria" = c("Population", "Concept","Context", "Other"),
                             "Include" =c("All patient groups undergoing a surgical procedure", "Studies using a total opioid burden metric as a primary or secondary outcome (Such as oral morphine equivalence (OME), milligram morphine equivalence (MME) or opioid equivalence)", "Patients undergoing surgical procedures", "Any studies comparing a control against and intervention or two interventions."),
                             "Exclude" = c("Patients not undergoing surgical procedures. Non-human studies", "Outcomes not including opioid totals", "Palliative care studies or Pharmacology studies", "Studies with no difference between intervention groups" ))
 
-knitr::kable(tbl_screening) 
+knitr::kable(tbl_screening_protocol)
 
 ```
 

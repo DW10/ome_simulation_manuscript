@@ -1,0 +1,20 @@
+project:
+  type: default
+  output-dir: _submission
+  execute-dir: project
+  render:
+    - submission/supplement.qmd
+    - submission/manuscript.qmd
+    - submission/cover-letter.qmd
+filters:
+  - at: pre-quarto
+    path: xref-hardcode.lua
+format:
+  docx:
+    toc: false
+    number-sections: false
+    reference-doc: submission/reference.docx
+    fig-align: center
+    fig-width: 5
+    fig-height: 3
+    fig-dpi: 300

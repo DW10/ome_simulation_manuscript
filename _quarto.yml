@@ -1,57 +1,8 @@
-project:
-  type: book
- # pre-render: pre_render.R
-book:
-  title: 'The inherent bias in studies reporting outcomes using total opioid burden
-    metrics: a simulation study'
-  search: false
-  downloads:
-    - pdf
-    - docx
-  chapters:
-    - index.qmd
-    - communication.qmd
-    - author_contributions.qmd
-    - references.qmd
-  appendices:
-    - sm-proofs.qmd
-    - sm-simulations.qmd
-    - sm-lit-review.qmd
-    - sm-lit-protocol.qmd
-comments:
-  hypothesis:
-    theme: clean
-    openSidebar: false
-bibliography: /Users/dylanwhitaker/Documents/OneDrive - UCL/refs.bib
+profile:
+  group:
+    - [website, submission]
+bibliography: "/Users/dylanwhitaker/Documents/OneDrive - UCL/refs.bib"
 csl: bja.csl
-format:
-  html:
-    toc: true
-    toc-location: left
-    fig-align: center
-    fig-width: 6.5
-    fig-height: 4
-    fig-dpi: 150
-  pdf:
-    documentclass: scrreprt
-    geometry:
-      - top=30mm
-      - left=20mm
-      - heightrounded
-    toc: true
-    fig-align: center
-    fig-width: 5
-    fig-height: 3
-    fig-dpi: 300
-    output-file: ome_simulation.pdf
-    fig-pos: H
-  docx:
-    toc: true
-    fig-align: center
-    fig-width: 5
-    fig-height: 3
-    fig-dpi: 300
-    output-file: ome_simulation
 prefer-html: true
 language:
   crossref-apx-prefix: 'Supplementary material '
@@ -60,66 +11,3 @@ execute:
   echo: false
   warning: true
   error: true
-author:
-  - id: aut1
-    name:
-      given: Dylan
-      family: Whitaker
-    email: dylan.whitaker.25@ucl.ac.uk
-    orcid: 0000-0002-6619-5846
-    attributes:
-      corresponding: true
-    roles:
-      - Conceptualization
-      - Data curation
-      - Formal analysis
-      - Methodology
-      - Visualization
-      - Writing - original draft
-      - Writing - review & editing
-    affiliations:
-      - ref: aff1
-      - ref: aff2
-  - id: aut2
-    name:
-      given: Matthew
-      family: Wilson
-    orcid: 0000-0002-5001-0253
-    attributes:
-      corresponding: false
-    roles:
-      - Conceptualization
-      - Funding acquisition
-      - Supervision
-      - Writing - review & editing
-    affiliations:
-      - ref: aff3
-      - ref: aff4
-  - id: aut3
-    name:
-      given: Steve
-      family: Harris
-    orcid: 0000-0002-5001-0253
-    attributes:
-      corresponding: false
-    roles:
-      - Conceptualization
-      - Funding acquisition
-      - Supervision
-      - Writing - review & editing
-    affiliations:
-      - ref: aff1
-      - ref: aff2
-affiliations:
-  - id: aff1
-    name: Institute of Health Informatics, University College London, London, United
-      Kingdom
-  - id: aff2
-    name: Department of Critical Care, University College London Hospitals NHS Foundation
-      Trust, London, United Kingdom
-  - id: aff3
-    name: Department of Anaesthesia and Perioperative Medicine, University College
-      London Hospitals NHS Foundation Trust, London, United Kingdom
-  - id: aff4
-    name: Division of Surgery and Interventional Science, University College London,
-      London, United Kingdom

@@ -3,13 +3,13 @@
 
 ## Introduction
 
-As a research metric, measuring differences in group means intents to measure the difference in total scale of the groups, known as the associational effect (or treatment effect in causal work), to assess if an intervention applied to one group is associated (or causes) a reduction in the total amount of opioids. 
+As a research metric, measuring differences in group means intends to measure the difference in total scale of the groups, known as the associational effect (or treatment effect in causal work), to assess if an intervention applied to one group is associated (or causes) a reduction in the total amount of opioids. 
 
-We will demonstrate that the measured difference in means is equal to true difference in means once when the following conditions are met:
+We will demonstrate that the measured difference in means is equal to true difference in means when the following conditions are met:
 
-1. The proportion and total exposure of opioids is equal: $p_{i,T^0} = p_{i,T^1}$ and $D_{T^0} = D_{T^1}$
+1. There is no error in the conversion value used: $\epsilon_i = 0 \;\; \forall i$ 
 
-2. There is no error in the conversion value used: $\epsilon = 0$ 
+2. The drug mean dose between groups are equal: $\Delta \bar d_i = 0 \;\; \forall i$
 
 ## Definitions
 
@@ -18,11 +18,12 @@ The Total Opioid Burden $\text{TOB}$ for a given patient over a given timeframe 
 $$
 \text{TOB}_j = \sum_{i\in\mathbf{M}} d_{i,j} c_{i,r}
 $${#eq-ome1}
-The mean dose of a given medication within a given group $\bar{d}_{i,G}$ is defined as the sum of the doses $d$ of the medication for the patients within the group.
+
+The conversion value $c_i$ is the unknown ground truth conversion value $c_i^0$ with the error term $\epsilon_i$ of the given medication in the published value. It is noted that there is no error term in the doses given $d$ term. 
 
 $$
-\bar{d}_{i,G} = \frac{1}{n_G} \sum_{j \in G} d_{i,j}
-$${#eq-mean-dose}
+c_i = c_i^0 + \epsilon_i
+$${#eq-c-i}
 
 The group mean TOB can be rearranged from @eq-ome as a sum of weighted means where $\mu_{\text{TOB}, G}$ is equal to the sum $\bar{d}_{i,G}$ multiplied by the conversion value $c_i$.
 
@@ -30,11 +31,11 @@ $$
 \mu_{\text{TOB}, G} = \frac{1}{n_G} \sum_{j \in G} \sum_{i \in \mathbf{M}} d_{i,j} c_i
 $${#eq-tob-G}
 
-The conversion value $c_i$ is the unknown ground truth conversion value $c_i^0$ with the error term $\epsilon_i$ of the given medication in the published value. It is noted that there is no error term in the doses given $d$ term. Whilst there may be a number of type 2 errors in the dose administered compared to the dose recorded this is not considered.  
+The mean dose of a given medication within a given group $\bar{d}_{i,G}$ is defined as the arithmetic mean of the doses $d$ of the medication for the patients within the group.
 
 $$
-c_i = c_i^0 + \epsilon_i
-$${#eq-c-i}
+\bar{d}_{i,G} = \frac{1}{n_G} \sum_{j \in G} d_{i,j}
+$${#eq-mean-dose}
 
 The group's total opioid exposure $D_G$ (also known as the group total opioid requirement) is the sum of the mean dose $\bar{d}_i$. This is the pooled drug-milligram, not the group total $\text{TOB}$ calculated in @eq-tob-G.
 $$
@@ -91,26 +92,33 @@ $$
 \Delta \mu = \underbrace{\left( D_{T^1} \sum_i p_{i,T^1} c_i^0 -  D_{T^0} \sum_i p_{i,T^0} c_i^0 \right) }_{\Delta \mu^0\text{, true difference}} + \underbrace{\left( D_{T^1} \sum_i p_{i,T^1} \epsilon_i -  D_{T^0} \sum_i p_{i,T^0} \epsilon_i \right) }_{\mathcal{B} \text{, bias}}
 $${#eq-total}
 
-## Bias term as a function of the proportion, error and scale.
+Substituting @eq-bar-d into the bias term of @eq-total gives an equivalent drug-wise form of the bias, where $\Delta \bar d_i = \bar d_{i,T^1} - \bar d_{i,T^0}$.
 
-The bias term can be be substituted and simplified as shown in @eq-bias, demonstrating the core conditions of the TOB metrics. 
+$$
+\mathcal{B} = \sum_i \epsilon_i \Delta \bar d_i
+$${#eq-bias-d}
+
+@eq-bias-d can also be written as @eq-bias.
 
 $$
 \mathcal{B} = \bar{D} \sum_i \epsilon_i \Delta p_i + \Delta D \sum_i \epsilon_i \bar p_i 
 $${#eq-bias}
 
+
 ## Conclusion
 
-For the bias to be 0 and thus the measured difference $\Delta \mu$ to be equal to the true difference $\Delta \mu^0$  it must satisfy the following condition.
+The measured difference $\Delta \mu$ equals the true difference $\Delta \mu^0$ if and only if
 
 $$
-\mathcal{B} = 0 \iff \bar{D} \sum_i \epsilon_i \Delta p_i  = - \Delta D \sum_i \epsilon_i \bar p_i 
+\mathcal{B} = 0 \iff \bar{D} \sum_i \epsilon_i \Delta p_i = - \Delta D \sum_i \epsilon_i \bar p_i \iff \sum_i \epsilon_i \Delta \bar d_i = 0
 $${#eq-logic}
 
-Special cases where this is sufficient:
+Conditions where this is satisfied:
 
-1. $\epsilon_i = 0 \forall i$
+1. **No conversion error:** Every conversion value is correct, so the bias is zero whatever the group composition.
+$$\epsilon_i = 0 \;\; \forall i \implies \mathcal{B} = 0$$
 
-2. $\Delta p_i = 0 \forall i$ *and* $\Delta D = 0$
+2. **Mean dose does not differ between groups:** Each medication has the same mean dose in both groups. 
+$$ \Delta \bar d_i = 0 \;\; \forall i \implies \mathcal{B} = 0$$
 
-There may also arise unique conditions where the error and proportions may cancel and thus satisfy @eq-logic
+It is noted that there are a range of other possible special and general conditions where @eq-logic can be satisfied and hence there will be no bias. 

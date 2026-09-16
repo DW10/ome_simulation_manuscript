@@ -34,13 +34,13 @@ $${#eq-ome}
 
 A number of conversion value tables have been published in an attempt to provide a *"best estimate"* of the conversion values between opioids [@mcphersonDemystifyingOpioidConversion2010; @nielsenSynthesisOralMorphine2016; @dowellCDCClinicalPractice2022]. Within clinical practice, these cited value tables are conventionally treated as a good surrogate for the true conversion value @mercadanteConversionRatiosOpioid2023. However, these values have been co-opted to produce metrics used in research despite a lack of clear methodological quality assurance. A commonly used, and often primary, outcome in perioperative analgesic studies is the difference in opioid requirement between groups, as measured by comparing the arithmetic mean of summed TOB. 
 
-There is an implicit claim that once converted, it no longer matters which opioids a patient receives. However, the mathematical proof in @sec-proof demonstrates that this is only true if one of the two following conditions are satisfied (@eq-logic):
+There is an implicit claim that once converted, it no longer matters which opioids a patient receives. However as demonstrated by the STRATOS guidance, misspecified weights with differential exposure leads to measurement error @keoghSTRATOSGuidanceDocument2020. Mathematical proof in @sec-proof demonstrates that this is true if either following conditions are satisfied (@eq-logic):
 
-1) If the mixture and scale of opioids in each group is the same 
+1. There is no error in any of the conversion values used
 
-2) There is no error in the conversion values used
+2. The mean dose of all medication between groups are equal
 
-If neither condition is satisfied exactly, a previously undescribed bias arises that can skew or even invert the results of a study. In this simulation study we aim to quantify the extent of this bias and furthermore to estimate the impact on the current body of literature. 
+If one of the possible conditions is not satisfied exactly, a measurement bias arises that can skew or even invert the results of a study. In this simulation study we aim to quantify the extent of this bias and to estimate the impact on the current body of literature. 
 
 ## Methods
 
@@ -52,13 +52,13 @@ No ethical approvals were required for this study. All simulations were performe
 
 ## Results
 
-The first simulation found that, as shown in @eq-logic, if either condition is met the observed difference is equal to the expected difference and there is no bias. Where there is a 10% error in the conversion value of oxycodone used, the resulting observed difference in outcome can be up to $\pm$ 10% the true difference if the opioids within the groups are completely mismatched. The linear bias that arises from either a difference in opioid proportions or conversion value error compound to diverge the observed and expected difference further.
+The first simulation illustrates @eq-logic, if either condition is met the observed difference is equal to the expected difference and there is no bias. The bilinear bias that arises from either a difference in opioid proportions (with no treatment effect) or conversion value error combine to diverge the true and observed associations further apart.
 
-The second simulation shows that this bias is relevant under the realistic conditions of the hypothetical study. The observed treatment effect may overestimate the intervention's true efficacy or paradoxically invert its direction, suggesting harm from a beneficial treatment.
+The second simulation shows that this bias is clinically relevant under the realistic conditions of the hypothetical study. A true treatment association of `r percent(shared_objects$robot_effect_size)` (`r shared_objects$robot_effect_mg` TOB mg) with a $\epsilon_\text{oxycodone}$ of `r percent(shared_objects$oxy_error)` is observed to have a bias of `r percent((shared_objects$obs_robot_effect_mg - shared_objects$robot_effect_mg)/shared_objects$robot_effect_mg)`(`r round(shared_objects$obs_robot_effect_mg - shared_objects$robot_effect_mg,3)` TOB mg). However under a range of experimental conditions, the measurement bias can vary between `r percent(shared_objects$min_bias)` (`r round(shared_objects$min_bias_mg,2)`) and `r percent(shared_objects$max_bias)` (`r round(shared_objects$max_bias_mg,2)`) of the true associational effect potentially inverting the study results. 
 
 The exploratory review included `r n_lit_data` eligible studies that underwent primary data extraction, of which `r n_lit_data* lit_not_described` (`r scales::percent(lit_not_described)`) stated the conversion values used while `r lit_provide_doses* n_lit_data` (`r scales::percent( lit_provide_doses)`) reported the proportion of opioids between groups. Of which, only 5 studies provided the within group mean opioid doses to allow the calculation of the outcome metrics independently. 
 
-@fig-1 shows the study reported outcome alongside the recalculated outcome for each of the 5 studies. It demonstrates that for studies where there was no difference in opioid proportions (Fedorka 2025 @fedorkacjLiposomalBupivacaineBupivacaine2025) there is no bias, despite using a range of possible different conversion values . However, in studies where the two groups received different analgesic options (Carter 2025 @cartermEffectNonsteroidalAntiInflammatory2025), the observed value can fall within a 10% range. 
+@fig-1 shows the study reported outcome alongside the calculated outcome for each of the 5 studies reporting mean doses. This demonstrates the difficulty replicating metrics due to the number of calculation assumptions. In studies with single opioids (Fedorka 2025 @fedorkacjLiposomalBupivacaineBupivacaine2025) the bias is minimal however in studies investigating different analgesic treatments (Carter 2025 @cartermInpatientMultimodalPain2025) a substantial bias arises.
 
 ```{r}
 #| label: fig-1
@@ -69,16 +69,15 @@ plot_point_whisker
 
 ## Discussion
 
-In observational research, it will be rare that the first condition of balanced groups is met exactly. An RCT may offer more hope of eliminating the TOB bias, however if a collider bias occurs (where the treatment itself has an effect on the choice of analgesia used @pearlBookWhyNew2019) or the post-operative analgesia treatment is not protocolised, the bias will persist. For studies where a treatment associational effect is expected then it is expected that the group scale will not be equal and hence a bias will be present. 
+In observational research, it will be rare for the result to have no measurement bias. The influence of the bias in the conversion value is a considerable problem; the degree of error to the biological ground truth can never be known and estimates very [@rennickVariabilityOpioidEquivalence2016; @yessaillianSystematicReviewMorphine2024]. Where a non-zero treatment association exists ($\Delta \mu^0 \neq 0$), condition 2 cannot hold, because $\Delta \bar d_i = 0 \; \forall i$ implies $\Delta D = 0$ and hence $\Delta \mu^0 = 0$. 
 
-The influence of the bias in the conversion value is a considerable problem; the degree of error to the biological ground truth can never be known and estimates very [@rennickVariabilityOpioidEquivalence2016; @yessaillianSystematicReviewMorphine2024]. It is known that the conversion value tables are built on small, single opioid studies and have been formalised from clinical rules of thumb @mcphersonWhyEquianalgesicTables2020. We propose that data driven distributions of possible conversion value should instead be produced, this would allow quantification of uncertainty in the TOB metrics.
+An RCT may offer hope of reducing the TOB bias, however if a collider bias occurs (where the treatment itself has an effect on the choice of analgesia used @pearlBookWhyNew2019) or the post-operative analgesia treatment is not protocolised, the mean doses between groups will diverge and the bias will increase. Regardless of the design, any study reporting TOB outcome metrics should assess the degree of bias in the context of the minimum clinically important difference to ensure the results and conclusions are interpreted accurately. 
 
 This study is limited by only simulating a two opioid paradigm and by comparing group means; the extent of the bias in multiple opioid studies or comparison of group medians has not been investigated. Furthermore, the literature search was exploratory rather than systematic and may not be representative of the wider literature. 
 
 We recommend:
 
-1. All studies using opioid equivalence metrics must publish the proportions of the opioids within each group and conversion value tables used. 
+1. All studies using opioid equivalence metrics must publish the mean doses of the opioids within each group and conversion tables used. 
 
-2. More work is required to estimate the true population level opioid conversion value tables to reduce the error between the true potency and the value tables used. 
-
+2. Further work to estimate the true population level opioid conversion values.
 

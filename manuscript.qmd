@@ -21,7 +21,6 @@ source(temp_r_file, echo = FALSE)
 unlink(temp_r_file)
 rm(temp_r_file)
 
-set.seed(20)
 ```
 
 ```{r set theme}

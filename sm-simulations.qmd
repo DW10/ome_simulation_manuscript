@@ -633,7 +633,7 @@ The results in @tbl-sim-demo represent a single sample of `r nrow(df)` patients 
 
 ```{r sim multiple hypothetical}
 #| warning: false
-trials_hypothetical <- 100
+trials_hypothetical <- 500
 
 cl <- makeCluster(parallel::detectCores() - 1)
 registerDoParallel(cl)

@@ -169,45 +169,56 @@ analyse_dataset <- function(df){
 #| collape: true
 
 run_simulation <- function(trials = 5,
-                          conversion_values = seq(from=1, to=4, by = 0.2),
-                          morphine_proportion = seq(from =0.1, to= 0.9, by = 0.05))
-                          {
+                           conversion_values = seq(from = 1, to = 4, by = 0.2),
+                           morphine_proportion = seq(from = 0.1, to = 0.9, by = 0.05)) {
 
-  for(t in 1:trials){
-    for(i in conversion_values){
-      for(j in morphine_proportion){
-    
-    df <- sim_patient(
-      mu_tot = mu_tot,
-      potency_morphine = potency_morphine,
-      potency_oxycodone_truth = potency_oxycodone,
-      potency_oxycodone_ome = i,
-      proportion_morphine = j,
-      oxycodone_shortage = oxycodone_shortage,
-      t_0 = t_0,
-      t_end = t_end,
-      t_robot = t_robot,
-      annual_n = annual_n,
-      proportion_robotic = proportion_robotic,
-      robot_effect_size = robot_effect_size
-    )
-    
-    epsilon <- (i - potency_oxycodone)
-    
-    
-    diff_in_mean = (df %>% filter(robotic == "Robotic") %>% pull(tob) %>% mean()) -  (df %>% filter(robotic == "Non-robotic") %>% pull(tob) %>% mean())
-    
-    robotic_oxy <- (df %>% filter(robotic == "Robotic") %>% pull(opioid))
-    p_oxy_robotic <- sum(robotic_oxy == "oxycodone")/length(robotic_oxy)
-    
-    non_robotic_oxy <- (df %>% filter(robotic == "Non-robotic") %>% pull(opioid))
-    p_oxy_non_robotic <- sum(non_robotic_oxy == "oxycodone")/length(non_robotic_oxy)
-    
-    delta_p_oxycodone <- p_oxy_robotic - p_oxy_non_robotic
-    
-    if(t == 1 & i == conversion_values[1] & j == morphine_proportion[1]){
-      
-      results_grid <- data.frame(
+  param_grid <- expand.grid(i = conversion_values, j = morphine_proportion)
+
+  results_grid <- foreach(
+    k = seq_len(nrow(param_grid)),
+    .combine = bind_rows,
+    .multicombine = TRUE,
+    .packages = c("dplyr"),
+    .export = c("sim_patient", "mu_tot", "potency_morphine", "potency_oxycodone",
+                "oxycodone_shortage", "t_0", "t_end", "t_robot", "annual_n",
+                "proportion_robotic", "robot_effect_size")
+  ) %dopar% {
+
+    i <- param_grid$i[k]
+    j <- param_grid$j[k]
+    trial_results <- vector("list", trials)
+
+    for (t in 1:trials) {
+
+      df <- sim_patient(
+        mu_tot = mu_tot,
+        potency_morphine = potency_morphine,
+        potency_oxycodone_truth = potency_oxycodone,
+        potency_oxycodone_ome = i,
+        proportion_morphine = j,
+        oxycodone_shortage = oxycodone_shortage,
+        t_0 = t_0,
+        t_end = t_end,
+        t_robot = t_robot,
+        annual_n = annual_n,
+        proportion_robotic = proportion_robotic,
+        robot_effect_size = robot_effect_size
+      )
+
+      epsilon <- (i - potency_oxycodone)
+
+      diff_in_mean <- (df %>% filter(robotic == "Robotic") %>% pull(tob) %>% mean()) -
+        (df %>% filter(robotic == "Non-robotic") %>% pull(tob) %>% mean())
+
+      robotic_oxy <- df %>% filter(robotic == "Robotic") %>% pull(opioid)
+      p_oxy_robotic <- sum(robotic_oxy == "oxycodone") / length(robotic_oxy)
+
+      non_robotic_oxy <- df %>% filter(robotic == "Non-robotic") %>% pull(opioid)
+      p_oxy_non_robotic <- sum(non_robotic_oxy == "oxycodone") / length(non_robotic_oxy)
+
+      delta_p_oxycodone <- p_oxy_robotic - p_oxy_non_robotic
+
+      trial_results[[t]] <- data.frame(
         trial = t,
         conversion_value = i,
         morphine_proportion = j,
@@ -215,31 +226,20 @@ run_simulation <- function(trials = 5,
         delta_p_oxycodone = delta_p_oxycodone,
         epsilon = epsilon
       )
-    }else{
-    # Store results
-    results_grid <- rbind(results_grid, data.frame(
-      trial=t,
-      conversion_value = i,
-      morphine_proportion = j,
-      mean_diff_ome = diff_in_mean,
-      delta_p_oxycodone = delta_p_oxycodone,
-      epsilon = epsilon
-    ))
     }
-    
-  }
-  }
-}
 
-  results_grid <- results_grid %>% group_by(conversion_value, morphine_proportion) %>%
+    bind_rows(trial_results)
+  }
+
+  results_grid <- results_grid %>%
+    group_by(conversion_value, morphine_proportion) %>%
     summarise(mean_diff_ome = mean(mean_diff_ome),
-            delta_p_oxycodone = mean(delta_p_oxycodone),
-            epsilon = mean(epsilon),
-            .groups = "drop")
+              delta_p_oxycodone = mean(delta_p_oxycodone),
+              epsilon = mean(epsilon),
+              .groups = "drop")
 
   return(results_grid)
-
-} 
+}
 
 
 ```
@@ -436,7 +436,7 @@ p_morph_low = 0
 conversion_value_low = 1
 conversion_value_high = 3
 
-trials = 5
+trials = 20
 ```
 
 A hypothetical study was designed to emulate a retrospective cohort study to compare a surgical intervention on the postoperative opioid requirement. The study set-up is outlined in @nte-sim-design.
@@ -638,7 +638,7 @@ The results in @tbl-sim-demo represent a single sample of `r nrow(df)` patients 
 
 ```{r sim multiple hypothetical}
 #| warning: false
-trials_hypothetical <- 1000
+trials_hypothetical <- 100
 
 cl <- makeCluster(parallel::detectCores() - 1)
 registerDoParallel(cl)
@@ -799,11 +799,15 @@ The hypothetical study was repeated using the grid values of different conversio
 #| out-height: 3in
 #| out-width: 6in
 
+cl <- makeCluster(parallel::detectCores() - 1)
+registerDoParallel(cl)
 
 simulation1 <- run_simulation(trials= trials,
                conversion_values = seq(from=conversion_value_low, to=conversion_value_high, by = 0.1),
                morphine_proportion = seq(from=p_morph_low, to= p_morph_high, by = 0.05)
                )
+
+stopCluster(cl)
 
 
 plot_grid_1 <- plot_grid(simulation1,

@@ -5,7 +5,7 @@ bibliography: "/Users/dylanwhitaker/Documents/OneDrive - UCL/refs.bib"
 csl: bja.csl
 prefer-html: true
 language:
-  crossref-apx-prefix: 'Supplementary material '
+  crossref-apx-prefix: 'Supplementary material'
   section-title-appendices: Supplementary material
 execute:
   echo: false

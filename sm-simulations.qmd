@@ -1,6 +1,6 @@
 # Simulation Studies {#sec-sims}
 
-```{r source_files}
+```{r setup_simulations}
 #| echo: FALSE
 #| message: FALSE
 #| output: FALSE

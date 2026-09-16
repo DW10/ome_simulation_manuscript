@@ -1,6 +1,6 @@
 # Manuscript
 
-```{r source_files}
+```{r setup_manuscript}
 #| echo: false
 #| message: false
 

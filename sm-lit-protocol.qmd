@@ -1,7 +1,7 @@
 
 # Literature Rapid Review Of Total Opioid Burden Metric Methodology And Reporting Within Preoperative Care Research: Protocol {#sec-sm-lit-protocol}
 
-```{r source_files}
+```{r setup_lit_protocol}
 #| echo: FALSE
 #| message: FALSE
 #| output: FALSE

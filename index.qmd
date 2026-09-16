@@ -8,7 +8,7 @@
 </style>
 ```
 
-::: {.flushright data-latex=""}
+::: {.flushright custom-style="Address" data-latex=""}
 Professor Hugh Hemmings,\
 Weill Cornell Medical College,\
 New York,\

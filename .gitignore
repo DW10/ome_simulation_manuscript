@@ -11,3 +11,9 @@ manuscript_files/*
 pre_render.R
 **/*.quarto_ipynb
 .DS_Store
+
+# Rendered outputs
+_book/
+_submission/
+*_files/
+*.rmarkdown

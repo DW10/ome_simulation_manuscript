@@ -11,3 +11,11 @@ manuscript_files/*
 pre_render.R
 **/*.quarto_ipynb
 .DS_Store
+/Claude outputs/*
+
+# Rendered outputs
+_book/
+_submission/
+*_files/
+*.rmarkdown
+.RDataTmp

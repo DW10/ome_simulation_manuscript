@@ -25,10 +25,14 @@ Writing - review & editing: DW, MW and SH\
 
 The authors wish to thank the following for their support: Dr Thomas Frost for early direction and support, Dr Yogini Jani for feedback, University College London Hospitals National Health Service Foundation Trust Critical Care Special Interest Project Scheme and the University College London Health Algorithm Laboratory.
 
-# Declaration of interests
+# Disclosure of interests
 
 The authors declare that they have no conflict of interest
 
 # Funding 
 
 DW is supported by the Engineering and Physical Sciences Research Council (EP/Y034929/1). MW and SH are supported by the National Institute for Health Research (NIHR) Central London Patient Safety Research Collaboration (NIHR 204297). SH and DW are supported by the NIHR University College London Hospitals National Health Service Foundation Trust and University College London Biomedical Research Centre. The views expressed in this study are those of the authors and do not necessarily reflect those of the NIHR or the Department of Health and Social Care.
+
+# Declaration of Generative AI and AI-assisted technologies in the writing process
+
+During the preparation of this work the authors used Anthropic's Claude Opus 5 in order to produce virtual peer review. After using this tool, the authors reviewed and edited the content as needed and take full responsibility for the content of the publication.

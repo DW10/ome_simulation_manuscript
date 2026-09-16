@@ -1,7 +1,7 @@
 
 # Literature Rapid Review Of Total Opioid Burden Metric Methodology And Reporting Within Preoperative Care Research: Protocol {#sec-sm-lit-protocol}
 
-```{r source_files}
+```{r setup_lit_protocol}
 #| echo: FALSE
 #| message: FALSE
 #| output: FALSE
@@ -45,11 +45,11 @@ The eligibility criteria is set using the PCCO framework as described in @tbl-sc
 #| tbl-cap: "Litrature extraction proforma"
 #| output: TRUE
 
-tbl_screening <- data.frame("Criteria" = c("Population", "Concept","Context", "Other"),
+tbl_screening_protocol <- data.frame("Criteria" = c("Population", "Concept","Context", "Other"),
                             "Include" =c("All patient groups undergoing a surgical procedure", "Studies using a total opioid burden metric as a primary or secondary outcome (Such as oral morphine equivalence (OME), milligram morphine equivalence (MME) or opioid equivalence)", "Patients undergoing surgical procedures", "Any studies comparing a control against and intervention or two interventions."),
                             "Exclude" = c("Patients not undergoing surgical procedures. Non-human studies", "Outcomes not including opioid totals", "Palliative care studies or Pharmacology studies", "Studies with no difference between intervention groups" ))
 
-knitr::kable(tbl_screening) 
+knitr::kable(tbl_screening_protocol)
 
 ```
 
@@ -115,8 +115,8 @@ tbl_extraction_form <- data.frame(
     "Reported, Not reported"
   ),
   "Description" = c("What is the methodology of the study? If the study is not comparing an intervention between two groups, return to screening and mark as not eligable.",
-                                  "In the manuscript, is the conversion set used to generate the TOB metric described. If it is cited, copy the citation into the free text box below. If values are given, state the values in the free text box. This should usually be included in the methods section but may be included in other places of the manuscript such as tables or footnotes.",
-                                  "What type of intervention is given. For trials comparing surgical technique, approach, methods or surgical tools select surgical. For trials comparing anaesthesia technique, blocks, interoperative medications select anaesthesia. For trials comparing analgeisa including analgesia protocols, postoperative analgesic medications, etc select  analgeisa Otherwise, select other and describe the intervention in the free text box.",
+                    "What type of intervention is given. For trials comparing surgical technique, approach, methods or surgical tools select surgical. For trials comparing anaesthesia technique, blocks, interoperative medications select anaesthesia. For trials comparing analgeisa including analgesia protocols, postoperative analgesic medications, etc select  analgeisa Otherwise, select other and describe the intervention in the free text box.",
+                    "In the manuscript, is the conversion set used to generate the TOB metric described. If it is cited, copy the citation into the free text box below. If values are given, state the values in the free text box. This should usually be included in the methods section but may be included in other places of the manuscript such as tables or footnotes.",
                                   "Assess the results section, Is it possible to establish the proportion, mean or total doses of each opioid between intervention groups. If authors explicilty state only one type of opioid used in the TOB metric select 'Reported'.")
   )
 

@@ -1,0 +1,21 @@
+---
+title: 'Supplementary material: The inherent bias in studies reporting outcomes using total opioid burden metrics: a simulation study'
+metadata-files:
+  - ../_authors.yml
+number-sections: true
+xref-hardcode:
+  eq-ome: "Equation 1 of the main manuscript"
+---
+
+{{< include ../sm-proofs.qmd >}}
+
+{{< include ../sm-simulations.qmd >}}
+
+{{< include ../sm-lit-review.qmd >}}
+
+{{< include ../sm-lit-protocol.qmd >}}
+
+# Supplementary References {.unnumbered}
+
+::: {#refs}
+:::

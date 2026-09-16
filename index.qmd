@@ -8,7 +8,7 @@
 </style>
 ```
 
-::: {.flushright data-latex=""}
+::: {.flushright custom-style="Address" data-latex=""}
 Professor Hugh Hemmings,\
 Weill Cornell Medical College,\
 New York,\
@@ -20,12 +20,13 @@ Dear Professor Hemmings,
 
 We thank you for considering our **Research Communication** manuscript titled *"The inherent bias in studies reporting outcomes using total opioid burden metrics: a simulation study"* to the British Journal of Anaesthesia. 
 
-Our paper is a methodological critique of total opioid burden metrics such as oral morphine equivalent (OME) that finds an important and unpublished bias. This bias arises when comparing groups with unmatched proportions of differing opioid or there is an error in the conversion values used. Whilst this applies predominantly to observational research, there are key implications for randomised controlled trials. 
+Our paper is a methodological critique of total opioid burden metrics such as oral morphine equivalent (OME) that finds an important measurement bias.
+The bias is present in any study comparing groups with unmatched proportions of differing opioid or there is an error in the conversion values used compared to the biological ground truth. Whilst this applies predominantly to observational research, there are key implications for randomised controlled trials. 
 
-A number of high profile manuscripts have published various opioid conversion value tables with the most cited being the Center of Disease Control, USA with over 2,500 citations. Despite multiple attempts to unify the methodology, the inherent bias continues to be overlooked. We hope this paper will lead to a critical review of how  total opioid burden metrics are used in research and improve the accuracy in the metrics already widely used. We aim to set the new standard for how opioid burden metrics are reported.
+Despite multiple attempts to unify the methodology with conversion tables and calculator tools, the inherent bias continues to be overlooked. We hope this paper will lead to a critical review of how  total opioid burden metrics are used in research and improve the accuracy in the metrics already widely used. 
 
-We can confirm no parts of this work have been presented before and it is not under consideration at any other journal. 
+We can confirm no parts of this work have been presented before and has not been under consideration at any other journal. 
 
 Many thanks,
-
 The authors
+

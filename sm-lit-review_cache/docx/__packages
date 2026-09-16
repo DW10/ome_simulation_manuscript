@@ -1,0 +1,10 @@
+dplyr
+gt
+scales
+ggplot2
+patchwork
+latex2exp
+foreach
+iterators
+doParallel
+tidyr

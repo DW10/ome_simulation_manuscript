@@ -1,8 +1,8 @@
----
-format: html
----
-
 # Exploratory Literature Search {#sec-lit-review}
+
+## Introduction
+
+Given the mathematical proof and the results of the simulation, an exploratory search of the literature was performed to establish a formal systematic literature search protocol. The intention of the literature search is to understand to what extent does the current literature describe TOB methodology and if it was possible to estimate the bias in published works. To formally calculate the bias the error in the conversion value is needed which requires the knowledge of the biological ground truth. As this is not possible, a range of different conversion values, each with their own unknown error was used to as a proxy for a range of conversion value errors. 
 
 ## Methods
 
@@ -48,7 +48,7 @@ Primary and full text screening was carried out using the inclusion criteria det
 
 tbl_screening <- data.frame("Criteria" = c("Population", "Concept","Context", "Other"),
                             "Include" =c("All patient groups undergoing a surgical procedure", "Studies using a total opioid burden metric as a primary or secondary outcome (Such as oral morphine equivalence (OME), milligram morphine equivalence (MME) or opioid equivalence)", "Patients undergoing surgical procedures", "Any studies comparing a control against and intervention or two interventions."),
-                            "Exclude" = c("Patients not undergoing surgical procedures. Non-human studies", "Outcomes not including opioid totals", "Palliative care studies or Pharmacology studies", "Studies with no difference between intervention groups" ))
+                            "Exclude" = c("Patients not undergoing surgical procedures. Non-human studies", "Outcomes not including opioid totals", "Palliative care studies or Pharmacology studies", "" ))
 
 knitr::kable(tbl_screening) 
 
@@ -152,21 +152,21 @@ papers_grid_summary <- plot_data %>%
 
 ```
 
-For each paper where group average doses of each opioid were described, these were extracted. If only median values were provided, an estimated mean was calculated using Wan's 2014 approximation ($\hat{d_i} = \frac{Q_1 + M + Q_2}{3}$ ) to preserve the linearity with in the arithmetic mean @wanEstimatingSampleMean2014. Where opioid routes where not provided then IV was assumed and where conversion values were not provided, the Nielsen set was used @nielsenSynthesisOralMorphine2016. 
+For each paper where group average doses of each opioid were described, these were extracted. If only median values were provided, an estimated mean was calculated using Wan's 2014 approximation ($\hat{d_i} = \frac{Q_1 + M + Q_3}{3}$ ) to preserve the linearity with in the arithmetic mean @wanEstimatingSampleMean2014. Where opioid routes where not provided then IV was assumed and where conversion values were not provided, the Nielsen set was used @nielsenSynthesisOralMorphine2016. 
 
 The group mean of total opioid burden reported by the paper was extracted. Then using the mean doses and the conversion values provided, the group mean was calculated independently. Following this, all possible group means were calculated by applying each of the possible values provided in Table 1 of Neilsens Conversion set (summarised in @tbl-conversion-ranges), as the range of plausible conversion values an author may use @nielsenSynthesisOralMorphine2016.
 
 ```{r}
 #| label: tbl-conversion-ranges
 
-conversion_value_ranges <- data.frame(
+tbl_conversion_ranges <- data.frame(
   Medication = names(conversion_value_ranges),
   `Conversion values` = sapply(conversion_value_ranges, paste, collapse = ", "),
   check.names = FALSE,
   row.names = NULL
 )
 
-knitr::kable(conversion_value_ranges)
+knitr::kable(tbl_conversion_ranges)
 ```
 
 ## Results
@@ -300,7 +300,7 @@ tbl %>%
     population ~ pct(20)
   ) %>%
   tab_options(
-    latex.use_longtable = TRUE,
+    latex.use_longtable = FALSE,
     latex.tbl.pos = "tb"
   )
 
@@ -360,18 +360,18 @@ exemplars_summary_table %>%
   container.width = pct(100)
   ) %>%
   tab_options(
-    latex.use_longtable = TRUE,
+    latex.use_longtable = FALSE,
     latex.tbl.pos = "h"
   )
 ```
 
-This table highlights the difficulty in re-calculating the total opioid burdens that the authors have produced. This is likely due to a number of assumptions as details in the methods such as estimating mean values from medians and assuming medication routes. Only one study, Fedorka 2025, showed no sensitivity to the conversion value set used @fedorkacjLiposomalBupivacaineBupivacaine2025 This is because, in the RCT only oxycodone was used in the post-operative period, as so whilst the group estimates may vary, the treatment effect percentage is fixed at 10%.  
+This table highlights the difficulty in re-calculating the total opioid burdens that the authors have produced. This is likely due to a number of assumptions as details in the methods such as estimating mean values from medians and assuming medication routes. Only one study, Fedorka 2025, showed no sensitivity to the conversion value set used @fedorkacjLiposomalBupivacaineBupivacaine2025. This is because, in the RCT only oxycodone was used in the post-operative period, as so whilst the group estimates may vary, the treatment effect percentage is fixed at 10%.  
 
 @fig-lit-outcomes demonstrates the reported difference in opioid burden (red cross) compared to the de-novo calculated difference (green cross). When the the grid search of the possible combinations of the values used by Neilsen was performed, the minimum and maximum values are demonstrated by the orange whiskers.
 
 ```{r}
 #| label: fig-lit-outcomes
-#| fig-cap: "Point and whisker plot of the reported and de-novo calcualted difference in the intervention group for opioid outcomes. Red cross shows the reported percentage intervention group outcome, green cross's the de novo point estiamte using hte values reported by neilsen and the oragne error bar the range using the grid values across the ranges reproted by Neilsen. All effects given as the percentage change in the intervention group compared to the control."
+#| fig-cap: 'Forest style plot illustrating the percentage change in opioid use associated with an intervention. Blue cross denote the study reported outcome. Orange diamond and error bar denote the the primary point estimate and range using different conversion values.'
 
 plot_point_whisker <- ggplot(exemplars_summary, aes(y=authors))+
   geom_errorbar(aes(xmin=min_delta, xmax=max_delta), color = "orange")+
@@ -396,7 +396,7 @@ There were some key learning points from the preliminary data collection that wa
 
 **Search strategy** - A single database was used for speed and ease, this was expanded to include 2 further databases sources.
 
-**Screening** - A single reviewer with no verification was performed for speed and ease, a formal screening strategy was defined in the protocol. The inclusion criteria was narrowed to only include interventional study, this was due to a number of observational trials being included in the primary data extraction. The full text screening stage was integrated into the primary data extraction in the proforma. 
+**Screening** - A single reviewer with no verification was performed for speed and ease, a formal screening strategy was defined in the protocol. The inclusion criteria was narrowed to only include interventional study, this was due to a number of non-comparative observational trials being included in the primary data extraction. The full text screening stage was integrated into the primary data extraction in the proforma. 
 
 **Data extraction** - The primary and secondary data collection proformas were formalised in the protocol. For each field a descriptor was included to further define the value to be entered. The primary data collection proforma was focused to remove data points that were deemed no longer required.
 
@@ -411,13 +411,14 @@ lit_not_described <- 1-lit_data %>% filter(Opioid.conversion.set == "Not describ
 lit_provide_doses <- lit_data %>% filter(Opioid.proportions.within.group == "Described") %>% nrow()/n_lit_data
 
 
-shared_objects <- list(
+shared_objects_lit <- list(
   n_lit_data = nrow(lit_data),
   lit_not_described = lit_not_described,
   lit_provide_doses = lit_provide_doses,
   plot_point_whisker = plot_point_whisker
 )
-saveRDS(shared_objects, file = "data/shared_objects_lit.rds")
+saveRDS(shared_objects_lit, file = "data/shared_objects_lit.rds")
 
 ```
  
+

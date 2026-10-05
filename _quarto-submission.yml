@@ -7,6 +7,8 @@ project:
     - submission/manuscript.qmd
     - submission/cover-letter.qmd
 filters:
+  - at: pre-ast
+    path: title-page.lua
   - at: pre-quarto
     path: xref-hardcode.lua
 format:

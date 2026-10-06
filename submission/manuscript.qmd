@@ -2,6 +2,15 @@
 title: 'The inherent bias in studies reporting outcomes using total opioid burden metrics: a simulation study'
 metadata-files:
   - ../_authors.yml
+title-page: true
+keywords:
+  - opioid analgesia
+  - opioid conversion
+  - perioperative outcomes
+  - research reporting
+  - measurement bias
+  - oral morphine equivalents
+  - milligram morphine equivalent
 xref-hardcode:
   sec-proof: "Supplementary Material Section 1"
   sec-sims: "Supplementary Material Section 2"

@@ -30,6 +30,10 @@ This repo is a file store and version control for a manuscript on the bias withi
 
 References that point to the other document are replaced with fixed text by `xref-hardcode.lua`. The text is set under `xref-hardcode:` in `submission/manuscript.qmd` and `submission/supplement.qmd`. If supplement sections or equations are added or reordered, update those numbers and check them against `supplement.docx`.
 
+### Title page
+
+`title-page.lua` builds the BJA title page for any submission document that sets `title-page: true` (currently only `manuscript.qmd`). All author, affiliation, ORCID and corresponding-author details come from `_authors.yml`, so correct them in the plume source sheet and re-run `pre_render.R`. Affiliations are numbered in order of first appearance. Keywords are set under `keywords:` in `submission/manuscript.qmd` and are sorted alphabetically by the filter.
+
 ### Word styling
 
 `submission/reference.docx` is the Word template. It defines an `Address` style, right-aligned, which the cover letter's address block uses. Add journal formatting (fonts, spacing) to this file.

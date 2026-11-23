@@ -78,8 +78,8 @@ sim_patient <- function(
   # Relabel  for use in tables later
   df <- df %>% mutate(
     robotic = case_when(
-        robotic == TRUE ~ "Robotic",
-        robotic == FALSE ~ "Non-robotic"
+        robotic == TRUE ~ "Minimally invasive surgery",
+        robotic == FALSE ~ "Open surgery"
       ),
       opioid = case_when(
         opioid == "M" ~ "morphine",
@@ -671,14 +671,14 @@ obs_robot_effect <- obs_robot_effect_mg/obs_non_robotic_ome
 
 To reduce the effect of random sampling, the simulation was repeated with the same parameters `r trials_hypothetical` times. 
 
-The mean opioid burden value for the robotic surgery group was `r round(obs_robotic_ome, 2)` TOB mg and for the non-robotic surgery group was `r  round(obs_non_robotic_ome, 2)` TOB mg. This gives an observed effect size of the robot as `r round(obs_robot_effect_mg,2)` TOB mg compared to the realised true effect of `r percent(robot_effect_size,2)` TOB mg (nominal
+The mean opioid burden value for the minimally invasive surgery group was `r round(obs_robotic_ome, 2)` TOB mg and for the standard open surgery group was `r  round(obs_non_robotic_ome, 2)` TOB mg. This gives an observed effect size of the robot as `r round(obs_robot_effect_mg,2)` TOB mg compared to the realised true effect of `r percent(robot_effect_size,2)` TOB mg (nominal
 `r robot_effect_mg` TOB mg), giving a bias of `r round(obs_robot_effect_mg - robot_effect_mg,3)` TOB mg.
 
 ### Verification of @eq-bias
 
 Using @eq-bias we can verify the simulation bias is as expected given the parameters.
 
-Let $T^1$ be the group treated with the robot and $T^0$ be the group treated non-robotically. \
+Let $T^1$ be the group treated with the minimally invasive approach and $T^0$ be the group treated with open surgical approach. \
 Let $\epsilon_\text{morphine}$ be 0 and $\epsilon_\text{oxycodone}$ be $c_\text{oxycodone} - c_\text{oxycodone}^0$ which is `r round(potency_oxycodone_ome-potency_oxycodone, 3)`. \
 
 The values of $\bar{d}_{i,T}$ are observed from the simulation from @tbl-sim-maths as the mean dose of the opioid within each treatment group. The value of $D_T$ is calculated from the sum of the mean doses $\bar{d}_{i}$ within group $T$. The values of $p_{i,T}$ are calculated using $\bar{d}_{i,T}$ and $D_T$ (@eq-prop). 
@@ -784,7 +784,7 @@ ggplot(convergence_df, aes(x = t, y = effect)) +
 
 ### Impact of conversion set and proportions
 
-The hypothetical study was repeated using the grid values of different conversion values and different proportion of postoperative oxycodone prescribing. The prior was informed by ranges observed in the literature and the latter to influence the degree of different in opioid proportions between groups. For each set of grid values, `r if(trials==3){"three"}else{trials}` were performed and the mean observed difference calculated. Given a `r mu_tot` mg expected opioid requirement and a treatment effect of `r scales::percent(robot_effect_size)` it is expected the observed difference of the robotic group to be `r (mu_tot* robot_effect_size)` mg.
+The hypothetical study was repeated using the grid values of different conversion values and different proportion of postoperative oxycodone prescribing. The prior was informed by ranges observed in the literature and the latter to influence the degree of different in opioid proportions between groups. For each set of grid values, `r if(trials==3){"three"}else{trials}` were performed and the mean observed difference calculated. Given a `r mu_tot` mg expected opioid requirement and a treatment effect of `r scales::percent(robot_effect_size)` it is expected the observed difference of the minimally invasive group to be `r (mu_tot* robot_effect_size)` mg.
 
 ```{r}
 #| label: fig-sim-grid-search-1

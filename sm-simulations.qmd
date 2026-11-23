@@ -438,9 +438,9 @@ A hypothetical study was designed to emulate a retrospective cohort study to com
 
 ::: {#nte-sim-design .callout-note title="Hypothetical study design"}
 
-A research team wish to understand if a minimally invasive approach for a surgical procedure, reduces the post-operative pain. They design a retrospective cohort study for patients treated with a minimally invasive procedure and those with a standard open procedure. The primary outcome is the total opioid requirement, as measured in OME mg, in the first 24 hours post-operatively as a surrogate for the total pain caused by the surgical procedure.
+A research team wish to understand if a minimally invasive approach for a surgical procedure, reduces the post-operative pain. They design a retrospective cohort study for patients treated with a minimally invasive procedure and those treated with open surgery. The primary outcome is the total opioid requirement, as measured in OME mg, in the first 24 hours post-operatively as a surrogate for the total pain caused by the surgical procedure.
 
-The annual case volume is `r annual_n`, these were all performed using open approach surgery until `r format(t_robot, "%e %b %y")` when the eqipment for minimally invasive surgery was acquired, and since `r scales::percent(proportion_robotic)` of cases are performed this way. All EHR data was collected between `r format(t_0, "%e %b %y")` and `r format(t_end, "%e %b %y")`. All patients are treated with a Patient Controlled Analgesia (PCA) after their operation and on average the anaesthetist will prescribe a morphine PCA to `r scales::percent(proportion_morphine)` of patients and an oxycodone PCA to the remainder. No other opioid medication was administered. 
+The annual case volume is `r annual_n`, these were all performed as open surgery until `r format(t_robot, "%e %b %y")` when the equipment for minimally invasive surgery was acquired, and since `r scales::percent(proportion_robotic)` of cases are performed this way. All EHR data was collected between `r format(t_0, "%e %b %y")` and `r format(t_end, "%e %b %y")`. All patients are treated with a Patient Controlled Analgesia (PCA) after their operation and on average the anaesthetist will prescribe a morphine PCA to `r scales::percent(proportion_morphine)` of patients and an oxycodone PCA to the remainder. No other opioid medication was administered. 
 
 During the study there was a national shortage of oxycodone from `r oxycodone_shortage[1]` to `r oxycodone_shortage[2]` and at which time all patients were prescribed a morphine PCA. Whilst the authors described this in their methods section, they concluded that it would not impact their results, as the differing opioids were already accounted for in their OME metric. 
 :::
@@ -576,7 +576,7 @@ df |>
   gt::tab_options(table.width = gt::pct(100))
 ```
 
-A simple demographics table for the study is shown in @tbl-sim-demo, this demonstrates the unequal distributions of opioids between groups. @fig-sim-ome-1 shows that within the minimally invasive and open groups the proportion of each opioid is not equal, and the effect of the oxycodone shortage has had a larger impact on the minimally invasive group. @fig-sim-ome-2 demonstrates this distribution of the total opioid burden (OME mg) of patients in the two groups.
+A simple demographics table for the study is shown in @tbl-sim-demo, this demonstrates the unequal distributions of opioids between groups. @fig-sim-ome-1 shows that within the minimally invasive surgery and open surgery groups the proportion of each opioid is not equal, and the effect of the oxycodone shortage has had a larger impact on the minimally invasive surgery group. @fig-sim-ome-2 demonstrates this distribution of the total opioid burden (OME mg) of patients in the two groups.
 
 ```{r}
 #| label: fig-sim-ome
@@ -671,14 +671,14 @@ obs_robot_effect <- obs_robot_effect_mg/obs_non_robotic_ome
 
 To reduce the effect of random sampling, the simulation was repeated with the same parameters `r trials_hypothetical` times. 
 
-The mean opioid burden value for the minimally invasive surgery group was `r round(obs_robotic_ome, 2)` TOB mg and for the standard open surgery group was `r  round(obs_non_robotic_ome, 2)` TOB mg. This gives an observed effect size of the minimally invasive approach as `r round(obs_robot_effect_mg,2)` TOB mg compared to the realised true effect of `r percent(robot_effect_size,2)` TOB mg (nominal
+The mean opioid burden value for the minimally invasive surgery group was `r round(obs_robotic_ome, 2)` TOB mg and for the open surgery group was `r  round(obs_non_robotic_ome, 2)` TOB mg. This gives an observed effect size of the minimally invasive approach as `r round(obs_robot_effect_mg,2)` TOB mg compared to the realised true effect of `r percent(robot_effect_size,2)` TOB mg (nominal
 `r robot_effect_mg` TOB mg), giving a bias of `r round(obs_robot_effect_mg - robot_effect_mg,3)` TOB mg.
 
 ### Verification of @eq-bias
 
 Using @eq-bias we can verify the simulation bias is as expected given the parameters.
 
-Let $T^1$ be the group treated with the minimally invasive approach and $T^0$ be the group treated with open surgical approach. \
+Let $T^1$ be the group treated with minimally invasive surgery and $T^0$ be the group treated with open surgery. \
 Let $\epsilon_\text{morphine}$ be 0 and $\epsilon_\text{oxycodone}$ be $c_\text{oxycodone} - c_\text{oxycodone}^0$ which is `r round(potency_oxycodone_ome-potency_oxycodone, 3)`. \
 
 The values of $\bar{d}_{i,T}$ are observed from the simulation from @tbl-sim-maths as the mean dose of the opioid within each treatment group. The value of $D_T$ is calculated from the sum of the mean doses $\bar{d}_{i}$ within group $T$. The values of $p_{i,T}$ are calculated using $\bar{d}_{i,T}$ and $D_T$ (@eq-prop). 

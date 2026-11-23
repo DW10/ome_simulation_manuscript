@@ -438,9 +438,9 @@ A hypothetical study was designed to emulate a retrospective cohort study to com
 
 ::: {#nte-sim-design .callout-note title="Hypothetical study design"}
 
-A research team wish to understand if the use of a robot for a surgical procedure, reduces the post-operative pain. They design a retrospective cohort study for patients treated with a robotic procedure and those without. The primary outcome is the total opioid requirement, as measured in OME mg, in the first 24 hours post-operatively as a surrogate for the total pain caused by the surgical procedure.
+A research team wish to understand if a minimally invasive approach for a surgical procedure, reduces the post-operative pain. They design a retrospective cohort study for patients treated with a minimally invasive procedure and those with a standard open procedure. The primary outcome is the total opioid requirement, as measured in OME mg, in the first 24 hours post-operatively as a surrogate for the total pain caused by the surgical procedure.
 
-The annual case volume is `r annual_n`, these were all performed using non-robotic surgery until `r format(t_robot, "%e %b %y")` when a robot was acquired, and since `r scales::percent(proportion_robotic)` of cases are performed with the robot. All EHR data was collected between `r format(t_0, "%e %b %y")` and `r format(t_end, "%e %b %y")`. All patients are treated with a Patient Controlled Analgesia (PCA) after their operation and on average the anaesthetist will prescribe a morphine PCA to `r scales::percent(proportion_morphine)` of patients and an oxycodone PCA to the remainder. No other opioid medication was administered. 
+The annual case volume is `r annual_n`, these were all performed using open approach surgery until `r format(t_robot, "%e %b %y")` when the eqipment for minimally invasive surgery was acquired, and since `r scales::percent(proportion_robotic)` of cases are performed this way. All EHR data was collected between `r format(t_0, "%e %b %y")` and `r format(t_end, "%e %b %y")`. All patients are treated with a Patient Controlled Analgesia (PCA) after their operation and on average the anaesthetist will prescribe a morphine PCA to `r scales::percent(proportion_morphine)` of patients and an oxycodone PCA to the remainder. No other opioid medication was administered. 
 
 During the study there was a national shortage of oxycodone from `r oxycodone_shortage[1]` to `r oxycodone_shortage[2]` and at which time all patients were prescribed a morphine PCA. Whilst the authors described this in their methods section, they concluded that it would not impact their results, as the differing opioids were already accounted for in their OME metric. 
 :::
@@ -576,15 +576,15 @@ df |>
   gt::tab_options(table.width = gt::pct(100))
 ```
 
-A simple demographics table for the study is shown in @tbl-sim-demo, this demonstrates the unequal distributions of opioids between groups. @fig-sim-ome-1 shows that within the robotic and non-robotic groups the proportion of each opioid is not equal, and the effect of the oxycodone shortage has had a larger impact on the robotic group. @fig-sim-ome-2 demonstrates this distribution of the total opioid burden (OME mg) of patients in the robotic and non-robotic patients.
+A simple demographics table for the study is shown in @tbl-sim-demo, this demonstrates the unequal distributions of opioids between groups. @fig-sim-ome-1 shows that within the minimally invasive and open groups the proportion of each opioid is not equal, and the effect of the oxycodone shortage has had a larger impact on the minimally invasive group. @fig-sim-ome-2 demonstrates this distribution of the total opioid burden (OME mg) of patients in the two groups.
 
 ```{r}
 #| label: fig-sim-ome
 #| layout-ncol: 2
 #| fig-cap: "**Opioid prescribing and OME distribution by surgery type**"
 #| fig-subcap: 
-#|   - "**Opioid prescribing proportions by surgery type** - Proportion and count of each opioid prescribed within robotic and non-robotic surgery groups."
-#|   - "**OME distribution by surgery type** - Kernel density of calculated OME (OME mg) for robotic and non-robotic surgery groups."
+#|   - "**Opioid prescribing proportions by surgery type** - Proportion and count of each opioid prescribed within the minimally invasive and open surgery groups."
+#|   - "**OME distribution by surgery type** - Kernel density of calculated OME (OME mg) for the minimally invasive and open surgery groups."
 #| fig-width: 5
 #| fig-height: 5
 #| out-height: 2.5in
@@ -613,7 +613,7 @@ ggplot(df, aes(x=tob, fill=robotic))+
   theme_academic()+
   labs(x="TOB (OME mg)",
         y="Density",
-        fill="Robotic Surgery")+
+        fill="Surgical approach")+
   scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
   theme(legend.position = "bottom")+
   paletteer::scale_fill_paletteer_d("MetBrewer::Austria", direction = -1)
@@ -671,7 +671,7 @@ obs_robot_effect <- obs_robot_effect_mg/obs_non_robotic_ome
 
 To reduce the effect of random sampling, the simulation was repeated with the same parameters `r trials_hypothetical` times. 
 
-The mean opioid burden value for the minimally invasive surgery group was `r round(obs_robotic_ome, 2)` TOB mg and for the standard open surgery group was `r  round(obs_non_robotic_ome, 2)` TOB mg. This gives an observed effect size of the robot as `r round(obs_robot_effect_mg,2)` TOB mg compared to the realised true effect of `r percent(robot_effect_size,2)` TOB mg (nominal
+The mean opioid burden value for the minimally invasive surgery group was `r round(obs_robotic_ome, 2)` TOB mg and for the standard open surgery group was `r  round(obs_non_robotic_ome, 2)` TOB mg. This gives an observed effect size of the minimally invasive approach as `r round(obs_robot_effect_mg,2)` TOB mg compared to the realised true effect of `r percent(robot_effect_size,2)` TOB mg (nominal
 `r robot_effect_mg` TOB mg), giving a bias of `r round(obs_robot_effect_mg - robot_effect_mg,3)` TOB mg.
 
 ### Verification of @eq-bias

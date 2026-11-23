@@ -202,13 +202,13 @@ run_simulation <- function(trials = 5,
 
       epsilon <- (i - potency_oxycodone)
 
-      diff_in_mean <- (df %>% filter(robotic == "Robotic") %>% pull(tob) %>% mean()) -
-        (df %>% filter(robotic == "Non-robotic") %>% pull(tob) %>% mean())
+      diff_in_mean <- (df %>% filter(robotic == "Minimally invasive surgery") %>% pull(tob) %>% mean()) -
+        (df %>% filter(robotic == "Open surgery") %>% pull(tob) %>% mean())
 
-      robotic_oxy <- df %>% filter(robotic == "Robotic") %>% pull(opioid)
+      robotic_oxy <- df %>% filter(robotic == "Minimally invasive surgery") %>% pull(opioid)
       p_oxy_robotic <- sum(robotic_oxy == "oxycodone") / length(robotic_oxy)
 
-      non_robotic_oxy <- df %>% filter(robotic == "Non-robotic") %>% pull(opioid)
+      non_robotic_oxy <- df %>% filter(robotic == "Open surgery") %>% pull(opioid)
       p_oxy_non_robotic <- sum(non_robotic_oxy == "oxycodone") / length(non_robotic_oxy)
 
       delta_p_oxycodone <- p_oxy_robotic - p_oxy_non_robotic
@@ -291,7 +291,7 @@ p_table <- result |>
     p_iG = d_bar_iG / D_G,
     .by  = robotic
   ) %>%
-  arrange(desc(robotic), opioid)
+  arrange(robotic, opioid)
 
 return(p_table)
 }
@@ -623,8 +623,8 @@ ggplot(df, aes(x=tob, fill=robotic))+
 ```
 
 ```{r}
-obs_robotic_ome <- df %>% filter(robotic == "Robotic") %>% pull(tob) %>% mean() 
-obs_non_robotic_ome <- df %>% filter(robotic == "Non-robotic") %>% pull(tob) %>% mean() 
+obs_robotic_ome <- df %>% filter(robotic == "Minimally invasive surgery") %>% pull(tob) %>% mean() 
+obs_non_robotic_ome <- df %>% filter(robotic == "Open surgery") %>% pull(tob) %>% mean() 
 obs_robot_effect_mg <- obs_robotic_ome - obs_non_robotic_ome
 obs_robot_effect <- obs_robot_effect_mg/obs_non_robotic_ome
 ```
@@ -663,8 +663,8 @@ result <- foreach(
 
 stopCluster(cl)
 
-obs_robotic_ome <- result %>% filter(robotic == "Robotic") %>% pull(tob) %>% mean() 
-obs_non_robotic_ome <- result %>% filter(robotic == "Non-robotic") %>% pull(tob) %>% mean() 
+obs_robotic_ome <- result %>% filter(robotic == "Minimally invasive surgery") %>% pull(tob) %>% mean() 
+obs_non_robotic_ome <- result %>% filter(robotic == "Open surgery") %>% pull(tob) %>% mean() 
 obs_robot_effect_mg <- obs_robotic_ome - obs_non_robotic_ome
 obs_robot_effect <- obs_robot_effect_mg/obs_non_robotic_ome
 ```
@@ -733,8 +733,8 @@ This estimate of `r round(bias,4)` approximates the observed bias of from the si
 
 calculate_effect <- function(result){
   
-obs_robotic_ome <- result %>% filter(robotic == "Robotic") %>% pull(tob) %>% mean() 
-obs_non_robotic_ome <- result %>% filter(robotic == "Non-robotic") %>% pull(tob) %>% mean() 
+obs_robotic_ome <- result %>% filter(robotic == "Minimally invasive surgery") %>% pull(tob) %>% mean() 
+obs_non_robotic_ome <- result %>% filter(robotic == "Open surgery") %>% pull(tob) %>% mean() 
 obs_robot_effect_mg <- obs_robotic_ome - obs_non_robotic_ome
 obs_robot_effect <- obs_robot_effect_mg/obs_non_robotic_ome
 

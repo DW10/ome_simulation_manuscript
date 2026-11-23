@@ -36,7 +36,7 @@ References that point to the other document are replaced with fixed text by `xre
 
 ### Word styling
 
-`submission/reference.docx` is the Word template. It defines an `Address` style, right-aligned, which the cover letter's address block uses. Add journal formatting (fonts, spacing) to this file.
+`submission/reference.docx` is the Word template. It defines an `Address` style, right-aligned, which the cover letter's address block uses, and a footer with centred page numbers. Add journal formatting (fonts, spacing) to this file.
 
 ### Bibliography
 

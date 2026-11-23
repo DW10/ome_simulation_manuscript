@@ -34,6 +34,10 @@ References that point to the other document are replaced with fixed text by `xre
 
 `title-page.lua` builds the BJA title page for any submission document that sets `title-page: true` (currently only `manuscript.qmd`). All author, affiliation, ORCID and corresponding-author details come from `_authors.yml`, so correct them in the plume source sheet and re-run `pre_render.R`. Affiliations are numbered in order of first appearance. Keywords are set under `keywords:` in `submission/manuscript.qmd` and are sorted alphabetically by the filter.
 
+### Figures
+
+The submission profile leaves Figure 1 out of `manuscript.docx` and keeps only its legend, as BJA wants figures as separate files. After rendering, `save_figures.R` (a `post-render` script in `_quarto-submission.yml`) saves the plot from `data/shared_objects_lit.rds` as `_submission/submission/figure-1.tiff` (5 × 3 in, 300 dpi, LZW). The legend text is set once, as `fig_1_cap` in the setup chunk of `communication.qmd`. The website profile is unchanged and still places the figure in the text.
+
 ### Word styling
 
 `submission/reference.docx` is the Word template. It defines an `Address` style, right-aligned, which the cover letter's address block uses, and a footer with centred page numbers. Add journal formatting (fonts, spacing) to this file.

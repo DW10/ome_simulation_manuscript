@@ -2,6 +2,8 @@ project:
   type: default
   output-dir: _submission
   execute-dir: project
+  post-render:
+    - save_figures.R
   render:
     - submission/supplement.qmd
     - submission/manuscript.qmd

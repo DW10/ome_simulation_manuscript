@@ -258,8 +258,8 @@ max_val <- max(results_grid$mean_diff_ome, na.rm = TRUE)
   symmetric_fill_scale(20)+
   labs(title = ,
        x = TeX(r'(Value used for $c_{oxycodone}$)'),
-       y = "Proportion of morphine perscribed",
-       fill = "Mean difference in OME") +
+       y = "Proportion of morphine prescribed",
+       fill = "Mean difference in TOB") +
    geom_vline(xintercept = potency_oxycodone, linetype = "dashed", color = "red")+
     theme_minimal() +
     theme(
@@ -548,7 +548,7 @@ df <- sim_patient(
 
 ```{r}
 #| label: tbl-sim-demo
-#| tbl-cap: "Demographic table of simulated study population. Count data by opioid with treatment group proportion provided in bracked. Group mean OME totals with standard deviation shown."
+#| tbl-cap: "Demographic table of simulated study population. Count data by opioid with treatment group proportion provided in brackets. Group mean OME totals with standard deviation shown."
 #| eval: true
 
 library(gtsummary)
@@ -581,10 +581,10 @@ A simple demographics table for the study is shown in @tbl-sim-demo, this demons
 ```{r}
 #| label: fig-sim-ome
 #| layout-ncol: 2
-#| fig-cap: "**Opioid prescribing and OME distribution by surgery type**"
+#| fig-cap: "**Opioid prescribing and OME distribution by surgical approach**"
 #| fig-subcap: 
-#|   - "**Opioid prescribing proportions by surgery type** - Proportion and count of each opioid prescribed within the minimally invasive and open surgery groups."
-#|   - "**OME distribution by surgery type** - Kernel density of calculated OME (OME mg) for the minimally invasive and open surgery groups."
+#|   - "**Opioid prescribing proportions by surgical approach** - Proportion and count of each opioid prescribed within the minimally invasive and open surgery groups."
+#|   - "**OME distribution by surgical approach** - Kernel density of calculated OME (OME mg) for the minimally invasive and open surgery groups."
 #| fig-width: 5
 #| fig-height: 5
 #| out-height: 2.5in
@@ -729,7 +729,7 @@ This estimate of `r round(bias,4)` approximates the observed bias of from the si
 
 ```{r}
 #| label: fig-convergence
-#| fig-cap: "Line chart demonstrating the convergence of the esimated effect on the value of the true effect combined with the bias. The solid blue line shows the running estimate of the effect after t simulations. The orange line marks the true effect plus bias. The green line marks the true effect."
+#| fig-cap: "Line chart demonstrating the convergence of the estimated effect on the value of the true effect combined with the bias. The solid blue line shows the running estimate of the effect after t simulations. The orange line marks the true effect plus bias. The green line marks the true effect."
 
 calculate_effect <- function(result){
   
@@ -884,7 +884,7 @@ plot_simple_grid_2 <- ggplot(simple_results, aes(y = p, x = e, fill = diff)) +
 plot_grid_2 <- ggplot(simulation1, aes(x=conversion_value, y=morphine_proportion, fill=mean_diff_ome)) +
   geom_tile() +
   symmetric_fill_scale(20)+
-  labs(y = expression("Proportion of postoperative \n perscribing as morphine"),,
+  labs(y = expression("Proportion of postoperative \n prescribing as morphine"),,
        x = TeX(r'($\c_{oxycodone}$ (Conversion Value for Oxycodone used) )'),
        fill = "Mean difference in TOB") +
   theme_minimal() +

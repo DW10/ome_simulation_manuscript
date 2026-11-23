@@ -17,6 +17,7 @@ xref-hardcode:
   sec-lit-review: "Supplementary Material Section 3"
   sec-sm-lit-protocol: "Supplementary Material Section 4"
   eq-logic: "Supplementary Equation 14"
+  fig-1: "Figure 1"
 ---
 
 {{< include ../communication.qmd >}}

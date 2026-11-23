@@ -17,6 +17,8 @@ n_lit_data <- shared_objects_lit$n_lit_data
 lit_not_described <- shared_objects_lit$lit_not_described
 lit_provide_doses <- shared_objects_lit$lit_provide_doses
 plot_point_whisker <- shared_objects_lit$plot_point_whisker
+
+fig_1_cap <- 'Forest plot illustrating the percentage change in opioid use associated with an intervention. Blue cross denote the study reported outcome. Orange diamond and error bar denote the primary point estimate and range using different conversion values.'
 ```
 
 There is a wide variety of opioids used across the range of clinical specialities and patient groups, each with their own potency to provide analgesia @bhatnagarOpioidEquivalency2026. Opioid conversion values offer the ability to convert a specific opioid into the equivalent units of a reference opioid, to produce equi-analgesic doses measured in oral morphine equivalent (OME) or milligram morphine equivalent (MME) depending on the reference. This is commonly conducted to enable comparisons within research studies (as an outcome measure) or clinically to guide opioid switching.
@@ -49,11 +51,17 @@ The literature search included `r n_lit_data` articles, of which `r n_lit_data* 
 
 @fig-1 shows the study reported outcome alongside the calculated outcome for each of the 5 studies reporting mean doses. This demonstrates the difficulty replicating metrics due to the number of calculation assumptions. In studies with single opioids (Fedorka 2025 @fedorkacjLiposomalBupivacaineBupivacaine2025) the bias is minimal, however in studies investigating different analgesic treatments (Carter 2025 @cartermInpatientMultimodalPain2025) a substantial bias arises.
 
+::: {.content-hidden when-profile="submission"}
 ```{r}
 #| label: fig-1
-#| fig-cap:  'Forest plot illustrating the percentage change in opioid use associated with an intervention. Blue cross denote the study reported outcome. Orange diamond and error bar denote the primary point estimate and range using different conversion values.'
+#| fig-cap: !expr fig_1_cap
 plot_point_whisker
 ```
+:::
+
+::: {.content-visible when-profile="submission"}
+Figure 1: `r fig_1_cap`
+:::
 
 Measurement bias is common in observational research. The influence of the bias in the conversion value is a considerable problem; we cannot know the exact biological conversion value for either a patient or a population; estimates produced vary.[@rennickVariabilityOpioidEquivalence2016; @yessaillianSystematicReviewMorphine2024] Where a non-zero treatment association exists ($\Delta \mu^0 \neq 0$), condition 2 cannot hold, because $\Delta \bar d_i = 0 \; \forall i$ implies $\Delta D = 0$ and hence $\Delta \mu^0 = 0$. 
 

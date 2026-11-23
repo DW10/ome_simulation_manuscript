@@ -202,13 +202,13 @@ run_simulation <- function(trials = 5,
 
       epsilon <- (i - potency_oxycodone)
 
-      diff_in_mean <- (df %>% filter(robotic == "Robotic") %>% pull(tob) %>% mean()) -
-        (df %>% filter(robotic == "Non-robotic") %>% pull(tob) %>% mean())
+      diff_in_mean <- (df %>% filter(robotic == "Minimally invasive surgery") %>% pull(tob) %>% mean()) -
+        (df %>% filter(robotic == "Open surgery") %>% pull(tob) %>% mean())
 
-      robotic_oxy <- df %>% filter(robotic == "Robotic") %>% pull(opioid)
+      robotic_oxy <- df %>% filter(robotic == "Minimally invasive surgery") %>% pull(opioid)
       p_oxy_robotic <- sum(robotic_oxy == "oxycodone") / length(robotic_oxy)
 
-      non_robotic_oxy <- df %>% filter(robotic == "Non-robotic") %>% pull(opioid)
+      non_robotic_oxy <- df %>% filter(robotic == "Open surgery") %>% pull(opioid)
       p_oxy_non_robotic <- sum(non_robotic_oxy == "oxycodone") / length(non_robotic_oxy)
 
       delta_p_oxycodone <- p_oxy_robotic - p_oxy_non_robotic
@@ -258,8 +258,8 @@ max_val <- max(results_grid$mean_diff_ome, na.rm = TRUE)
   symmetric_fill_scale(20)+
   labs(title = ,
        x = TeX(r'(Value used for $c_{oxycodone}$)'),
-       y = "Proportion of morphine perscribed",
-       fill = "Mean difference in OME") +
+       y = "Proportion of morphine prescribed",
+       fill = "Mean difference in TOB") +
    geom_vline(xintercept = potency_oxycodone, linetype = "dashed", color = "red")+
     theme_minimal() +
     theme(
@@ -291,7 +291,7 @@ p_table <- result |>
     p_iG = d_bar_iG / D_G,
     .by  = robotic
   ) %>%
-  arrange(desc(robotic), opioid)
+  arrange(robotic, opioid)
 
 return(p_table)
 }
@@ -438,9 +438,9 @@ A hypothetical study was designed to emulate a retrospective cohort study to com
 
 ::: {#nte-sim-design .callout-note title="Hypothetical study design"}
 
-A research team wish to understand if the use of a robot for a surgical procedure, reduces the post-operative pain. They design a retrospective cohort study for patients treated with a robotic procedure and those without. The primary outcome is the total opioid requirement, as measured in OME mg, in the first 24 hours post-operatively as a surrogate for the total pain caused by the surgical procedure.
+A research team wish to understand if a minimally invasive approach for a surgical procedure, reduces the post-operative pain. They design a retrospective cohort study for patients treated with a minimally invasive procedure and those treated with open surgery. The primary outcome is the total opioid requirement, as measured in OME mg, in the first 24 hours post-operatively as a surrogate for the total pain caused by the surgical procedure.
 
-The annual case volume is `r annual_n`, these were all performed using non-robotic surgery until `r format(t_robot, "%e %b %y")` when a robot was acquired, and since `r scales::percent(proportion_robotic)` of cases are performed with the robot. All EHR data was collected between `r format(t_0, "%e %b %y")` and `r format(t_end, "%e %b %y")`. All patients are treated with a Patient Controlled Analgesia (PCA) after their operation and on average the anaesthetist will prescribe a morphine PCA to `r scales::percent(proportion_morphine)` of patients and an oxycodone PCA to the remainder. No other opioid medication was administered. 
+The annual case volume is `r annual_n`, these were all performed as open surgery until `r format(t_robot, "%e %b %y")` when the equipment for minimally invasive surgery was acquired, and since `r scales::percent(proportion_robotic)` of cases are performed this way. All EHR data was collected between `r format(t_0, "%e %b %y")` and `r format(t_end, "%e %b %y")`. All patients are treated with a Patient Controlled Analgesia (PCA) after their operation and on average the anaesthetist will prescribe a morphine PCA to `r scales::percent(proportion_morphine)` of patients and an oxycodone PCA to the remainder. No other opioid medication was administered. 
 
 During the study there was a national shortage of oxycodone from `r oxycodone_shortage[1]` to `r oxycodone_shortage[2]` and at which time all patients were prescribed a morphine PCA. Whilst the authors described this in their methods section, they concluded that it would not impact their results, as the differing opioids were already accounted for in their OME metric. 
 :::
@@ -548,7 +548,7 @@ df <- sim_patient(
 
 ```{r}
 #| label: tbl-sim-demo
-#| tbl-cap: "Demographic table of simulated study population. Count data by opioid with treatment group proportion provided in bracked. Group mean OME totals with standard deviation shown."
+#| tbl-cap: "Demographic table of simulated study population. Count data by opioid with treatment group proportion provided in brackets. Group mean OME totals with standard deviation shown."
 #| eval: true
 
 library(gtsummary)
@@ -576,15 +576,15 @@ df |>
   gt::tab_options(table.width = gt::pct(100))
 ```
 
-A simple demographics table for the study is shown in @tbl-sim-demo, this demonstrates the unequal distributions of opioids between groups. @fig-sim-ome-1 shows that within the robotic and non-robotic groups the proportion of each opioid is not equal, and the effect of the oxycodone shortage has had a larger impact on the robotic group. @fig-sim-ome-2 demonstrates this distribution of the total opioid burden (OME mg) of patients in the robotic and non-robotic patients.
+A simple demographics table for the study is shown in @tbl-sim-demo, this demonstrates the unequal distributions of opioids between groups. @fig-sim-ome-1 shows that within the minimally invasive surgery and open surgery groups the proportion of each opioid is not equal, and the effect of the oxycodone shortage has had a larger impact on the minimally invasive surgery group. @fig-sim-ome-2 demonstrates this distribution of the total opioid burden (OME mg) of patients in the two groups.
 
 ```{r}
 #| label: fig-sim-ome
 #| layout-ncol: 2
-#| fig-cap: "**Opioid prescribing and OME distribution by surgery type**"
+#| fig-cap: "**Opioid prescribing and OME distribution by surgical approach**"
 #| fig-subcap: 
-#|   - "**Opioid prescribing proportions by surgery type** - Proportion and count of each opioid prescribed within robotic and non-robotic surgery groups."
-#|   - "**OME distribution by surgery type** - Kernel density of calculated OME (OME mg) for robotic and non-robotic surgery groups."
+#|   - "**Opioid prescribing proportions by surgical approach** - Proportion and count of each opioid prescribed within the minimally invasive and open surgery groups."
+#|   - "**OME distribution by surgical approach** - Kernel density of calculated OME (OME mg) for the minimally invasive and open surgery groups."
 #| fig-width: 5
 #| fig-height: 5
 #| out-height: 2.5in
@@ -613,7 +613,7 @@ ggplot(df, aes(x=tob, fill=robotic))+
   theme_academic()+
   labs(x="TOB (OME mg)",
         y="Density",
-        fill="Robotic Surgery")+
+        fill="Surgical approach")+
   scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
   theme(legend.position = "bottom")+
   paletteer::scale_fill_paletteer_d("MetBrewer::Austria", direction = -1)
@@ -623,8 +623,8 @@ ggplot(df, aes(x=tob, fill=robotic))+
 ```
 
 ```{r}
-obs_robotic_ome <- df %>% filter(robotic == "Robotic") %>% pull(tob) %>% mean() 
-obs_non_robotic_ome <- df %>% filter(robotic == "Non-robotic") %>% pull(tob) %>% mean() 
+obs_robotic_ome <- df %>% filter(robotic == "Minimally invasive surgery") %>% pull(tob) %>% mean() 
+obs_non_robotic_ome <- df %>% filter(robotic == "Open surgery") %>% pull(tob) %>% mean() 
 obs_robot_effect_mg <- obs_robotic_ome - obs_non_robotic_ome
 obs_robot_effect <- obs_robot_effect_mg/obs_non_robotic_ome
 ```
@@ -663,22 +663,22 @@ result <- foreach(
 
 stopCluster(cl)
 
-obs_robotic_ome <- result %>% filter(robotic == "Robotic") %>% pull(tob) %>% mean() 
-obs_non_robotic_ome <- result %>% filter(robotic == "Non-robotic") %>% pull(tob) %>% mean() 
+obs_robotic_ome <- result %>% filter(robotic == "Minimally invasive surgery") %>% pull(tob) %>% mean() 
+obs_non_robotic_ome <- result %>% filter(robotic == "Open surgery") %>% pull(tob) %>% mean() 
 obs_robot_effect_mg <- obs_robotic_ome - obs_non_robotic_ome
 obs_robot_effect <- obs_robot_effect_mg/obs_non_robotic_ome
 ```
 
 To reduce the effect of random sampling, the simulation was repeated with the same parameters `r trials_hypothetical` times. 
 
-The mean opioid burden value for the minimally invasive surgery group was `r round(obs_robotic_ome, 2)` TOB mg and for the standard open surgery group was `r  round(obs_non_robotic_ome, 2)` TOB mg. This gives an observed effect size of the robot as `r round(obs_robot_effect_mg,2)` TOB mg compared to the realised true effect of `r percent(robot_effect_size,2)` TOB mg (nominal
+The mean opioid burden value for the minimally invasive surgery group was `r round(obs_robotic_ome, 2)` TOB mg and for the open surgery group was `r  round(obs_non_robotic_ome, 2)` TOB mg. This gives an observed effect size of the minimally invasive approach as `r round(obs_robot_effect_mg,2)` TOB mg compared to the realised true effect of `r percent(robot_effect_size,2)` TOB mg (nominal
 `r robot_effect_mg` TOB mg), giving a bias of `r round(obs_robot_effect_mg - robot_effect_mg,3)` TOB mg.
 
 ### Verification of @eq-bias
 
 Using @eq-bias we can verify the simulation bias is as expected given the parameters.
 
-Let $T^1$ be the group treated with the minimally invasive approach and $T^0$ be the group treated with open surgical approach. \
+Let $T^1$ be the group treated with minimally invasive surgery and $T^0$ be the group treated with open surgery. \
 Let $\epsilon_\text{morphine}$ be 0 and $\epsilon_\text{oxycodone}$ be $c_\text{oxycodone} - c_\text{oxycodone}^0$ which is `r round(potency_oxycodone_ome-potency_oxycodone, 3)`. \
 
 The values of $\bar{d}_{i,T}$ are observed from the simulation from @tbl-sim-maths as the mean dose of the opioid within each treatment group. The value of $D_T$ is calculated from the sum of the mean doses $\bar{d}_{i}$ within group $T$. The values of $p_{i,T}$ are calculated using $\bar{d}_{i,T}$ and $D_T$ (@eq-prop). 
@@ -729,12 +729,12 @@ This estimate of `r round(bias,4)` approximates the observed bias of from the si
 
 ```{r}
 #| label: fig-convergence
-#| fig-cap: "Line chart demonstrating the convergence of the esimated effect on the value of the true effect combined with the bias. The solid blue line shows the running estimate of the effect after t simulations. The orange line marks the true effect plus bias. The green line marks the true effect."
+#| fig-cap: "Line chart demonstrating the convergence of the estimated effect on the value of the true effect combined with the bias. The solid blue line shows the running estimate of the effect after t simulations. The orange line marks the true effect plus bias. The green line marks the true effect."
 
 calculate_effect <- function(result){
   
-obs_robotic_ome <- result %>% filter(robotic == "Robotic") %>% pull(tob) %>% mean() 
-obs_non_robotic_ome <- result %>% filter(robotic == "Non-robotic") %>% pull(tob) %>% mean() 
+obs_robotic_ome <- result %>% filter(robotic == "Minimally invasive surgery") %>% pull(tob) %>% mean() 
+obs_non_robotic_ome <- result %>% filter(robotic == "Open surgery") %>% pull(tob) %>% mean() 
 obs_robot_effect_mg <- obs_robotic_ome - obs_non_robotic_ome
 obs_robot_effect <- obs_robot_effect_mg/obs_non_robotic_ome
 
@@ -884,7 +884,7 @@ plot_simple_grid_2 <- ggplot(simple_results, aes(y = p, x = e, fill = diff)) +
 plot_grid_2 <- ggplot(simulation1, aes(x=conversion_value, y=morphine_proportion, fill=mean_diff_ome)) +
   geom_tile() +
   symmetric_fill_scale(20)+
-  labs(y = expression("Proportion of postoperative \n perscribing as morphine"),,
+  labs(y = expression("Proportion of postoperative \n prescribing as morphine"),,
        x = TeX(r'($\c_{oxycodone}$ (Conversion Value for Oxycodone used) )'),
        fill = "Mean difference in TOB") +
   theme_minimal() +

@@ -21,20 +21,19 @@ plot_point_whisker <- shared_objects_lit$plot_point_whisker
 
 There is a wide variety of opioids used across the range of clinical specialities and patient groups, each with their own potency to provide analgesia @bhatnagarOpioidEquivalency2026. Opioid conversion values offer the ability to convert a specific opioid into the equivalent units of a reference opioid, to produce equi-analgesic doses measured in oral morphine equivalent (OME) or milligram morphine equivalent (MME) depending on the reference. This is commonly conducted to enable comparisons within research studies (as an outcome measure) or clinically to guide opioid switching.
 
-We define the total opioid burden (TOB) as the generalisation of the reference-specific metrics OME and MME, estimating the summed analgesic exposure through opioid medications to a patient. Formalised, TOB is the weighted sum of the dose $d$ for medication $i$ in the set of medications $\mathbf{M}$ multiplied by the conversion value $c$ for a given route $r$ (@eq-ome).
+We define the total opioid burden (TOB) as the generalisation of the reference-specific metrics OME and MME, estimating the total analgesic exposure of opioid medications to a patient. Formalised, TOB is the weighted sum of the dose $d$ for medication $i$ in the set of medications $\mathbf{M}$ multiplied by the conversion value $c$ for a given route $r$ (@eq-ome).
 
 $$\text{TOB} = \sum_{i\in\mathbf{M}} d_i c_{i,r}
 $${#eq-ome}
 
-A number of conversion value tables have been published aiming to provide a *"best estimate"* of the conversion values between opioids [@mcphersonDemystifyingOpioidConversion2010; @nielsenSynthesisOralMorphine2016; @dowellCDCClinicalPractice2022]. Within clinical practice, these cited value tables are conventionally treated as a good surrogate for the true conversion value @mercadanteConversionRatiosOpioid2023. However, these values have been co-opted to produce metrics used in research without additional methodological quality assurance. A commonly used, and often primary, outcome in perioperative analgesic studies is the difference in opioid requirement between groups, as measured by comparing the arithmetic mean of summed TOB. 
+A number of conversion value tables have been published aiming to provide a *"best estimate"* of the conversion values between opioids [@mcphersonDemystifyingOpioidConversion2010; @nielsenSynthesisOralMorphine2016; @dowellCDCClinicalPractice2022]. Within clinical practice, these cited value tables are treated as a good surrogate for the true conversion value @mercadanteConversionRatiosOpioid2023. However, these values have been co-opted to produce metrics used in research without additional methodological quality assurance. A commonly used, and often primary, outcome in perioperative analgesic studies is the difference in opioid requirement between groups, as measured difference in group means of OME/MME. 
 
-There is an implicit claim that once converted, it no longer matters which opioids a patient receives. However as demonstrated by the STRATOS guidance, misspecified weights with differential exposure leads to measurement error @keoghSTRATOSGuidanceDocument2020. The mathematical proof in @sec-proof demonstrates that this is true if either following conditions are satisfied (@eq-logic):
+There is an implicit claim that once converted, it no longer matters which opioids a patient receives. However as demonstrated by the STRATOS guidance, errors in conversion values with differential exposure between groups leads to measurement error @keoghSTRATOSGuidanceDocument2020. The mathematical proof in @sec-proof demonstrates that if one of the following conditions is not satisfied exactly, a measurement bias arises that can skew or even invert the results of a study.
 
 1. There is no error in any of the conversion values used
 
 2. The mean dose of all medication between groups are equal
 
-If one of the possible conditions is not satisfied exactly, a measurement bias arises that can skew or even invert the results of a study. In this simulation study we aim to quantify the extent of this bias and to estimate the impact on the current body of literature. 
 
 Two simulation studies were performed to understand the extent and impact of the bias on studies comparing group mean differences in TOB (@sec-sims). The first simulation explores the parameter space between groups with inversely distributed opioid groups and conversion values with errors of $\pm$ 100% of a *"ground truth"* value. The second, simulates a hypothetical study of `r shared_objects$n_second_sim` participants to analyse the effect of minimally invasive surgery on postoperative pain, using an *"exogenous shock"* to vary the inter-group opioid proportions and varying conversion values to vary the degree of the measurement error. The outcome in both simulations was the degree of bias, estimated by measuring the observed difference compared to the expected difference in group mean TOB.
 
@@ -55,7 +54,6 @@ The literature search included `r n_lit_data` articles, of which `r n_lit_data* 
 #| fig-cap:  'Forest plot illustrating the percentage change in opioid use associated with an intervention. Blue cross denote the study reported outcome. Orange diamond and error bar denote the primary point estimate and range using different conversion values.'
 plot_point_whisker
 ```
-
 
 Measurement bias is common in observational research. The influence of the bias in the conversion value is a considerable problem; we cannot know the exact biological conversion value for either a patient or a population; estimates produced vary.[@rennickVariabilityOpioidEquivalence2016; @yessaillianSystematicReviewMorphine2024] Where a non-zero treatment association exists ($\Delta \mu^0 \neq 0$), condition 2 cannot hold, because $\Delta \bar d_i = 0 \; \forall i$ implies $\Delta D = 0$ and hence $\Delta \mu^0 = 0$. 
 

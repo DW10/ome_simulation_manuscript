@@ -12,6 +12,6 @@ ggsave(
   width = 5,
   height = 3,
   units = "in",
-  dpi = 300,
+  dpi = 1200,
   compression = "lzw"
 )

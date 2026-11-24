@@ -371,16 +371,26 @@ This table highlights the difficulty in re-calculating the total opioid burdens 
 
 ```{r}
 #| label: fig-lit-outcomes
-#| fig-cap: 'Forest style plot illustrating the percentage change in opioid use associated with an intervention. Blue cross denote the study reported outcome. Orange diamond and error bar denote the the primary point estimate and range using different conversion values.'
+#| fig-cap: 'Forest plot illustrating the percentage change in opioid use associated with an intervention. Blue cross denote the study reported treatment effect/association. Orange diamond and error bar denote the primary point estimate and range using different conversion values.'
 
 plot_point_whisker <- ggplot(exemplars_summary, aes(y=authors))+
   geom_errorbar(aes(xmin=min_delta, xmax=max_delta), color = "orange")+
   geom_point(aes(x=delta_ome),colour = "orange", shape=18, size = 4)+
   geom_point(aes(x=reported_delta_ome),colour = "blue", shape = 4, size=3)+
   geom_vline(xintercept = 0, color = "black") +
+  annotate("segment", x = -0.02, xend = -0.17, y = Inf, yend = Inf,
+           arrow = arrow(length = unit(1.5, "mm")), linewidth = 0.4)+
+  annotate("segment", x = 0.02, xend = 0.17, y = Inf, yend = Inf,
+           arrow = arrow(length = unit(1.5, "mm")), linewidth = 0.4)+
+  annotate("text", x = -0.02, y = Inf, label = "Decrease",
+           hjust = 1, vjust = -0.8, size = 3)+
+  annotate("text", x = 0.02, y = Inf, label = "Increase",
+           hjust = 0, vjust = -0.8, size = 3)+
+  coord_cartesian(clip = "off")+
   theme_academic()+
-  theme(axis.line.y = element_blank())+
-  labs(x="Change in opioid use in intervention group",
+  theme(axis.line.y = element_blank(),
+        plot.margin = margin(t = 20, r = 5.5, b = 5.5, l = 5.5))+
+  labs(x="Change in total opioid burden, intervention vs control group (%)",
        y="")+
   scale_x_continuous(labels = percent,
                      breaks = seq(-0.6, 0.3, by = 0.1))+

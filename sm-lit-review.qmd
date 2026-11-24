@@ -416,39 +416,19 @@ gen_study <- gen_analysis %>%
             sign_change = any(sign_change),
             range_pp = max(range_pp))
 
-n_assessable <- nrow(gen_study)
-n_imbalanced <- sum(gen_study$multi_opioid & gen_study$composition_differs)
-n_opposite <- sum(gen_study$opposite_direction)
-n_sign_change <- sum(gen_study$sign_change)
-ci_imbalanced <- binom.test(n_imbalanced, n_assessable)$conf.int
-max_range <- gen_study %>% slice_max(range_pp, n = 1)
-
-lit_rct <- lit_data %>% filter(trimws(Study.type) == "RCT")
-n_rct <- nrow(lit_rct)
-rct_studies <- exemplars_summary %>%
-  filter(Ref %in% lit_rct$Covidence..) %>%
-  mutate(study = sub(" \\(.*\\)$", "", authors)) %>%
-  pull(study) %>%
-  unique()
-n_rct_assessable <- length(rct_studies)
 baran_range <- gen_study %>% filter(study == "Baran 2025") %>% pull(range_pp)
+carter_range <- gen_study %>% filter(study == "Carter 2025") %>% pull(range_pp)
 ```
 
-Whether the bias could change a study's conclusions depends on the structure of its opioid data as well as on the size of the conversion value errors. As the errors are unknown, only the structural preconditions can be assessed. From @eq-bias-d the observed difference is $\Delta \mu = \sum_i c_i \Delta \bar d_i$, which gives three levels of susceptibility:
+In our analysis we hoped to estimate the number of studies published would have a measurement bias and to what extent. Unfortunately, we found it is not possible to estimate this if the doses of each medication is not provided by the authors. Of the `r n_lit_data` eligible studies we found only 5 studies (with a total of 6 outcomes) were these drug mean doses were reported. 
 
-1. **Single opioid** - a conversion value error rescales both groups equally, so the relative (percentage) treatment effect and its direction are unchanged.
-2. **Multiple opioids, all changing in the same direction** - as every $c_i > 0$, the direction of $\Delta \mu$ is fixed. If the opioid proportions differ between groups ($\Delta p_i \neq 0$ in @eq-bias), the size of the relative treatment effect depends on the conversion values used and could move an estimate across a minimum clinically important difference.
-3. **Multiple opioids changing in opposite directions** - at least one opioid is higher in the intervention group while another is lower. Both the size and the direction of the treatment effect depend on the conversion values, and with sufficient error the conclusion can invert.
+Of these 5 studies, two were RCT's and the remaining 3 cohort studies. We found only one study had no bias, as it there was only a single opioid, oxycodone, was used.[@fedorkacjLiposomalBupivacaineBupivacaine2025] The smallest bias observed was a `r round(baran_range, 1)`% (Baran 2025), whilst the largest difference was `r round(carter_range, 1)`% (Carter 2025).[@baranoOptimizingAnalgesiaMinimally2025; @cartermInpatientMultimodalPain2025]
 
-These preconditions could only be assessed in the `r n_assessable` of `r n_lit_data` (`r percent(n_assessable/n_lit_data, accuracy = 0.1)`) studies that reported group mean doses of each opioid. Of these, `r n_imbalanced` (`r percent(n_imbalanced/n_assessable)`; exact 95% CI `r percent(ci_imbalanced[1])` to `r percent(ci_imbalanced[2])`) used more than one opioid with unequal opioid proportions between groups, and in `r n_opposite` at least one opioid changed in the opposite direction to the others (level 3). Only Fedorka 2025, which used oxycodone alone, was not susceptible.[@fedorkacjLiposomalBupivacaineBupivacaine2025] Across the Nielsen conversion values, `r if (n_sign_change == 0) "no study" else paste(n_sign_change, "studies")` changed the direction of its treatment effect; the relative treatment effect varied by up to `r round(max_range$range_pp, 1)` percentage points (`r max_range$study`).
+Using the 1 out of 5 ratio we may generalise that 80% of comparative studies are at risk of of measurement bias however there are a number of significant caveats to this. Without reporting of the breakdown of opioid doses we cannot assess the combination of opioids used to generate the TOB metric. Given the low rate of reporting and small subset of literature screened we were not able to find any studies were substituting the conversion values would invert the treatment effects. As the minimally important clinical difference was not collected we were not able to assess if the range would cross this threshold. 
 
-Restricting to randomised trials, `r n_rct` of the `r n_lit_data` studies were RCTs, of which `r n_rct_assessable` reported doses by opioid. Fedorka 2025 used a single opioid (level 1).[@fedorkacjLiposomalBupivacaineBupivacaine2025] Baran 2025 used two opioids, with fentanyl higher in the intervention group and morphine unchanged (level 2); its relative treatment effect varied by `r round(baran_range, 1)` percentage points across the Nielsen values.[@baranoOptimizingAnalgesiaMinimally2025] The susceptibility of the remaining `r n_rct - n_rct_assessable` RCTs could not be determined.
+To strengthen this analysis and allow for a better estimate of the degree of bias we recommend a systematic literature review that captures the complete data set needed as proposed in @sec-sm-lit-protocol.
 
-These estimates have significant limitations. Most studies (`r percent(1 - n_assessable/n_lit_data)`) did not report doses by opioid, so susceptibility could not be estimated for the majority, and the assessable studies were selected by their reporting practice so may not be representative. The sample was a random subset of 480 records from a single database and a single publication year (2025), extracted by one reviewer. Recalculation relied on assumptions (means estimated from medians, intravenous routes assumed, Nielsen values used where none were stated, and an inferred morphine dose for Baran 2025), and did not reproduce the reported values (@tbl-lit-summary-outcomes). Finally, the Nielsen values reflect variation between published conversion values, not the error against the biological value; a stable direction across this range does not show that a study is unbiased.
-
-The estimate is therefore a lower bound: at least `r n_imbalanced` of `r n_lit_data` (`r percent(n_imbalanced/n_lit_data, accuracy = 0.1)`) studies were demonstrably susceptible to the bias, and for `r n_lit_data - n_assessable` it could not be determined. This supports the recommendation that studies report the mean dose of each opioid by group, so that readers can make this assessment.
-
-### Lessons for the formal protocol
+### Development of the systamtic litraitre review protocol.
 
 There were some key learning points from the preliminary data collection that was integrated into the protocol as presented in @sec-sm-lit-protocol.
 

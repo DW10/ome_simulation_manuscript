@@ -58,9 +58,6 @@ plot_point_whisker
 ```
 :::
 
-::: {.content-visible when-profile="submission"}
-Figure 1: `r fig_1_cap`
-:::
 
 Measurement bias is common in observational research. The influence of the bias in the conversion value is a considerable problem; we cannot know the exact biological conversion value for either a patient or a population and published estimates differ.[@rennickVariabilityOpioidEquivalence2016; @yessaillianSystematicReviewMorphine2024] Furthermore where a treatment effect exists, condition 2 cannot hold the treatment would cause a change in the group mean doses.
 

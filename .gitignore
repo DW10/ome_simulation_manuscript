@@ -19,3 +19,6 @@ _submission/
 *_files/
 *.rmarkdown
 .RDataTmp
+
+# knitr/Quarto chunk caches
+*_cache/

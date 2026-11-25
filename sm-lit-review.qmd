@@ -371,16 +371,26 @@ This table highlights the difficulty in re-calculating the total opioid burdens 
 
 ```{r}
 #| label: fig-lit-outcomes
-#| fig-cap: 'Forest style plot illustrating the percentage change in opioid use associated with an intervention. Blue cross denote the study reported outcome. Orange diamond and error bar denote the the primary point estimate and range using different conversion values.'
+#| fig-cap: 'Forest plot illustrating the percentage change in opioid use associated with an intervention. Blue cross denote the study reported treatment effect/association. Orange diamond and error bar denote the primary point estimate and range using different conversion values.'
 
 plot_point_whisker <- ggplot(exemplars_summary, aes(y=authors))+
   geom_errorbar(aes(xmin=min_delta, xmax=max_delta), color = "orange")+
   geom_point(aes(x=delta_ome),colour = "orange", shape=18, size = 4)+
   geom_point(aes(x=reported_delta_ome),colour = "blue", shape = 4, size=3)+
   geom_vline(xintercept = 0, color = "black") +
+  annotate("segment", x = -0.02, xend = -0.17, y = Inf, yend = Inf,
+           arrow = arrow(length = unit(1.5, "mm")), linewidth = 0.4)+
+  annotate("segment", x = 0.02, xend = 0.17, y = Inf, yend = Inf,
+           arrow = arrow(length = unit(1.5, "mm")), linewidth = 0.4)+
+  annotate("text", x = -0.02, y = Inf, label = "Decrease",
+           hjust = 1, vjust = -0.8, size = 3)+
+  annotate("text", x = 0.02, y = Inf, label = "Increase",
+           hjust = 0, vjust = -0.8, size = 3)+
+  coord_cartesian(clip = "off")+
   theme_academic()+
-  theme(axis.line.y = element_blank())+
-  labs(x="Change in opioid use in intervention group",
+  theme(axis.line.y = element_blank(),
+        plot.margin = margin(t = 20, r = 5.5, b = 5.5, l = 5.5))+
+  labs(x="Change in total opioid burden, intervention vs control group (%)",
        y="")+
   scale_x_continuous(labels = percent,
                      breaks = seq(-0.6, 0.3, by = 0.1))+
@@ -391,6 +401,44 @@ plot_point_whisker
 ```
 
 ## Discussion
+
+### Generalisability and potential impact on published conclusions
+
+```{r}
+#| label: generalisability
+
+gen_analysis <- papers %>%
+  group_by(authors) %>%
+  summarise(n_opioids = n(),
+            composition_differs = n_distinct(round(delta_p, 3)) > 1,
+            opposite_direction = any(Delta_p > 0) & any(Delta_p < 0),
+            .groups = "drop") %>%
+  left_join(papers_grid_summary %>% select(authors, min_delta, max_delta), by = "authors") %>%
+  mutate(study = sub(" \\(.*\\)$", "", authors),
+         sign_change = min_delta < 0 & max_delta > 0,
+         range_pp = (max_delta - min_delta) * 100)
+
+gen_study <- gen_analysis %>%
+  group_by(study) %>%
+  summarise(multi_opioid = any(n_opioids > 1),
+            composition_differs = any(composition_differs),
+            opposite_direction = any(opposite_direction),
+            sign_change = any(sign_change),
+            range_pp = max(range_pp))
+
+baran_range <- gen_study %>% filter(study == "Baran 2025") %>% pull(range_pp)
+carter_range <- gen_study %>% filter(study == "Carter 2025") %>% pull(range_pp)
+```
+
+In our analysis we hoped to estimate the number of studies published would have a measurement bias and to what extent. Unfortunately, we found it is not possible to estimate this if the doses of each medication is not provided by the authors. Of the `r n_lit_data` eligible studies we found only 5 studies (with a total of 6 outcomes) were these drug mean doses were reported. 
+
+Of these 5 studies, two were RCT's and the remaining 3 cohort studies. We found only one study was not susceptible to bias in relative terms, as only a single opioid, oxycodone, was used.[@fedorkacjLiposomalBupivacaineBupivacaine2025] Across the Nielsen values, the relative treatment effect varied by `r round(baran_range, 1)` percentage points (Baran 2025) to `r round(carter_range, 1)` percentage points (Carter 2025).[@baranoOptimizingAnalgesiaMinimally2025; @cartermInpatientMultimodalPain2025] Of the `r lit_data %>% filter(trimws(Study.type) == "RCT") %>% nrow()` RCTs sampled, one of the two that could be assessed (Baran 2025) used more than one opioid with an imbalance between groups; the remaining `r lit_data %>% filter(trimws(Study.type) == "RCT") %>% nrow() - 2` could not be assessed.
+
+Of the 5 assessable studies, 4 (80%) were at risk of measurement bias. As these studies were selected by their reporting practice, this should not be generalised to all comparative studies, and there are a number of further significant caveats. Without reporting of the breakdown of opioid doses we cannot assess the combination of opioids used to generate the TOB metric. Given the low rate of reporting and small subset of literature screened we were not able to find any studies were substituting the conversion values would invert the treatment effects. As the minimally important clinical difference was not collected we were not able to assess if the range would cross this threshold. 
+
+To strengthen this analysis and allow for a better estimate of the degree of bias we recommend a systematic literature review that captures the complete data set needed as proposed in @sec-sm-lit-protocol.
+
+### Development of the systematic litrature review protocol.
 
 There were some key learning points from the preliminary data collection that was integrated into the protocol as presented in @sec-sm-lit-protocol.
 

@@ -402,7 +402,7 @@ for(p in seq(p_min, p_max, by = 0.05)){
 }
 ```
 
-`r scales::comma(n)` samples were divided equally between a control and intervention group. An opioid of either morphine or oxycodone was then sampled from a distribution set by $\Delta p_i$ to set the proportion $p$ of each opioid to be reciprocal in each group ($\bar p_i = 0.5$). An opioid requirement ($D$) was sampled from a normal distribution ($\mathbb{E}[D] =$ `r mu_opioid_requirment_control` with $\sigma =$ `r sigma`) for both groups enforcing a treatment association of `r percent(treatment_effect)` ($\Delta D = 0$).
+`r scales::comma(n)` samples were divided equally between a control and intervention group. An opioid of either morphine or oxycodone was then sampled from a distribution set by $\Delta p_i$ to set the proportion $p$ of each opioid to be reciprocal in each group ($\bar p_i = 0.5$). An opioid requirement ($D$) was sampled from a normal distribution ($\mathbb{E}[D] =$ `r mu_opioid_requirment_control` with $\sigma =$ `r sigma`) for both groups enforcing a treatment effect of `r percent(treatment_effect)` ($\Delta D = 0$).
 
 For samples where the opioid assigned was morphine, the total morphine dose was set equal to the opioid requirement ($d_\text{morphine} = D \therefore\ c_\text{morphine}^0 = 1, \epsilon_\text{morphine} = 0$. For samples where the opioid was oxycodone, the total oxycodone dose was set to opioid requirement divided by the ground truth potency ($c_\text{oxycodone}^0$) equal to `r potency_oxycodone` ($d_\text{oxycodone} = \frac{D}{c_\text{oxycodone}^0}$). For all samples, the opioid consumed was then converted into a TOB, using a conversion value of `r potency_morphine` for morphine and `r potency_oxycodone` +/- an error, $\epsilon$, for oxycodone. The measured difference between the group mean of the control and intervention groups ($\Delta \mu = \mu_{\text{TOB, intervention}} - \mu_{\text{TOB, control}}$) was then calculated. The reference opioid used was oral morphine so the resulting units of the TOB metric are oral morphine equivalence milligrams (OMEmg).
 
@@ -449,7 +449,7 @@ The difference in proportion ($\Delta p_i$) between groups is simulated using a 
 
 ### Estimand
 
-Across all simulations the estimand is the true associational effect of the treatment group  $\Delta \mu^0$.
+Across all simulations the estimand is the true treatment effect of the treatment group  $\Delta \mu^0$.
 
 ## Performance measure 
 
@@ -469,7 +469,7 @@ All simulations were performed in `r version$version.string`, using seed `r seed
 
 `r scales::comma(nrow(simple_results))` different simulations where performed across the grid values of $\Delta p_{\text{oxycodone}}$ and $\epsilon$. @fig-simple-grid-1 demonstrates the observed difference between groups ($\Delta \mu_\text{TOB}$) plotted against the difference in the proportion of morphine in the intervention group over the percentage error in the conversion value $\epsilon$.
 
-Where the conversion value is equal to the ground truth ($\epsilon$ = 0%) or the proportion of opioids in each group are matched ($\Delta p_i$ = 0) then the observed group difference is equal to the true treatment association. 
+Where the conversion value is equal to the ground truth ($\epsilon$ = 0%) or the proportion of opioids in each group are matched ($\Delta p_i$ = 0) then the observed group difference is equal to the true treatment effect. 
 
 ```{r}
 #| label: fig-simple-grid-1
@@ -629,7 +629,7 @@ obs_robot_effect_mg <- obs_robotic_ome - obs_non_robotic_ome
 obs_robot_effect <- obs_robot_effect_mg/obs_non_robotic_ome
 ```
 
-The results in @tbl-sim-demo represent a single sample of `r nrow(df)` patients that is subject to the variation induced in the random sampling. For this specific sample the observed treatment association of `r percent(obs_robot_effect, 0.01)`.
+The results in @tbl-sim-demo represent a single sample of `r nrow(df)` patients that is subject to the variation induced in the random sampling. For this specific sample the observed treatment effect of `r percent(obs_robot_effect, 0.01)`.
 
 ```{r sim multiple hypothetical}
 #| warning: false

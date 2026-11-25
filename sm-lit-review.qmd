@@ -438,7 +438,7 @@ Of the 5 assessable studies, 4 (80%) were at risk of measurement bias. As these 
 
 To strengthen this analysis and allow for a better estimate of the degree of bias we recommend a systematic literature review that captures the complete data set needed as proposed in @sec-sm-lit-protocol.
 
-### Development of the systamtic litraitre review protocol.
+### Development of the systematic litrature review protocol.
 
 There were some key learning points from the preliminary data collection that was integrated into the protocol as presented in @sec-sm-lit-protocol.
 

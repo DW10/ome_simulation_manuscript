@@ -1,9 +1,0 @@
-scales
-dplyr
-ggplot2
-patchwork
-latex2exp
-gt
-foreach
-iterators
-doParallel
